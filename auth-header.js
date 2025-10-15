@@ -49,6 +49,26 @@ class AuthHeaderManager {
     }
 }
 
+// Закрытие выпадающего меню при клике вне его
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.profile-dropdown')) {
+        const dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(dropdown => {
+            dropdown.style.display = 'none';
+        });
+    }
+});
+
+// Открытие/закрытие меню профиля
+function toggleProfileMenu() {
+    const dropdown = document.querySelector('.dropdown-content');
+    if (dropdown.style.display === 'block') {
+        dropdown.style.display = 'none';
+    } else {
+        dropdown.style.display = 'block';
+    }
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Инициализация AuthHeaderManager');

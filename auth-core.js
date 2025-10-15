@@ -139,6 +139,28 @@ class UserManager {
     }
 }
 
+// Функция для обновления отображения кнопок в шапке
+function updateHeaderAuthState() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const authButtons = document.getElementById('auth-buttons');
+    const profileSection = document.getElementById('profile-section');
+    
+    if (isLoggedIn === 'true') {
+        // Пользователь вошел - показываем профиль, скрываем кнопки входа
+        if (authButtons) authButtons.style.display = 'none';
+        if (profileSection) profileSection.style.display = 'block';
+    } else {
+        // Пользователь не вошел - показываем кнопки входа, скрываем профиль
+        if (authButtons) authButtons.style.display = 'block';
+        if (profileSection) profileSection.style.display = 'none';
+    }
+}
+
+// Вызываем при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    updateHeaderAuthState();
+});
+
 // ThemeManager класс
 class ThemeManager {
     constructor() {
@@ -189,4 +211,5 @@ class ThemeManager {
             }, 150);
         }
     }
+    
 }
