@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testoria - Найди свой тест!</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <a>
+                            <i class="fas fa-brain"></i>
+                            Testoria
+                        </a>
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link active">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <!-- Вместо всего блока header-controls -->
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons">
+                        <!-- Будет заполнено автоматически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Главный баннер -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-icon">
+                    </div>
+                    <h2 class="hero-title">
+                        Открой себя через увлекательные тесты
+                    </h2>
+                    <p class="hero-subtitle">
+                        Узнай, какой ты бутерброд, персонаж из фильма или просто хорошо проведи время
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="catalog.html" class="btn btn-primary">
+                            <i class="fas fa-play"></i>
+                            Начать тест
+                        </a>
+                        <a href="about.html" class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i>
+                            Узнать больше
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Популярные тесты -->
+       <section class="popular-tests">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">
+                <i class="fas fa-fire"></i>
+                Популярные тесты
+            </h2>
+            <p>Самые интересные тесты, которые проходят прямо сейчас</p>
+        </div>
+        
+        <div class="tests-grid" id="popularTestsContainer">
+            <!-- Тесты будут загружены через JavaScript -->
+        </div>
+        
+        <div class="section-footer">
+            <a href="catalog.html" class="btn btn-primary">
+                <i class="fas fa-list"></i>
+                Смотреть все тесты
+            </a>
+        </div>
+    </div>
+</section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="https://t.me/ttemkatut" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Данные для популярных тестов на главной
+        const popularTests = [
+            {
+                id: 1,
+                title: "Какой ты бутерброд?",
+                category: "food",
+                description: "Узнай, какой бутерброд лучше всего описывает твою личность и жизненный подход!",
+                image: "https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                icon: "fas fa-bread-slice",
+                rating: 4.8,
+                votes: 256,
+                time: 5,
+                date: "2024-01-15"
+            },
+            {
+               id: 9,
+               title: "Кто ты из преподавателей МКП",
+               category: "memes",
+               description: "Пройди тест и узнай какой из преподавателей ПОИТ в МКП подходит тебе по вайбу!",
+               image: "prepodi.jpg",
+               icon: "fas fa-laugh-beam",
+               rating: 5.0,
+               votes: 198,
+               time: 5,
+               date: "2024-01-28"
+            },
+            {
+                id: 3,
+                title: "Твой стиль программирования",
+                category: "tech",
+                description: "Узнай, какой язык программирования и подход к разработке тебе подходит!",
+                image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                icon: "fas fa-laptop-code",
+                rating: 4.7,
+                votes: 312,
+                time: 10,
+                date: "2024-01-10"
+            }
+        ];
+
+        // Функция для отображения популярных тестов
+       function displayPopularTests() {
+    const popularTestsContainer = document.getElementById('popularTestsContainer');
+    
+    if (popularTestsContainer) {
+        popularTestsContainer.innerHTML = popularTests.map(test => `
+            <div class="test-card" data-test-id="${test.id}">
+                <div class="test-image">
+                    <img src="${test.image}" alt="${test.title}" onerror="this.src='https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
+                    <div class="test-category">
+                        <i class="${getCategoryIcon(test.category)}"></i>
+                        ${getCategoryName(test.category)}
+                    </div>
+                </div>
+                <div class="test-content">
+                    <div class="test-header">
+                        <h3>
+                            <i class="${test.icon}"></i>
+                            ${test.title}
+                        </h3>
+                    </div>
+                    <div class="test-description">
+                        <p>${test.description}</p>
+                    </div>
+                    <div class="test-meta">
+                        <span class="test-stat">
+                            <i class="fas fa-star"></i>
+                            ${test.rating} (${test.votes})
+                        </span>
+                        <span class="test-time">
+                            <i class="fas fa-clock"></i>
+                            ${test.time} мин
+                        </span>
+                    </div>
+                    <div class="test-actions">
+                        <a href="test.html?id=${test.id}" class="btn btn-test">
+                            <i class="fas fa-play-circle"></i>
+                            Пройти тест
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+}
+
+        // Вспомогательные функции
+        function getCategoryIcon(category) {
+            const icons = {
+                'food': 'fas fa-utensils',
+                'animals': 'fas fa-paw',
+                'tech': 'fas fa-code',
+                'memes': 'fas fa-laugh-beam',
+                'entertainment': 'fas fa-film',
+                'psychology': 'fas fa-brain',
+                'games': 'fas fa-gamepad'
+            };
+            return icons[category] || 'fas fa-question';
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                'food': 'Еда',
+                'animals': 'Животные',
+                'tech': 'Технологии',
+                'memes': 'Мемы',
+                'entertainment': 'Развлечения',
+                'psychology': 'Психология',
+                'games': 'Игры'
+            };
+            return names[category] || 'Другое';
+        }
+
+        function showTestModal(testId) {
+            const test = popularTests.find(t => t.id == testId);
+            alert(`Тест "${test.title}" скоро будет доступен! Сейчас мы работаем над системой тестирования.`);
+        }
+
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.htmlElement = document.documentElement;
+                this.init();
+            }
+
+            init() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme) {
+                    this.setTheme(savedTheme);
+                } else if (systemPrefersDark) {
+                    this.setTheme('dark');
+                }
+
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        this.setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+
+            setTheme(theme) {
+                this.htmlElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.themeToggle.setAttribute('aria-label', 
+                    theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
+            }
+
+            toggleTheme() {
+                const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+
+                this.themeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.themeToggle.style.transform = 'scale(1)';
+                }, 150);
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            displayPopularTests();
+            
+            // Плавная загрузка страницы
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // Плавный переход по ссылкам
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.href && link.href.includes('.html') && !link.href.includes('#')) {
+                        e.preventDefault();
+                        document.body.style.opacity = '0';
+                        setTimeout(() => {
+                            window.location.href = link.href;
+                        }, 300);
+                    }
+                });
+            });
+        });
+    </script>
+   <!-- Подключаем основные классы -->
+<script src="auth-core.js"></script>
+
+<!-- Подключаем управление хедером -->
+<script src="auth-header.js"></script>
+</body>
+</html>

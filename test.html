@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прохождение теста - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons">
+                        <!-- Будет заполнено автоматически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Прогресс-бар -->
+        <section class="test-progress-section">
+            <div class="container">
+                <div class="test-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span class="progress-text" id="progressText">Вопрос 1 из 5</span>
+                        <span class="progress-percent" id="progressPercent">0%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контейнер теста -->
+        <section class="test-container">
+            <div class="container">
+                <!-- Заголовок теста -->
+                <div class="test-header" id="testHeader">
+                    <h1 class="test-title" id="testTitle">Загрузка теста...</h1>
+                    <p class="test-description" id="testDescription"></p>
+                </div>
+
+                <!-- Контейнер вопроса -->
+                <div class="question-container" id="questionContainer">
+                    <div class="question-loading">
+                        <div class="loader-spinner"></div>
+                        <p>Загружаем вопросы...</p>
+                    </div>
+                </div>
+
+                <!-- Навигация -->
+                <div class="test-navigation" id="testNavigation" style="display: none;">
+                    <button class="btn btn-secondary" id="prevBtn">
+                        <i class="fas fa-arrow-left"></i>
+                        Назад
+                    </button>
+                    <div class="navigation-info">
+                        <span id="currentQuestion">1</span> из <span id="totalQuestions">5</span>
+                    </div>
+                    <button class="btn btn-primary" id="nextBtn">
+                        Далее
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-success" id="finishBtn" style="display: none;">
+                        <i class="fas fa-check"></i>
+                        Завершить тест
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="https://t.me/ttemkatut" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Данные тестов (временные, потом вынесем в отдельный файл)
+        const testsData = {
+            1: {
+                id: 1,
+                title: "Какой ты бутерброд?",
+                description: "Узнай, какой бутерброд лучше всего описывает твою личность и жизненный подход!",
+                image: "https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                category: "food",
+                questions: [
+                    {
+                        id: 1,
+                        question: "Какой твой идеальный вечер?",
+                        options: [
+                            { id: 1, text: "Шумная вечеринка с друзьями", value: "extrovert" },
+                            { id: 2, text: "Тихий ужин при свечах", value: "romantic" },
+                            { id: 3, text: "Кино с необычным сюжетом", value: "creative" },
+                            { id: 4, text: "Приключения и эксперименты", value: "adventurous" }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        question: "Какую музыку ты предпочитаешь?",
+                        options: [
+                            { id: 1, text: "Популярные хиты", value: "mainstream" },
+                            { id: 2, text: "Классическую", value: "classic" },
+                            { id: 3, text: "Альтернативу и инди", value: "alternative" },
+                            { id: 4, text: "Экспериментальную", value: "experimental" }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        question: "Твой подход к работе?",
+                        options: [
+                            { id: 1, text: "Четкий план и расписание", value: "organized" },
+                            { id: 2, text: "Гибкий график", value: "flexible" },
+                            { id: 3, text: "Импровизация и креатив", value: "creative_work" },
+                            { id: 4, text: "Эксперименты и новшества", value: "innovative" }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        question: "Какую книгу ты бы выбрал?",
+                        options: [
+                            { id: 1, text: "Бестселлер", value: "popular" },
+                            { id: 2, text: "Классику", value: "timeless" },
+                            { id: 3, text: "Фэнтези или научную фантастику", value: "imaginative" },
+                            { id: 4, text: "Что-то необычное и неизвестное", value: "unique" }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        question: "Твой стиль в одежде?",
+                        options: [
+                            { id: 1, text: "Классический и элегантный", value: "elegant" },
+                            { id: 2, text: "Удобный и практичный", value: "practical" },
+                            { id: 3, text: "Яркий и необычный", value: "expressive" },
+                            { id: 4, text: "Экспериментальный и модный", value: "fashionable" }
+                        ]
+                    }
+                ],
+                results: [
+                    {
+                        type: "classic_sandwich",
+                        title: "Ты - Классический Бутерброд!",
+                        description: "Надежный, традиционный и всеми любимый. Ты ценишь стабильность и качество.",
+                        image: "https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    },
+                    {
+                        type: "gourmet_sandwich",
+                        title: "Ты - Гурманский Бутерброд!",
+                        description: "Изысканный, с уникальными сочетаниями. Ты ценитель прекрасного и необычного.",
+                        image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    },
+                    {
+                        type: "adventurous_sandwich",
+                        title: "Ты - Приключенческий Бутерброд!",
+                        description: "Смелый, экспериментальный и всегда готовый к новому. Ты обожаешь вызовы!",
+                        image: "https://images.unsplash.com/photo-1539252554453-80ab65ce3586?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    },
+                    {
+                        type: "creative_sandwich",
+                        title: "Ты - Креативный Бутерброд!",
+                        description: "Уникальный, артистичный и вдохновляющий. Ты видишь мир по-своему!",
+                        image: "https://images.unsplash.com/photo-1571091718767-18b5b1457add?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    }
+                ]
+            },
+          
+            9: {
+                id: 9,
+                title: "Кто ты из преподавателей МКП?",
+                description: "Пройди тест и узнай, какой из преподавателей ПОИТ в МКП подходит тебе по вайбу!",
+                image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                category: "memes",
+                questions: [
+                    {
+                        id: 1,
+                        question: "Ваше отношение к дедлайнам?",
+                        options: [
+                            { id: 1, text: "✅ Дедлайн - это закон, но могу понять", value: "kislyuk" },
+                            { id: 2, text: "❌ Главное - сдать когда-нибудь", value: "prutkina" }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        question: "Любите ли вы проводить пары?",
+                        options: [
+                            { id: 1, text: "✅ Обожаю, особенно когда студенты понимают тему", value: "kislyuk" },
+                            { id: 2, text: "❌ Честно? Лучше бы дома сидел(а)", value: "prutkina" }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        question: "Какой ваш стиль общения со студентами?",
+                        options: [
+                            { id: 1, text: "Строгий, но справедливый ", value: "kislyuk" },
+                            { id: 2, text: "На одной волне, как друг ", value: "prutkina" },
+                            { id: 3, text: "Официально-деловой, по правилам ", value: "kulakovich" },
+                            { id: 4, text: "Мемно-прикольный, с шутками ", value: "shapovalov" },
+                            { id: 5, text: "Расслабленный, с вайбом ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        question: "Что для вас важнее в обучении?",
+                        options: [
+                            { id: 1, text: "Понять суть и применять в реальности ", value: "kislyuk" },
+                            { id: 2, text: "Чтобы было не скучно и весело ", value: "prutkina" },
+                            { id: 3, text: "Дисциплина и соблюдение правил ", value: "kulakovich" },
+                            { id: 4, text: "Креативное мышление и нестандартный подход ", value: "shapovalov" },
+                            { id: 5, text: "Атмосфера и вайб ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        question: "Как вы проводите перерыв?",
+                        options: [
+                            { id: 1, text: "Готовлюсь к следующей паре ", value: "shapovalov" },
+                            { id: 2, text: "На курилку, куда же еще ", value: "prutkina" },
+                            { id: 3, text: "Проверяю работы и составляю отчеты ", value: "kulakovich" },
+                            { id: 4, text: "Кушать иду ", value: "kislyuk" },
+                            { id: 5, text: "Заряжаюсь вайбом ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        question: "Ваше отношение к срезам знаний?",
+                        options: [
+                            { id: 1, text: "Необходимы для контроля прогресса ", value: "kislyuk" },
+                            { id: 2, text: "Ненавижу их как и студенты ", value: "prutkina" },
+                            { id: 3, text: "Обожаю! Это показывает реальные знания ", value: "kulakovich" },
+                            { id: 4, text: "Можно и без них, главное - понимание ", value: "shapovalov" },
+                            { id: 5, text: "Срезы? А что это? ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 7,
+                        question: "Что вы сделаете, если студент опоздал?",
+                        options: [
+                            { id: 1, text: "Спрошу причину, но отмечу опоздание ", value: "kislyuk" },
+                            { id: 2, text: "«И не стыдно опаздывать? ", value: "prutkina" },
+                            { id: 3, text: "Строго отчитаю и поставлю Н ", value: "kulakovich" },
+                            { id: 4, text: "Пошучу про пробки и пропущу ", value: "shapovalov" },
+                            { id: 5, text: "«Сам только проснулся» ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        question: "Ваш главный teaching style?",
+                        options: [
+                            { id: 1, text: "Реальные кейсы из IT + теория ", value: "kislyuk" },
+                            { id: 2, text: "Лишь бы пережить пару ", value: "prutkina" },
+                            { id: 3, text: "Строгая программа + самостоятельные ", value: "kulakovich" },
+                            { id: 4, text: "Мемы + практика + приколы ", value: "shapovalov" },
+                            { id: 5, text: "Немного строгости, но в целом на вайбе ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 9,
+                        question: "Как вы выглядите в глазах студентов?",
+                        options: [
+                            { id: 1, text: "Крутой авторитет с опытом ", value: "kislyuk" },
+                            { id: 2, text: "Свой в доску, почти ровесник ", value: "prutkina" },
+                            { id: 3, text: "Строгая заведующая с властью ", value: "kulakovich" },
+                            { id: 4, text: "Лысый мемный дядя ", value: "shapovalov" },
+                            { id: 5, text: "Классный препод со своим вайбом ", value: "leyko" }
+                        ]
+                    },
+                    {
+                        id: 10,
+                        question: "Ваша фишка преподавания?",
+                        options: [
+                            { id: 1, text: "Умение объяснить сложное простыми словами ", value: "kislyuk" },
+                            { id: 2, text: "Понимание студенческих проблем ", value: "prutkina" },
+                            { id: 3, text: "Железная дисциплина и порядок ", value: "kulakovich" },
+                            { id: 4, text: "Нестандартные задания и юмор ", value: "shapovalov" },
+                            { id: 5, text: "Я в армии(  ", value: "leyko" }
+                        ]
+                    }
+                ],
+    results: [
+        {
+            type: "kislyuk",
+            title: "Ты - Кислюк Анастасия Павловна! ",
+            description: "Ты - тот самый крутой преподаватель, которого уважают все курсы! Сочетаешь в себе строгость и понимание, умеешь объяснить сложные темы простыми словами. Обожаешь реальные кейсы из IT и веришь, что главное - понять суть, а не просто зазубрить. Студенты тебя немного побаиваются, но бесконечно уважают за профессионализм и справедливость.",
+            image: "kisluk.png"
+        },
+        {
+            type: "prutkina", 
+            title: "Ты - Пруткина Дарья Антоновна! ",
+            description: "Ты на одной волне со студентами и понимаешь их лучше всех! Молодая, современная, и честно говоря, сама не особо любишь вести пары. Часто шутишь, создаешь расслабленную атмосферу и веришь, что учиться должно быть комфортно. Студенты считают тебя 'своей' и могут поделиться любыми проблемами.",
+            image: "prutkina.jpg"
+        },
+        {
+            type: "kulakovich",
+            title: "Ты - Кулакович Марина Викентьевна! ",
+            description: "Заведующая отделения - это про тебя! Строгая, правильная, обожающая срезы и самостоятельные работы. На парах ты - железная леди с безупречной дисциплиной, но один на один можешь быть понимающей и доброй. Знаешь все правила Устава МКП наизусть и следишь, чтобы все было по инструкции.",
+            image: "kulakovich.jpg"
+        },
+        {
+            type: "shapovalov",
+            title: "Ты - Шаповалов Анатолий Сергеевич! ", 
+            description: "Человек-мем в чистом виде! Добрый, с прекрасным чувством юмора, всегда на равных со студентами. Обожаешь приколы, нестандартное мышление и креативные подходы к обучению. Твоя лысина блестит ярче будущего твоих студентов. С тобой любая тема превращается в увлекательное приключение!",
+            image: "shapovalov.jpg"
+        },
+        {
+            type: "leyko",
+            title: "Ты - Лейко Дмитрий Александрович! ",
+            description: "К сожалению, тебя забрали в армию, но в наших сердцах ты останешься навсегда! Высокий, с длинными волосами и хорошим стилем,с прекрасной бородкой, ты создавал неповторимый вайб на парах. Как и Шаповалов, был на меме и приколе, обожал музыку и нестандартный подход. Студенты до сих пор вспоминают твои пары с теплотой и надеждой на возвращение!",
+            image: "leyko.jpg"
+        }
+    ]
+}
+        };
+
+        class TestManager {
+            constructor() {
+                this.currentTest = null;
+                this.currentQuestionIndex = 0;
+                this.userAnswers = [];
+                this.testId = null;
+                
+                this.elements = {
+                    testTitle: document.getElementById('testTitle'),
+                    testDescription: document.getElementById('testDescription'),
+                    questionContainer: document.getElementById('questionContainer'),
+                    testNavigation: document.getElementById('testNavigation'),
+                    prevBtn: document.getElementById('prevBtn'),
+                    nextBtn: document.getElementById('nextBtn'),
+                    finishBtn: document.getElementById('finishBtn'),
+                    progressFill: document.getElementById('progressFill'),
+                    progressText: document.getElementById('progressText'),
+                    progressPercent: document.getElementById('progressPercent'),
+                    currentQuestion: document.getElementById('currentQuestion'),
+                    totalQuestions: document.getElementById('totalQuestions')
+                };
+                
+                this.init();
+            }
+
+            init() {
+                this.getTestIdFromURL();
+                this.loadTest();
+                this.setupEventListeners();
+            }
+
+            getTestIdFromURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                this.testId = parseInt(urlParams.get('id'));
+                
+                if (!this.testId) {
+                    this.showError('Тест не найден');
+                    return;
+                }
+            }
+
+            loadTest() {
+                this.currentTest = testsData[this.testId];
+                
+                if (!this.currentTest) {
+                    this.showError('Тест не найден');
+                    return;
+                }
+
+                this.displayTestInfo();
+                this.showQuestion(0);
+                this.updateProgress();
+            }
+
+            displayTestInfo() {
+                this.elements.testTitle.textContent = this.currentTest.title;
+                this.elements.testDescription.textContent = this.currentTest.description;
+                this.elements.totalQuestions.textContent = this.currentTest.questions.length;
+            }
+
+            showQuestion(questionIndex) {
+                this.currentQuestionIndex = questionIndex;
+                const question = this.currentTest.questions[questionIndex];
+                
+                this.elements.questionContainer.innerHTML = this.createQuestionHTML(question);
+                this.elements.currentQuestion.textContent = questionIndex + 1;
+                this.updateNavigation();
+                this.updateProgress();
+            }
+
+            createQuestionHTML(question) {
+                return `
+                    <div class="question" data-question-id="${question.id}">
+                        <div class="question-header">
+                            <h2 class="question-title">${question.question}</h2>
+                        </div>
+                        ${question.image ? `
+                            <div class="question-image">
+                                <img src="${question.image}" alt="${question.question}">
+                            </div>
+                        ` : ''}
+                        <div class="options-grid">
+                            ${question.options.map(option => `
+                                <label class="option-card">
+                                    <input type="radio" name="question-${question.id}" value="${option.value}" 
+                                           ${this.getUserAnswer(question.id) === option.value ? 'checked' : ''}>
+                                    <div class="option-content">
+                                        <span class="option-text">${option.text}</span>
+                                    </div>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            getUserAnswer(questionId) {
+                const answer = this.userAnswers.find(a => a.questionId === questionId);
+                return answer ? answer.value : null;
+            }
+
+          saveAnswer(questionId, value) {
+                const existingIndex = this.userAnswers.findIndex(a => a.questionId === questionId);
+                
+                if (existingIndex !== -1) {
+                    this.userAnswers[existingIndex].value = value;
+                } else {
+                    this.userAnswers.push({ questionId, value });
+                }
+            }
+
+            updateNavigation() {
+                const isFirstQuestion = this.currentQuestionIndex === 0;
+                const isLastQuestion = this.currentQuestionIndex === this.currentTest.questions.length - 1;
+                
+                this.elements.prevBtn.style.display = isFirstQuestion ? 'none' : 'flex';
+                this.elements.nextBtn.style.display = isLastQuestion ? 'none' : 'flex';
+                this.elements.finishBtn.style.display = isLastQuestion ? 'flex' : 'none';
+                this.elements.testNavigation.style.display = 'flex';
+            }
+
+            updateProgress() {
+                const progress = ((this.currentQuestionIndex + 1) / this.currentTest.questions.length) * 100;
+                this.elements.progressFill.style.width = `${progress}%`;
+                this.elements.progressText.textContent = `Вопрос ${this.currentQuestionIndex + 1} из ${this.currentTest.questions.length}`;
+                this.elements.progressPercent.textContent = `${Math.round(progress)}%`;
+            }
+
+            setupEventListeners() {
+                this.elements.prevBtn.addEventListener('click', () => this.previousQuestion());
+                this.elements.nextBtn.addEventListener('click', () => this.nextQuestion());
+                this.elements.finishBtn.addEventListener('click', () => this.finishTest());
+                
+                // Обработка выбора ответа
+                document.addEventListener('change', (e) => {
+                    if (e.target.type === 'radio') {
+                        const questionId = parseInt(e.target.closest('.question').dataset.questionId);
+                        this.saveAnswer(questionId, e.target.value);
+                    }
+                });
+            }
+
+            previousQuestion() {
+                if (this.currentQuestionIndex > 0) {
+                    this.showQuestion(this.currentQuestionIndex - 1);
+                }
+            }
+
+            nextQuestion() {
+                const currentQuestion = this.currentTest.questions[this.currentQuestionIndex];
+                const userAnswer = this.getUserAnswer(currentQuestion.id);
+                
+                if (!userAnswer) {
+                    this.showNotification('Пожалуйста, выберите ответ', 'warning');
+                    return;
+                }
+
+                if (this.currentQuestionIndex < this.currentTest.questions.length - 1) {
+                    this.showQuestion(this.currentQuestionIndex + 1);
+                }
+            }
+
+            finishTest() {
+                const currentQuestion = this.currentTest.questions[this.currentQuestionIndex];
+                const userAnswer = this.getUserAnswer(currentQuestion.id);
+                
+                if (!userAnswer) {
+                    this.showNotification('Пожалуйста, выберите ответ на последний вопрос', 'warning');
+                    return;
+                }
+
+                if (this.userAnswers.length !== this.currentTest.questions.length) {
+                    this.showNotification('Вы ответили не на все вопросы. Завершить тест?', 'warning');
+                    // Здесь можно добавить подтверждение
+                }
+
+                this.calculateResults();
+            }
+
+            calculateResults() {
+                const teacherScores = {
+                    'kislyuk': 0,
+                    'prutkina': 0, 
+                    'kulakovich': 0,
+                    'shapovalov': 0,
+                    'leyko': 0
+                };
+
+                // Детальная система весов для каждого вопроса
+                const questionWeights = {
+                    1: { // Твое отношение к дедлайнам?
+                        'kislyuk': 3,    // строгий но понимающий
+                        'prutkina': 1,   // гибкий
+                        'kulakovich': 2  // строгий
+                    },
+                    2: { // Любишь ли ты проводить пары?
+                        'kislyuk': 2,    // любит когда понимают
+                        'prutkina': 0,   // не любит
+                        'shapovalov': 1  // нейтрально
+                    },
+                    3: { // Стиль общения
+                        'kislyuk': 3,
+                        'prutkina': 3, 
+                        'kulakovich': 3,
+                        'shapovalov': 3,
+                        'leyko': 3
+                    },
+                    4: { // Что важнее в обучении?
+                        'kislyuk': 3,    // понять суть
+                        'prutkina': 2,   // весело
+                        'kulakovich': 3, // дисциплина  
+                        'shapovalov': 3, // креативность
+                        'leyko': 2       // атмосфера
+                    },
+                    5: { // Перерыв
+                        'kislyuk': 2,    // готовится
+                        'prutkina': 2,   // отдыхает
+                        'kulakovich': 3, // работает
+                        'shapovalov': 2, // общается
+                        'leyko': 2       // музыку
+                    },
+                    6: { // Срезы знаний
+                        'kislyuk': 2,    // необходимы
+                        'prutkina': 0,   // ненавидит
+                        'kulakovich': 3, // обожает
+                        'shapovalov': 1, // можно без
+                        'leyko': 2       // не знает что это
+                    },
+                    7: { // Опоздавший студент
+                        'kislyuk': 2,    // спросит причину
+                        'prutkina': 1,   // ничего страшного
+                        'kulakovich': 3, // отчитает
+                        'shapovalov': 2, // пошутит
+                        'leyko': 3       // сам проспал
+                    },
+                    8: { // Teaching style
+                        'kislyuk': 3,    // реальные кейсы
+                        'prutkina': 2,   // пережить пару
+                        'kulakovich': 3, // строгая программа
+                        'shapovalov': 3, // мемы + практика
+                        'leyko': 2       // вайб + музыка
+                    },
+                    9: { // Внешний вид
+                        'kislyuk': 3,
+                        'prutkina': 3,
+                        'kulakovich': 3, 
+                        'shapovalov': 10,
+                        'leyko': 3
+                    },
+                    10: { // Фишка преподавания
+                        'kislyuk': 3,    // объяснить сложное
+                        'prutkina': 2,   // понимание проблем
+                        'kulakovich': 3, // дисциплина
+                        'shapovalov': 3, // юмор + нестандартное
+                        'leyko': 10       // хорни-вайб
+                    }
+                };
+
+                // Подсчет баллов с учетом весов вопросов
+                this.userAnswers.forEach(answer => {
+                    const questionId = answer.questionId;
+                    const value = answer.value;
+                    const weights = questionWeights[questionId];
+
+                    if (weights && weights[value] !== undefined) {
+                        teacherScores[value] += weights[value];
+                    } else {
+                        // Если вес не указан, даем стандартные 2 балла
+                        teacherScores[value] += 2;
+                    }
+                });
+
+                // Находим победителя
+                let maxTeacher = '';
+                let maxScore = 0;
+                
+                for (const [teacher, score] of Object.entries(teacherScores)) {
+                    if (score > maxScore) {
+                        maxScore = score;
+                        maxTeacher = teacher;
+                    }
+                }
+
+                const result = this.currentTest.results.find(r => r.type === maxTeacher) || this.currentTest.results[0];
+                this.goToResults(result);
+            }
+
+            goToResults(result) {
+                // Сохраняем результат в localStorage для страницы результатов
+                const testResult = {
+                    testId: this.testId,
+                    testTitle: this.currentTest.title,
+                    userAnswers: this.userAnswers,
+                    result: result,
+                    completedAt: new Date().toISOString()
+                };
+                
+                localStorage.setItem('lastTestResult', JSON.stringify(testResult));
+                window.location.href = `results.html?test=${this.testId}`;
+            }
+
+            showNotification(message, type = 'info') {
+                // Временное уведомление - потом заменим на красивый компонент
+                alert(message);
+            }
+
+            showError(message) {
+                this.elements.questionContainer.innerHTML = `
+                    <div class="error-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <h3>${message}</h3>
+                        <a href="catalog.html" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i>
+                            Вернуться в каталог
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        // Theme Manager
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.htmlElement = document.documentElement;
+                this.init();
+            }
+
+            init() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme) {
+                    this.setTheme(savedTheme);
+                } else if (systemPrefersDark) {
+                    this.setTheme('dark');
+                }
+
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        this.setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+
+            setTheme(theme) {
+                this.htmlElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.themeToggle.setAttribute('aria-label', 
+                    theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
+            }
+
+            toggleTheme() {
+                const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+
+                this.themeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.themeToggle.style.transform = 'scale(1)';
+                }, 150);
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new TestManager();
+            
+            // Плавная загрузка страницы
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

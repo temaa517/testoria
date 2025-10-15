@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link active">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <!-- Вместо всего блока header-controls -->
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons">
+                        <!-- Будет заполнено автоматически -->
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Контакты</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок страницы -->
+        <section class="catalog-header">
+            <div class="container">
+                <h1 class="page-title">
+                    <i class="fas fa-phone"></i>
+                    Контакты
+                </h1>
+                <p class="page-subtitle">Свяжитесь с нами любым удобным способом</p>
+            </div>
+        </section>
+
+        <!-- Уведомления -->
+        <div class="notifications-container" id="notificationsContainer"></div>
+
+        <!-- Контактная информация и форма -->
+        <section class="contact-content">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <h2>Контактная информация</h2>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Адрес</h3>
+                                <p>г. Минск, ул. Уручская, 81Б</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Телефон</h3>
+                                <p>+375 (01) 234-56-78</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-details">
+                                <h3>Email</h3>
+                                <p>hello@testoria.cloud</p>
+                            </div>
+                        </div>
+                        <div class="social-contact">
+                            <h3>Мы в соцсетях</h3>
+                            <div class="social-links">
+                                <a href="https://t.me/ttemkatut" class="social-link">
+                                    <i class="fab fa-telegram"></i>
+                                    Telegram
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <h2>Форма обратной связи</h2>
+                        <form id="feedbackForm">
+                            <div class="form-group">
+                                <label for="name">Ваше имя *</label>
+                                <input type="text" id="name" name="name" required 
+                                    placeholder="Введите ваше имя">
+                                <span class="error-message" id="nameError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email *</label>
+                                <input type="email" id="email" name="email" required 
+                                    placeholder="your@email.com">
+                                <span class="error-message" id="emailError"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Тема сообщения</label>
+                                <select id="subject" name="subject">
+                                    <option value="">Выберите тему</option>
+                                    <option value="technical">Техническая проблема</option>
+                                    <option value="suggestion">Предложение по улучшению</option>
+                                    <option value="cooperation">Сотрудничество</option>
+                                    <option value="other">Другое</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Сообщение *</label>
+                                <textarea id="message" name="message" rows="5" required 
+                                        placeholder="Опишите ваш вопрос или предложение..."></textarea>
+                                <span class="error-message" id="messageError"></span>
+                                <div class="char-counter">
+                                    <span id="charCount">0</span>/500 символов
+                                </div>
+                            </div>
+                            <div class="form-group checkbox-group">
+                                <input type="checkbox" id="consent" name="consent" required>
+                                <label for="consent">
+                                    Я согласен на обработку персональных данных
+                                </label>
+                                <span class="error-message" id="consentError"></span>
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-paper-plane"></i>
+                                <span class="btn-text">Отправить сообщение</span>
+                                <div class="btn-loader" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="faq-section">
+            <div class="container">
+                <h2 class="section-title">Часто задаваемые вопросы</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h3>Как создать свой тест на вашей платформе?</h3>
+                        <p>В настоящее время мы работаем над функционалом создания пользовательских тестов. Следите за обновлениями!</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Можно ли пройти тесты без регистрации?</h3>
+                        <p>Да, все наши тесты доступны без регистрации. Однако регистрация позволяет сохранять результаты.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h3>Как часто добавляются новые тесты?</h3>
+                        <p>Мы добавляем новые тесты каждую неделю. Подпишитесь на наши соцсети, чтобы быть в курсе обновлений.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        class ContactForm {
+            constructor() {
+                this.form = document.getElementById('feedbackForm');
+                this.submitBtn = document.getElementById('submitBtn');
+                this.btnText = this.submitBtn.querySelector('.btn-text');
+                this.btnLoader = this.submitBtn.querySelector('.btn-loader');
+                this.notificationsContainer = document.getElementById('notificationsContainer');
+                
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.setupCharacterCounter();
+            }
+
+            setupEventListeners() {
+                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+                
+                // Валидация в реальном времени
+                const inputs = this.form.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', () => this.validateField(input));
+                    input.addEventListener('input', () => this.clearError(input));
+                });
+            }
+
+            setupCharacterCounter() {
+                const messageTextarea = document.getElementById('message');
+                const charCount = document.getElementById('charCount');
+                
+                messageTextarea.addEventListener('input', () => {
+                    const length = messageTextarea.value.length;
+                    charCount.textContent = length;
+                    
+                    if (length > 500) {
+                        charCount.style.color = 'var(--error-color)';
+                    } else if (length > 400) {
+                        charCount.style.color = 'var(--warning-color)';
+                    } else {
+                        charCount.style.color = 'var(--text-secondary)';
+                    }
+                });
+            }
+
+            validateField(field) {
+                const value = field.value.trim();
+                const errorElement = document.getElementById(field.id + 'Error');
+
+                switch(field.type) {
+                    case 'text':
+                        if (field.id === 'name') {
+                            if (!value) {
+                                this.showError(field, 'Введите ваше имя');
+                            } else if (value.length < 2) {
+                                this.showError(field, 'Имя должно содержать минимум 2 символа');
+                            } else {
+                                this.clearError(field);
+                            }
+                        }
+                        break;
+                    
+                    case 'email':
+                        if (!value) {
+                            this.showError(field, 'Введите email адрес');
+                        } else if (!this.isValidEmail(value)) {
+                            this.showError(field, 'Введите корректный email адрес');
+                        } else {
+                            this.clearError(field);
+                        }
+                        break;
+                    
+                    case 'textarea':
+                        if (!value) {
+                            this.showError(field, 'Введите сообщение');
+                        } else if (value.length < 10) {
+                            this.showError(field, 'Сообщение должно содержать минимум 10 символов');
+                        } else if (value.length > 500) {
+                            this.showError(field, 'Сообщение не должно превышать 500 символов');
+                        } else {
+                            this.clearError(field);
+                        }
+                        break;
+                    
+                    case 'checkbox':
+                        if (!field.checked) {
+                            this.showError(field, 'Необходимо согласие на обработку данных');
+                        } else {
+                            this.clearError(field);
+                        }
+                        break;
+                }
+            }
+
+            isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            showError(field, message) {
+                field.classList.add('error');
+                const errorElement = document.getElementById(field.id + 'Error');
+                if (errorElement) {
+                    errorElement.textContent = message;
+                }
+            }
+
+            clearError(field) {
+                field.classList.remove('error');
+                const errorElement = document.getElementById(field.id + 'Error');
+                if (errorElement) {
+                    errorElement.textContent = '';
+                }
+            }
+
+            validateForm() {
+                let isValid = true;
+                const requiredFields = this.form.querySelectorAll('[required]');
+                
+                requiredFields.forEach(field => {
+                    this.validateField(field);
+                    if (field.classList.contains('error')) {
+                        isValid = false;
+                    }
+                });
+
+                return isValid;
+            }
+
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    this.showNotification('Пожалуйста, исправьте ошибки в форме', 'error');
+                    return;
+                }
+
+                this.setLoading(true);
+
+                try {
+                    // Имитация отправки на сервер
+                    await this.sendFormData();
+                    
+                    this.showNotification('Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.', 'success');
+                    this.form.reset();
+                    document.getElementById('charCount').textContent = '0';
+                    
+                } catch (error) {
+                    this.showNotification('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.', 'error');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+
+            async sendFormData() {
+                // Имитация задержки сети
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    subject: document.getElementById('subject').value,
+                    message: document.getElementById('message').value,
+                    timestamp: new Date().toISOString()
+                };
+
+                // В реальном приложении здесь будет fetch запрос к серверу
+                console.log('Отправка данных формы:', formData);
+                
+                // Сохраняем в localStorage для демонстрации
+                const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+                submissions.push(formData);
+                localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+                
+                return { success: true };
+            }
+
+                setLoading(loading) {
+                    if (loading) {
+                        this.submitBtn.disabled = true;
+                        this.submitBtn.classList.add('loading');
+                        this.btnText.style.display = 'none';
+                        this.btnLoader.style.display = 'block';
+                    } else {
+                        this.submitBtn.disabled = false;
+                        this.submitBtn.classList.remove('loading');
+                        this.btnText.style.display = 'block';
+                        this.btnLoader.style.display = 'none';
+                }
+                }
+
+            showNotification(message, type = 'info') {
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button class="notification-close" onclick="this.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+
+                this.notificationsContainer.appendChild(notification);
+
+                // Автоматическое удаление через 5 секунд
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 5000);
+            }
+
+            getNotificationIcon(type) {
+                const icons = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    warning: 'exclamation-triangle',
+                    info: 'info-circle'
+                };
+                return icons[type] || 'info-circle';
+            }
+        }
+
+        // Theme Manager
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.htmlElement = document.documentElement;
+                this.init();
+            }
+
+            init() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme) {
+                    this.setTheme(savedTheme);
+                } else if (systemPrefersDark) {
+                    this.setTheme('dark');
+                }
+
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        this.setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+
+            setTheme(theme) {
+                this.htmlElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.themeToggle.setAttribute('aria-label', 
+                    theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
+            }
+
+            toggleTheme() {
+                const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+
+                this.themeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.themeToggle.style.transform = 'scale(1)';
+                }, 150);
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new ContactForm();
+            
+            // Плавная загрузка страницы
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+
+            // Плавный переход по ссылкам
+            document.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.href && link.href.includes('.html') && !link.href.includes('#')) {
+                        e.preventDefault();
+                        document.body.style.opacity = '0';
+                        setTimeout(() => {
+                            window.location.href = link.href;
+                        }, 300);
+                    }
+                });
+            });
+        });
+    </script>
+<!-- Подключаем основные классы -->
+<script src="auth-core.js"></script>
+
+<!-- Подключаем управление хедером -->
+<script src="auth-header.js"></script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                        <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                        </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons">
+                        <!-- Будет заполнено автоматически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Вход в аккаунт</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок страницы -->
+        <section class="auth-header">
+            <div class="container">
+                <div class="auth-header-content">
+                    <h1 class="page-title">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Вход в аккаунт
+                    </h1>
+                    <p class="page-subtitle">Войдите в свой аккаунт, чтобы сохранять результаты тестов и продолжить с того места, где остановились</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основной контент -->
+        <section class="auth-content">
+            <div class="container">
+                <div class="auth-grid">
+                    <!-- Форма входа -->
+                    <div class="auth-form-container">
+                        <div class="auth-card">
+                            <h2>
+                                <i class="fas fa-user-circle"></i>
+                                Вход в аккаунт
+                            </h2>
+                            
+                            <form id="loginForm" class="auth-form">
+                                <div class="form-group">
+                                    <label for="loginName">
+                                        <i class="fas fa-user"></i>
+                                        Имя пользователя
+                                    </label>
+                                    <input type="text" id="loginName" name="name" required placeholder="Введите ваше имя">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="loginPassword">
+                                        <i class="fas fa-lock"></i>
+                                        Пароль
+                                    </label>
+                                    <div class="password-input-container">
+                                        <input type="password" id="loginPassword" name="password" required placeholder="Введите ваш пароль">
+                                        <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-full">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Войти в аккаунт
+                                </button>
+                            </form>
+
+                            <div class="auth-switch">
+                                <p>Еще нет аккаунта? <a href="register.html">Зарегистрируйтесь</a></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Боковая информация -->
+                    <div class="auth-info">
+                        <div class="info-card">
+                            <h3>
+                                <i class="fas fa-star"></i>
+                                Преимущества аккаунта
+                            </h3>
+                            <ul class="features-list">
+                                <li>
+                                    <i class="fas fa-save"></i>
+                                    <span>Сохраняйте результаты тестов</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Отслеживайте свой прогресс</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-heart"></i>
+                                    <span>Добавляйте тесты в избранное</span>
+                                </li>
+                                <li>
+                                    <i class="fas fa-sync-alt"></i>
+                                    <span>Продолжайте с любого устройства</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+    // Функция переключения видимости пароля
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.parentNode.querySelector('.password-toggle i');
+        
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
+    // Обработка формы входа
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('loginName').value.trim();
+                const password = document.getElementById('loginPassword').value;
+
+                // Базовая валидация
+                if (!name) {
+                    alert('Введите имя пользователя');
+                    return;
+                }
+
+                if (!password) {
+                    alert('Введите пароль');
+                    return;
+                }
+
+                try {
+                    const userManager = new UserManager();
+                    const user = userManager.loginByName(name, password);
+                    
+                    alert(`Добро пожаловать, ${user.name}! Перенаправляем...`);
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+
+                } catch (error) {
+                    alert(error.message);
+                }
+            });
+        }
+    });
+</script>
+<!-- Подключаем основные классы -->
+<script src="auth-core.js"></script>
+
+<!-- Подключаем управление хедером -->
+<script src="auth-header.js"></script>
+</body>
+</html>

@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог тестов - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                        <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                        </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link active">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <!-- Вместо всего блока header-controls -->
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons">
+                        <!-- Будет заполнено автоматически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Каталог тестов</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок каталога -->
+        <section class="catalog-header">
+            <div class="container">
+                <h1 class="page-title">
+                    <i class="fas fa-list"></i>
+                    Каталог тестов
+                </h1>
+                <p class="page-subtitle">Выберите тест, который вас интересует, и узнайте что-то новое о себе!</p>
+                
+                <!-- Статистика каталога -->
+                <div class="catalog-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-tasks"></i>
+                        <span>Всего тестов: <strong id="totalTests">12</strong></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Фильтры и поиск -->
+        <section class="catalog-filters">
+            <div class="container">
+                <div class="filters-grid">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Поиск тестов..." class="search-input" id="searchInput">
+                        <button class="search-clear" id="searchClear" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="">Все категории</option>
+                            <option value="food">🍕 Еда</option>
+                            <option value="animals">🐾 Животные</option>
+                            <option value="tech">💻 Технологии</option>
+                            <option value="memes">😂 Мемы</option>
+                            <option value="entertainment">🎬 Развлечения</option>
+                            <option value="psychology">🧠 Психология</option>
+                            <option value="games">🎮 Игры</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select" id="sortFilter">
+                            <option value="popular">По популярности</option>
+                            <option value="new">Сначала новые</option>
+                            <option value="rating">По рейтингу</option>
+                            <option value="time">По времени</option>
+                            <option value="name">По названию</option>
+                        </select>
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-secondary" id="resetFilters">
+                            <i class="fas fa-redo"></i>
+                            Сбросить
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Активные фильтры -->
+                <div class="active-filters" id="activeFilters" style="display: none;">
+                    <div class="active-filters-header">
+                        <span>Активные фильтры:</span>
+                        <button class="clear-all" id="clearAllFilters">Очистить все</button>
+                    </div>
+                    <div class="active-filters-tags" id="activeFiltersTags"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Результаты поиска -->
+        <section class="search-results" id="searchResults" style="display: none;">
+            <div class="container">
+                <div class="results-header">
+                    <h3 id="resultsCount">Найдено тестов: 0</h3>
+                    <button class="btn btn-text" id="hideResults">
+                        <i class="fas fa-times"></i>
+                        Скрыть результаты
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Сетка тестов -->
+        <section class="catalog-tests">
+            <div class="container">
+                <!-- Загрузчик -->
+                <div class="loader" id="loader" style="display: none;">
+                    <div class="loader-spinner"></div>
+                    <p>Загружаем тесты...</p>
+                </div>
+
+                <!-- Сообщение, если ничего не найдено -->
+                <div class="no-results" id="noResults" style="display: none;">
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <h3>Тесты не найдены</h3>
+                        <p>Попробуйте изменить параметры поиска или сбросить фильтры</p>
+                        <button class="btn btn-primary" id="resetSearch">
+                            <i class="fas fa-redo"></i>
+                            Сбросить фильтры
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Сетка тестов -->
+                <div class="tests-grid" id="testsContainer">
+                    <!-- Тесты будут загружены через JavaScript -->
+                </div>
+
+                <!-- Пагинация -->
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        Показано <span id="shownTests">0</span> из <span id="totalTestsCount">0</span> тестов
+                    </div>
+                    <div class="pagination" id="pagination">
+                        <!-- Пагинация будет сгенерирована через JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Данные тестов (12 тестов с правильными картинками)
+        // Данные тестов (12 тестов с правильными картинками)
+const allTests = [
+    {
+        id: 1,
+        title: "Какой ты бутерброд?",
+        category: "food",
+        description: "Узнай, какой бутерброд лучше всего описывает твою личность и жизненный подход!",
+        image: "https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        icon: "fas fa-bread-slice",
+        rating: 4.8,
+        votes: 256,
+        time: 5,
+        date: "2024-01-15"
+    },
+    {
+        id: 2,
+        title: "Кто ты из кошачьих?",
+        category: "animals",
+        description: "Определи, какое животное из семейства кошачьих соответствует твоему характеру!",
+        image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        icon: "fas fa-cat",
+        rating: 4.9,
+        votes: 189,
+        time: 7,
+        date: "2024-01-20"
+    },
+    {
+        id: 3,
+        title: "Твой стиль программирования",
+        category: "tech",
+        description: "Узнай, какой язык программирования и подход к разработке тебе подходит!",
+        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        icon: "fas fa-laptop-code",
+        rating: 4.7,
+        votes: 312,
+        time: 10,
+        date: "2024-01-10"
+    },
+    {
+        id: 4,
+        title: "Какой ты Виктор Козьмин?",
+        category: "memes",
+        description: "Отбрось все дела в сторону и узнай, какой ты Виктор Козьмин!",
+        image: "vityaa.jpg",
+        icon: "fas fa-laugh-beam",
+        rating: 4.6,
+        votes: 178,
+        time: 8,
+        date: "2024-02-05"
+    },
+    {
+        id: 5,
+        title: "Какой ты супергерой?",
+        category: "entertainment",
+        description: "Узнай, какие суперспособности скрыты внутри тебя и какой герой тебе близок!",
+        image: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        icon: "fas fa-shield-alt",
+        rating: 4.9,
+        votes: 223,
+        time: 6,
+        date: "2024-01-18"
+    },
+    {
+        id: 6,
+        title: "Твой стиль обучения",
+        category: "psychology",
+        description: "Определи, как ты лучше всего усваиваешь новую информацию и получаешь знания!",
+        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        icon: "fas fa-brain",
+        rating: 4.5,
+        votes: 156,
+        time: 7,
+        date: "2024-02-12"
+    },
+    {
+        id: 7,
+        title: "Твой игровой архетип",
+        category: "games",
+        description: "Узнай, какой тип игрока в тебе скрыт: стратег, исследователь или боец?",
+        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+        icon: "fas fa-dice",
+        rating: 4.8,
+        votes: 287,
+        time: 9,
+        date: "2024-02-08"
+    },
+    {
+        id: 8,
+        title: "Какая ты пицца?",
+        category: "food",
+        description: "От Маргариты до Пепперони - узнай, какая пицца соответствует твоей натуре!",
+        image: "https://roll-club.kh.ua/wp-content/uploads/2021/06/pizza.jpg",
+        icon: "fas fa-pizza-slice",
+        rating: 4.4,
+        votes: 134,
+        time: 4,
+        date: "2024-03-20"
+    },
+    {
+        id: 9,
+        title: "Кто ты из преподавателей МКП",
+        category: "memes",
+        description: "Пройди тест и узнай какой из преподавателей ПОИТ в МКП подходит тебе по вайбу!",
+        image: "prepodi.jpg",
+        icon: "fas fa-laugh-beam",
+        rating: 4.7,
+        votes: 198,
+        time: 12,
+        date: "2024-01-28"
+    },
+    {
+        id: 10,
+        title: "Какой ты персонаж из фильма?",
+        category: "entertainment",
+        description: "Узнай, какого киногероя напоминаешь своим характером и поведением!",
+        image: "https://cs12.pikabu.ru/post_img/2022/11/02/10/1667406737124956825.webp",
+        icon: "fas fa-video",
+        rating: 4.6,
+        votes: 167,
+        time: 5,
+        date: "2024-02-22"
+    },
+    {
+        id: 11,
+        title: "Какой ты персонаж из мультфильма",
+        category: "entertainment",
+        description: "Определи, какой персонаж из мультфильмов подходит тебе по характеру!",
+        image: "https://cs14.pikabu.ru/post_img/2021/10/08/10/1633709649140443466.jpg",
+        icon: "fas fa-film",
+        rating: 4.3,
+        votes: 145,
+        time: 8,
+        date: "2024-02-20"
+    },
+    {
+        id: 12,
+        title: "Какой ты известный мем?",
+        category: "memes",
+        description: "От Ждуна до Упоротого Кота - узнай, какой мем лучше всего описывает тебя!",
+        image: "https://static.rustore.ru/imgproxy/heR3jvDiuyx5KHnv13sdskqPCrszNWlBdiwrhlsn_6A/rs:fit:2666:1496/g:so/dpr:2/plain/https://static.rustore.ru/rustore-strapi/7/memes_main_a2856d53dd.webp@webp",
+        icon: "fas fa-thumbs-up",
+        rating: 4.9,
+        votes: 312,
+        time: 3,
+        date: "2024-01-25"
+    }
+];
+
+// Настройки пагинации
+const TESTS_PER_PAGE = 9;
+let currentPage = 1;
+let filteredTests = [...allTests];
+let currentSort = 'popular';
+let currentCategory = '';
+let currentSearch = '';
+
+// Элементы DOM
+const testsContainer = document.getElementById('testsContainer');
+const pagination = document.getElementById('pagination');
+const loader = document.getElementById('loader');
+const noResults = document.getElementById('noResults');
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+const categoryFilter = document.getElementById('categoryFilter');
+const sortFilter = document.getElementById('sortFilter');
+const resetFilters = document.getElementById('resetFilters');
+const activeFilters = document.getElementById('activeFilters');
+const activeFiltersTags = document.getElementById('activeFiltersTags');
+const clearAllFilters = document.getElementById('clearAllFilters');
+const searchResults = document.getElementById('searchResults');
+const resultsCount = document.getElementById('resultsCount');
+const hideResults = document.getElementById('hideResults');
+const resetSearch = document.getElementById('resetSearch');
+const shownTests = document.getElementById('shownTests');
+const totalTestsCount = document.getElementById('totalTestsCount');
+const searchIcon = document.querySelector('.search-box i.fa-search');
+
+// Инициализация
+document.addEventListener('DOMContentLoaded', function() {
+    initializeCatalog();
+    setupEventListeners();
+    displayTests();
+    updatePagination();
+});
+
+function initializeCatalog() {
+    totalTestsCount.textContent = allTests.length;
+    updateShownTests();
+}
+
+function setupEventListeners() {
+    // Поиск
+    searchInput.addEventListener('input', debounce(function() {
+        currentSearch = this.value.trim();
+        searchClear.style.display = currentSearch ? 'block' : 'none';
+        applyFilters();
+    }, 300));
+
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            currentSearch = this.value.trim();
+            searchClear.style.display = currentSearch ? 'block' : 'none';
+            applyFilters();
+        }
+    });
+    
+    if (searchIcon) {
+        searchIcon.addEventListener('click', function() {
+            currentSearch = searchInput.value.trim();
+            searchClear.style.display = currentSearch ? 'block' : 'none';
+            applyFilters();
+        });
+    }
+    
+    searchClear.addEventListener('click', function() {
+        searchInput.value = '';
+        currentSearch = '';
+        this.style.display = 'none';
+        applyFilters();
+    });
+
+    // Фильтры
+    categoryFilter.addEventListener('change', function() {
+        currentCategory = this.value;
+        applyFilters();
+    });
+
+    sortFilter.addEventListener('change', function() {
+        currentSort = this.value;
+        applyFilters();
+    });
+
+    // Кнопки управления
+    resetFilters.addEventListener('click', resetAllFilters);
+    clearAllFilters.addEventListener('click', resetAllFilters);
+    hideResults.addEventListener('click', function() {
+        searchResults.style.display = 'none';
+    });
+    resetSearch.addEventListener('click', resetAllFilters);
+
+    // Пагинация
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('pagination-btn') && !e.target.classList.contains('disabled')) {
+            const page = parseInt(e.target.dataset.page);
+            if (page) {
+                currentPage = page;
+                displayTests();
+                updatePagination();
+                window.scrollTo({ top: testsContainer.offsetTop - 100, behavior: 'smooth' });
+            }
+        }
+    });
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Универсальная функция фильтрации
+function applyFilters() {
+    loader.style.display = 'block';
+    testsContainer.style.opacity = '0.5';
+
+    setTimeout(() => {
+        // Фильтрация по поиску и категории
+        filteredTests = allTests.filter(test => {
+            const matchesSearch = !currentSearch || 
+                test.title.toLowerCase().includes(currentSearch.toLowerCase()) ||
+                test.description.toLowerCase().includes(currentSearch.toLowerCase());
+    
+            const matchesCategory = !currentCategory || test.category === currentCategory;
+    
+            return matchesSearch && matchesCategory;
+        });
+
+        // Сортировка
+        sortTests();
+        
+        // Сброс на первую страницу и обновление интерфейса
+        currentPage = 1;
+        displayTests();
+        updatePagination();
+        updateActiveFilters();
+        updateSearchResults();
+
+        loader.style.display = 'none';
+        testsContainer.style.opacity = '1';
+    }, 300);
+}
+
+function sortTests() {
+    filteredTests.sort((a, b) => {
+        switch (currentSort) {
+            case 'popular':
+                return b.votes - a.votes;
+            case 'new':
+                return new Date(b.date) - new Date(a.date);
+            case 'rating':
+                return b.rating - a.rating;
+            case 'time':
+                return a.time - b.time;
+            case 'name':
+                return a.title.localeCompare(b.title);
+            default:
+                return b.votes - a.votes;
+        }
+    });
+}
+
+function displayTests() {
+    const startIndex = (currentPage - 1) * TESTS_PER_PAGE;
+    const endIndex = startIndex + TESTS_PER_PAGE;
+    const testsToShow = filteredTests.slice(startIndex, endIndex);
+
+    if (testsToShow.length === 0) {
+        noResults.style.display = 'block';
+        testsContainer.innerHTML = '';
+    } else {
+        noResults.style.display = 'none';
+        testsContainer.innerHTML = testsToShow.map(test => `
+            <div class="test-card" data-test-id="${test.id}">
+                <div class="test-image">
+                    <img src="${test.image}" alt="${test.title}" onerror="this.src='https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
+                    <div class="test-category">
+                        <i class="${getCategoryIcon(test.category)}"></i>
+                        ${getCategoryName(test.category)}
+                    </div>
+                </div>
+                <div class="test-content">
+                    <div class="test-header">
+                        <h3>
+                            <i class="${test.icon}"></i>
+                            ${test.title}
+                        </h3>
+                    </div>
+                    <div class="test-description">
+                        <p>${test.description}</p>
+                    </div>
+                    <div class="test-meta">
+                        <span class="test-stat">
+                            <i class="fas fa-star"></i>
+                            ${test.rating} (${test.votes})
+                        </span>
+                        <span class="test-time">
+                            <i class="fas fa-clock"></i>
+                            ${test.time} мин
+                        </span>
+                    </div>
+                    <div class="test-actions">
+                        <a href="test.html?id=${test.id}" class="btn btn-test">
+                            <i class="fas fa-play-circle"></i>
+                            Пройти тест
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    updateShownTests();
+}
+
+function updatePagination() {
+    const totalPages = Math.ceil(filteredTests.length / TESTS_PER_PAGE);
+    let paginationHTML = '';
+
+    if (totalPages <= 1) {
+        pagination.innerHTML = '';
+        return;
+    }
+
+    // Кнопка "Назад"
+    paginationHTML += `
+        <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                ${currentPage === 1 ? '' : `data-page="${currentPage - 1}"`}>
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    `;
+
+    // Номера страниц
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            paginationHTML += `
+                <button class="pagination-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">
+                    ${i}
+                </button>
+            `;
+        } else if (i === currentPage - 2 || i === currentPage + 2) {
+            paginationHTML += `<span class="pagination-ellipsis">...</span>`;
+        }
+    }
+
+    // Кнопка "Вперед"
+    paginationHTML += `
+        <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                ${currentPage === totalPages ? '' : `data-page="${currentPage + 1}"`}>
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
+
+    pagination.innerHTML = paginationHTML;
+}
+
+function updateShownTests() {
+    const startIndex = (currentPage - 1) * TESTS_PER_PAGE + 1;
+    const endIndex = Math.min(startIndex + TESTS_PER_PAGE - 1, filteredTests.length);
+    shownTests.textContent = filteredTests.length === 0 ? '0' : `${startIndex}-${endIndex}`;
+}
+
+function updateActiveFilters() {
+    const activeFiltersList = [];
+    
+    if (currentCategory) {
+        activeFiltersList.push({
+            type: 'category',
+            text: `Категория: ${getCategoryName(currentCategory)}`,
+            value: currentCategory
+        });
+    }
+    
+    if (currentSearch) {
+        activeFiltersList.push({
+            type: 'search',
+            text: `Поиск: "${currentSearch}"`,
+            value: currentSearch
+        });
+    }
+
+    if (activeFiltersList.length > 0) {
+        activeFilters.style.display = 'block';
+        activeFiltersTags.innerHTML = activeFiltersList.map(filter => `
+            <span class="filter-tag">
+                ${filter.text}
+                <button class="filter-tag-remove" data-type="${filter.type}" data-value="${filter.value}">
+                    <i class="fas fa-times"></i>
+                </button>
+            </span>
+        `).join('');
+
+        // Обработчики для кнопок удаления фильтров
+        document.querySelectorAll('.filter-tag-remove').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const type = this.dataset.type;
+                const value = this.dataset.value;
+                
+                if (type === 'category') {
+                    categoryFilter.value = '';
+                    currentCategory = '';
+                } else if (type === 'search') {
+                    searchInput.value = '';
+                    currentSearch = '';
+                    searchClear.style.display = 'none';
+                }
+                
+                applyFilters();
+            });
+        });
+    } else {
+        activeFilters.style.display = 'none';
+    }
+}
+
+function updateSearchResults() {
+    if (currentSearch) {
+        searchResults.style.display = 'block';
+        resultsCount.textContent = `Найдено тестов: ${filteredTests.length}`;
+    } else {
+        searchResults.style.display = 'none';
+    }
+}
+
+function resetAllFilters() {
+    searchInput.value = '';
+    categoryFilter.value = '';
+    sortFilter.value = 'popular';
+    
+    currentSearch = '';
+    currentCategory = '';
+    currentSort = 'popular';
+    currentPage = 1;
+    
+    searchClear.style.display = 'none';
+    filteredTests = [...allTests];
+    sortTests();
+    displayTests();
+    updatePagination();
+    updateActiveFilters();
+    updateSearchResults();
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        'food': 'fas fa-utensils',
+        'animals': 'fas fa-paw',
+        'tech': 'fas fa-code',
+        'memes': 'fas fa-laugh-beam',
+        'entertainment': 'fas fa-film',
+        'psychology': 'fas fa-brain',
+        'games': 'fas fa-gamepad'
+    };
+    return icons[category] || 'fas fa-question';
+}
+
+function getCategoryName(category) {
+    const names = {
+        'food': 'Еда',
+        'animals': 'Животные',
+        'tech': 'Технологии',
+        'memes': 'Мемы',
+        'entertainment': 'Развлечения',
+        'psychology': 'Психология',
+        'games': 'Игры'
+    };
+    return names[category] || 'Другое';
+}
+
+// Заглушка для тестов
+function showTestModal(testId) {
+    const test = allTests.find(t => t.id == testId);
+    alert(`Тест "${test.title}" скоро будет доступен! Сейчас мы работаем над системой тестирования.`);
+}
+
+// ThemeManager
+class ThemeManager {
+    constructor() {
+        this.themeToggle = document.getElementById('themeToggle');
+        this.htmlElement = document.documentElement;
+        this.init();
+    }
+
+    init() {
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme) {
+            this.setTheme(savedTheme);
+        } else if (systemPrefersDark) {
+            this.setTheme('dark');
+        }
+
+        this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                this.setTheme(e.matches ? 'dark' : 'light');
+            }
+        });
+    }
+
+    setTheme(theme) {
+        this.htmlElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+        this.themeToggle.setAttribute('aria-label', 
+            theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
+    }
+
+    toggleTheme() {
+        const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        this.setTheme(newTheme);
+
+        this.themeToggle.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            this.themeToggle.style.transform = 'scale(1)';
+        }, 150);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    new ThemeManager();
+});
+    </script>
+<!-- Подключаем основные классы -->
+<script src="auth-core.js"></script>
+
+<!-- Подключаем управление хедером -->
+<script src="auth-header.js"></script>
+</body>
+</html>

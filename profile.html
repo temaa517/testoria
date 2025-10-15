@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <a href="index.html">
+                            <i class="fas fa-brain"></i>
+                            Testoria
+                        </a>
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons" id="authButtons">
+                        <!-- Будет заполнено через JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Мой профиль</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок страницы -->
+        <section class="profile-header">
+            <div class="container">
+                <div class="profile-header-content">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-circle"></i>
+                        Мой профиль
+                    </h1>
+                    <p class="page-subtitle">Управляйте вашим аккаунтом и отслеживайте прогресс</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основной контент профиля -->
+        <section class="profile-content">
+            <div class="container">
+                <div class="profile-grid">
+                    <!-- Боковая панель -->
+                    <div class="profile-sidebar">
+                        <div class="user-card">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 id="userName">Загрузка...</h3>
+                            <p class="user-join-date" id="userJoinDate">Участник с ...</p>
+                            <button class="btn btn-secondary btn-full" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Выйти
+                            </button>
+                        </div>
+
+                        <div class="profile-nav">
+                            <button class="nav-btn active" data-tab="stats">
+                                <i class="fas fa-chart-bar"></i>
+                                Статистика
+                            </button>
+                            <button class="nav-btn" data-tab="history">
+                                <i class="fas fa-history"></i>
+                                История тестов
+                            </button>
+                            <button class="nav-btn" data-tab="settings">
+                                <i class="fas fa-cog"></i>
+                                Настройки
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Основной контент -->
+                    <div class="profile-main">
+                        <!-- Вкладка статистики -->
+                        <div class="tab-content active" id="stats-tab">
+                            <h2>
+                                <i class="fas fa-chart-line"></i>
+                                Ваша статистика
+                            </h2>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="testsCompleted">0</span>
+                                        <span class="stat-label">Пройдено тестов</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="totalTime">0ч</span>
+                                        <span class="stat-label">Общее время</span>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-icon">
+                                        <i class="fas fa-trophy"></i>
+                                    </div>
+                                    <div class="stat-info">
+                                        <span class="stat-value" id="achievementsCount">0</span>
+                                        <span class="stat-label">Достижения</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="recent-activity">
+                                <h3>Недавняя активность</h3>
+                                <div class="activity-list" id="recentActivity">
+                                    <!-- Будет заполнено через JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Вкладка истории -->
+                        <div class="tab-content" id="history-tab">
+                            <h2>
+                                <i class="fas fa-history"></i>
+                                История тестов
+                            </h2>
+                            <div class="history-list" id="historyList">
+                                <!-- Будет заполнено через JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Вкладка настроек -->
+                        <div class="tab-content" id="settings-tab">
+                            <h2>
+                                <i class="fas fa-cog"></i>
+                                Настройки аккаунта
+                            </h2>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label for="userNameInput">Имя пользователя</label>
+                                    <input type="text" id="userNameInput" class="form-control">
+                                </div>
+                                <button class="btn btn-primary" onclick="updateUserName()">
+                                    <i class="fas fa-save"></i>
+                                    Сохранить изменения
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Profile Manager
+        class ProfileManager {
+            constructor() {
+                this.userManager = new UserManager();
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.checkAuth();
+                this.setupEventListeners();
+                this.loadProfileData();
+            }
+
+            checkAuth() {
+                if (!this.userManager.isLoggedIn()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                this.currentUser = this.userManager.getCurrentUser();
+                this.updateAuthButtons();
+            }
+
+            updateAuthButtons() {
+                const authButtons = document.getElementById('authButtons');
+                if (this.currentUser) {
+                    authButtons.innerHTML = `
+                        <a href="profile.html" class="btn btn-user">
+                            <i class="fas fa-user"></i>
+                            ${this.currentUser.name}
+                        </a>
+                    `;
+                }
+            }
+
+            setupEventListeners() {
+                // Переключение вкладок
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const tab = btn.dataset.tab;
+                        this.switchTab(tab);
+                    });
+                });
+            }
+
+            switchTab(tabName) {
+                // Обновляем активные кнопки
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+                // Обновляем активные вкладки
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            }
+
+            loadProfileData() {
+                if (!this.currentUser) return;
+
+                // Основная информация
+                document.getElementById('userName').textContent = this.currentUser.name;
+                document.getElementById('userNameInput').value = this.currentUser.name;
+                
+                // Дата регистрации
+                const joinDate = new Date(this.currentUser.createdAt).toLocaleDateString('ru-RU');
+                document.getElementById('userJoinDate').textContent = `Участник с ${joinDate}`;
+
+                // Статистика
+                document.getElementById('testsCompleted').textContent = this.currentUser.stats.testsCompleted;
+                document.getElementById('totalTime').textContent = this.formatTime(this.currentUser.stats.totalTime);
+                document.getElementById('achievementsCount').textContent = this.currentUser.achievements.length;
+
+                // История тестов
+                this.loadHistory();
+                this.loadRecentActivity();
+            }
+
+            loadHistory() {
+                const historyList = document.getElementById('historyList');
+                if (this.currentUser.history.length === 0) {
+                    historyList.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-history"></i>
+                            <h3>История тестов пуста</h3>
+                            <p>Пройдите свой первый тест, чтобы увидеть его здесь!</p>
+                            <a href="catalog.html" class="btn btn-primary">Найти тест</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                historyList.innerHTML = this.currentUser.history.map(test => `
+                    <div class="history-item">
+                        <div class="test-info">
+                            <h4>${test.testTitle}</h4>
+                            <p>${test.result.title}</p>
+                        </div>
+                        <div class="test-meta">
+                            <span class="test-date">${new Date(test.completedAt).toLocaleDateString('ru-RU')}</span>
+                            <span class="test-time">${this.formatTime(test.timeSpent)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            loadRecentActivity() {
+                const activityList = document.getElementById('recentActivity');
+                const recentTests = this.currentUser.history.slice(0, 5);
+                
+                if (recentTests.length === 0) {
+                    activityList.innerHTML = '<p class="no-activity">Нет недавней активности</p>';
+                    return;
+                }
+
+                activityList.innerHTML = recentTests.map(test => `
+                    <div class="activity-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="activity-content">
+                            <span class="activity-text">Пройден тест "${test.testTitle}"</span>
+                            <span class="activity-time">${this.formatRelativeTime(test.completedAt)}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            formatTime(minutes) {
+                const hours = Math.floor(minutes / 60);
+                const mins = minutes % 60;
+                return hours > 0 ? `${hours}ч ${mins}м` : `${mins}м`;
+            }
+
+            formatRelativeTime(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMins / 60);
+                const diffDays = Math.floor(diffHours / 24);
+
+                if (diffMins < 1) return 'только что';
+                if (diffMins < 60) return `${diffMins} мин назад`;
+                if (diffHours < 24) return `${diffHours} ч назад`;
+                if (diffDays < 7) return `${diffDays} д назад`;
+                return date.toLocaleDateString('ru-RU');
+            }
+        }
+
+        // Глобальные функции
+        function logout() {
+            const userManager = new UserManager();
+            userManager.logout();
+            window.location.href = 'index.html';
+        }
+
+        function updateUserName() {
+            const newName = document.getElementById('userNameInput').value.trim();
+            if (!newName) {
+                alert('Введите имя пользователя');
+                return;
+            }
+
+            const userManager = new UserManager();
+            try {
+                userManager.updateUserName(newName);
+                location.reload(); // Перезагружаем страницу для обновления данных
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // ThemeManager (такой же как в других файлах)
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.htmlElement = document.documentElement;
+                this.init();
+            }
+
+            init() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme) {
+                    this.setTheme(savedTheme);
+                } else if (systemPrefersDark) {
+                    this.setTheme('dark');
+                }
+
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        this.setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+
+            setTheme(theme) {
+                this.htmlElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.themeToggle.setAttribute('aria-label', 
+                    theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
+            }
+
+            toggleTheme() {
+                const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+
+                this.themeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.themeToggle.style.transform = 'scale(1)';
+                }, 150);
+            }
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new ProfileManager();
+            
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+<!-- Подключаем основные классы -->
+<script src="auth-core.js"></script>
+
+<!-- Подключаем управление хедером -->
+<script src="auth-header.js"></script>
+</body>
+</html>

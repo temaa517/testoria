@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты теста - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div class="auth-buttons">
+                        <!-- Будет заполнено автоматически -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="catalog.html">Каталог тестов</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Результаты</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Результаты теста -->
+        <section class="results-section">
+            <div class="container">
+                <div class="results-container" id="resultsContainer">
+                    <div class="results-loading">
+                        <div class="loader-spinner"></div>
+                        <p>Анализируем ваши ответы...</p>
+                    </div>
+                </div>
+
+               <!-- Действия с результатом -->
+<div class="results-actions" id="resultsActions" style="display: none;">
+    <div class="actions-grid">
+        <button class="action-btn share-btn" id="shareBtn">
+            <i class="fas fa-share-alt"></i>
+            Поделиться
+        </button>
+        <a href="catalog.html" class="action-btn catalog-btn">
+            <i class="fas fa-list"></i>
+            Еще тесты
+        </a>
+        <button class="action-btn retry-btn" id="retryBtn">
+            <i class="fas fa-redo"></i>
+            Пройти заново
+        </button>
+    </div>
+</div>
+
+<!-- Рекомендации -->
+<div class="recommendations" id="recommendations" style="display: none;">
+    <h3>Вам может понравиться</h3>
+    <div class="recommendations-grid" id="recommendationsGrid">
+        <!-- Рекомендации будут загружены через JavaScript -->
+    </div>
+</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="https://t.me/ttemkatut" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        class ResultsManager {
+    constructor() {
+        this.testResult = null;
+        
+        this.elements = {
+            resultsContainer: document.getElementById('resultsContainer'),
+            resultsActions: document.getElementById('resultsActions'),
+            recommendations: document.getElementById('recommendations'),
+            recommendationsGrid: document.getElementById('recommendationsGrid'),
+            shareBtn: document.getElementById('shareBtn'),
+            retryBtn: document.getElementById('retryBtn')
+        };
+        
+        this.init();
+    }
+
+    init() {
+        this.loadResults();
+        this.setupEventListeners();
+    }
+
+    loadResults() {
+        // Загружаем результаты из localStorage
+        const savedResult = localStorage.getItem('lastTestResult');
+        
+        if (!savedResult) {
+            this.showError('Результаты не найдены. Пройдите тест сначала.');
+            return;
+        }
+
+        this.testResult = JSON.parse(savedResult);
+        this.displayResults();
+    }
+
+    displayResults() {
+        if (!this.testResult) return;
+
+        const result = this.testResult.result;
+        
+        this.elements.resultsContainer.innerHTML = this.createResultsHTML(result);
+        this.elements.resultsActions.style.display = 'block';
+        this.elements.recommendations.style.display = 'block';
+        
+        this.loadRecommendations();
+    }
+
+    createResultsHTML(result) {
+        const test = this.testResult;
+        const completionDate = new Date(test.completedAt).toLocaleDateString('ru-RU');
+        
+        return `
+            <div class="results-success">
+                <div class="success-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h1 class="results-title">Тест завершен!</h1>
+                <p class="results-subtitle">Вы прошли тест "${test.testTitle}"</p>
+                
+                <div class="result-card">
+                    <div class="result-image">
+                        <img src="${result.image}" alt="${result.title}" onerror="this.src='https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="result-content">
+                        <div class="result-badge">
+                            <i class="fas fa-award"></i>
+                            Ваш результат
+                        </div>
+                        <h2 class="result-type">${result.title}</h2>
+                        <p class="result-description">${result.description}</p>
+                        <div class="result-meta">
+                            <span class="result-date">
+                                <i class="far fa-calendar"></i>
+                                ${completionDate}
+                            </span>
+                            <span class="result-questions">
+                                <i class="far fa-question-circle"></i>
+                                ${test.userAnswers.length} вопросов
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    loadRecommendations() {
+        // Временные рекомендации
+        const recommendations = [
+            {
+                id: 2,
+                title: "Кто ты из кошачьих?",
+                category: "animals",
+                description: "Определи, какое животное из семейства кошачьих тебе подходит!",
+                image: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                rating: 4.9
+            },
+            {
+                id: 3,
+                title: "Твой стиль программирования",
+                category: "tech",
+                description: "Узнай, какой язык программирования соответствует твоему характеру!",
+                image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                rating: 4.7
+            },
+            {
+                id: 5,
+                title: "Какой ты супергерой?",
+                category: "entertainment",
+                description: "Узнай, какие суперспособности скрыты внутри тебя!",
+                image: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                rating: 4.9
+            }
+        ];
+
+        this.elements.recommendationsGrid.innerHTML = recommendations.map(test => `
+            <div class="recommendation-card">
+                <div class="recommendation-image">
+                    <img src="${test.image}" alt="${test.title}">
+                    <div class="recommendation-category">
+                        ${this.getCategoryName(test.category)}
+                    </div>
+                </div>
+                <div class="recommendation-content">
+                    <h4>${test.title}</h4>
+                    <p>${test.description}</p>
+                    <div class="recommendation-meta">
+                        <span class="recommendation-rating">
+                            <i class="fas fa-star"></i>
+                            ${test.rating}
+                        </span>
+                    </div>
+                    <a href="test.html?id=${test.id}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-play-circle"></i>
+                        Пройти тест
+                    </a>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    getCategoryName(category) {
+        const names = {
+            'food': '🍕 Еда',
+            'animals': '🐾 Животные',
+            'tech': '💻 Технологии',
+            'memes': '😂 Мемы',
+            'entertainment': '🎬 Развлечения',
+            'psychology': '🧠 Психология',
+            'games': '🎮 Игры'
+        };
+        return names[category] || '📝 Другое';
+    }
+
+    setupEventListeners() {
+        this.elements.shareBtn.addEventListener('click', () => this.shareResults());
+        this.elements.retryBtn.addEventListener('click', () => this.retryTest());
+    }
+
+    shareResults() {
+        const result = this.testResult.result;
+        const shareText = `Я прошел тест "${this.testResult.testTitle}" на Testoria и мой результат: ${result.title}! ${result.description}\n\nПройди и ты: ${window.location.origin}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: `Мой результат теста: ${result.title}`,
+                text: shareText,
+                url: window.location.href
+            });
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(shareText).then(() => {
+                this.showNotification('Результат скопирован в буфер обмена!', 'success');
+            });
+        } else {
+            this.showNotification(shareText, 'info');
+        }
+    }
+
+    retryTest() {
+        // Просто переходим на страницу теста без подтверждения
+        window.location.href = `test.html?id=${this.testResult.testId}`;
+    }
+
+    showError(message) {
+        this.elements.resultsContainer.innerHTML = `
+            <div class="results-error">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>Ошибка</h2>
+                <p>${message}</p>
+                <a href="catalog.html" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i>
+                    Вернуться в каталог
+                </a>
+            </div>
+        `;
+    }
+
+    showNotification(message, type = 'info') {
+        // Временное уведомление
+        alert(message);
+    }
+}
+
+        // Theme Manager
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.htmlElement = document.documentElement;
+                this.init();
+            }
+
+            init() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme) {
+                    this.setTheme(savedTheme);
+                } else if (systemPrefersDark) {
+                    this.setTheme('dark');
+                }
+
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
+
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                    if (!localStorage.getItem('theme')) {
+                        this.setTheme(e.matches ? 'dark' : 'light');
+                    }
+                });
+            }
+
+            setTheme(theme) {
+                this.htmlElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                this.themeToggle.setAttribute('aria-label', 
+                    theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
+            }
+
+            toggleTheme() {
+                const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                this.setTheme(newTheme);
+
+                this.themeToggle.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.themeToggle.style.transform = 'scale(1)';
+                }, 150);
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+            new ResultsManager();
+            
+            // Плавная загрузка страницы
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
