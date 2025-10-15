@@ -213,3 +213,15 @@ class ThemeManager {
     }
     
 }
+
+// Автоматическая проверка авторизации при загрузке любой страницы
+document.addEventListener('DOMContentLoaded', function() {
+    updateHeaderAuthState();
+});
+
+// Также проверяем при изменении localStorage (если открыто несколько вкладок)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'isLoggedIn') {
+        updateHeaderAuthState();
+    }
+});
