@@ -45,8 +45,23 @@
                         <i class="fas fa-sun"></i>
                         <span class="theme-thumb"></span>
                     </button>
-                    <div class="auth-buttons" id="authButtons">
-                        <!-- Будет заполнено через JavaScript -->
+                    <!-- Кнопки входа (показываются когда пользователь не авторизован) -->
+                    <div id="auth-buttons" class="auth-buttons">
+                        <a href="login.html" class="btn btn-outline">Войти</a>
+                        <a href="register.html" class="btn btn-primary">Регистрация</a>
+                    </div>
+
+                    <!-- Кнопка профиля (показывается когда пользователь авторизован) -->
+                    <div id="profile-section" class="profile-dropdown" style="display: none;">
+                        <button class="profile-btn" onclick="toggleProfileMenu()">
+                            👤 Профиль
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="profile.html">Мой профиль</a>
+                            <a href="my-tests.html">Мои тесты</a>
+                            <a href="results.html">Результаты</a>
+                            <a href="#" onclick="logout()">Выйти</a>
+                        </div>
                     </div>
                 </div>
             </div>

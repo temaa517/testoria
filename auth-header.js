@@ -19,7 +19,7 @@ class AuthHeaderManager {
 
         console.log('Обновление хедера, пользователь авторизован:', this.userManager.isLoggedIn());
 
-        if (this.userManager.isLoggedIn()) {
+        if (localStorage.getItem('isLoggedIn') === 'true' || this.userManager.isLoggedIn()) {
             const user = this.userManager.getCurrentUser();
             authButtons.innerHTML = `
                 <a href="profile.html" class="btn btn-user">

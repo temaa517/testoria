@@ -52,6 +52,8 @@ class UserManager {
         this.currentUser = user;
         localStorage.setItem('testoria_current_user', JSON.stringify(user));
         
+        localStorage.setItem('isLoggedIn', 'true');
+
         // Обновляем хедер после входа
         if (window.authHeaderManager) {
             window.authHeaderManager.updateHeader();
@@ -63,7 +65,7 @@ class UserManager {
     logout() {
         this.currentUser = null;
         localStorage.removeItem('testoria_current_user');
-        
+        localStorage.removeItem('isLoggedIn');
         // Обновляем хедер после выхода
         if (window.authHeaderManager) {
             window.authHeaderManager.updateHeader();
@@ -214,14 +216,26 @@ class ThemeManager {
     
 }
 
-// Автоматическая проверка авторизации при загрузке любой страницы
-document.addEventListener('DOMContentLoaded', function() {
-    updateHeaderAuthState();
-});
-
 // Также проверяем при изменении localStorage (если открыто несколько вкладок)
 window.addEventListener('storage', function(e) {
     if (e.key === 'isLoggedIn') {
         updateHeaderAuthState();
     }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    updateHeaderAuthState();
+});
+
+
+// Также обновляем при изменении localStorage (если вход в другой вкладке)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'isLoggedIn') {
+        updateHeaderAuthState();
+    }
+});
+
+// Автоматическое обновление шапки при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Проверка авторизации...');
+    updateHeaderAuthState();
 });
