@@ -3802,7 +3802,7 @@ body {
 
 .dropdown-content a:last-child {
     border-bottom: none;
-    color: #dc3545;
+    color: #f0f0f0;
 }
 /* Стили для страницы профиля */
 .profile-grid {
