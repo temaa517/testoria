@@ -7,6 +7,9 @@ class UserManager {
         this.currentUser = JSON.parse(localStorage.getItem('testoria_current_user')) || null;
     }
 
+    getUsers() {
+        return this.users;
+    }
     register(userData) {
         const existingUser = this.users.find(user => user.name.toLowerCase() === userData.name.toLowerCase());
         if (existingUser) {
@@ -40,27 +43,39 @@ class UserManager {
     }
 
     loginByName(name, password) {
-        const user = this.users.find(u => 
-            u.name.toLowerCase() === name.toLowerCase() && 
-            u.password === this.hashPassword(password)
-        );
-        
-        if (!user) {
-            throw new Error('Неверное имя пользователя или пароль');
-        }
-
-        this.currentUser = user;
-        localStorage.setItem('testoria_current_user', JSON.stringify(user));
-        
-        localStorage.setItem('isLoggedIn', 'true');
-
-        // Обновляем хедер после входа
-        if (window.authHeaderManager) {
-            window.authHeaderManager.updateHeader();
-        }
-        
-        return user;
+    const user = this.users.find(u => 
+        u.name.toLowerCase() === name.toLowerCase() && 
+        u.password === this.hashPassword(password)
+    );
+    
+    if (!user) {
+        throw new Error('Неверное имя пользователя или пароль');
     }
+
+    this.currentUser = user;
+    localStorage.setItem('testoria_current_user', JSON.stringify(user));
+    localStorage.setItem('isLoggedIn', 'true');
+
+    console.log('✅ Пользователь вошел:', user.name);
+
+    // Обновляем хедер после входа
+    if (window.authHeaderManager) {
+        window.authHeaderManager.updateHeader();
+    }
+    
+    // Безопасный редирект
+    setTimeout(() => {
+        try {
+            window.location.href = 'index.html';
+        } catch (error) {
+            console.error('Ошибка редиректа:', error);
+            // Альтернативный редирект
+            window.location.replace('index.html');
+        }
+    }, 100);
+    
+    return user;
+}
 
     logout() {
         this.currentUser = null;

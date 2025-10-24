@@ -11,43 +11,36 @@ class AuthHeaderManager {
     }
 
     updateHeader() {
-        const authButtons = document.querySelector('.auth-buttons');
-        if (!authButtons) {
-            console.log('Элемент .auth-buttons не найден');
-            return;
-        }
-
-        console.log('Обновление хедера, пользователь авторизован:', this.userManager.isLoggedIn());
-
-        if (localStorage.getItem('isLoggedIn') === 'true' || this.userManager.isLoggedIn()) {
-            const user = this.userManager.getCurrentUser();
-            authButtons.innerHTML = `
-                <a href="profile.html" class="btn btn-user">
-                    <i class="fas fa-user"></i>
-                    ${user.name}
-                </a>
-            `;
+        const userManager = new UserManager();
+        const currentUser = userManager.getCurrentUser();
+        
+        const authButtons = document.getElementById('auth-buttons');
+        const profileSection = document.getElementById('profile-section');
+        
+        console.log('Обновление хедера, текущий пользователь:', currentUser);
+        
+        if (currentUser && currentUser.name) { // ДОБАВИЛИ ПРОВЕРКУ
+            if (authButtons) authButtons.style.display = 'none';
+            if (profileSection) profileSection.style.display = 'block';
+            
+            // Обновляем имя в профиле если есть элемент
+            const profileName = document.getElementById('profile-name');
+            if (profileName) {
+                profileName.textContent = currentUser.name;
+            }
         } else {
-            authButtons.innerHTML = `
-                <a href="login.html" class="btn btn-login">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Войти
-                </a>
-                <a href="register.html" class="btn btn-register">
-                    <i class="fas fa-user-plus"></i>
-                    Регистрация
-                </a>
-            `;
+            if (authButtons) authButtons.style.display = 'flex';
+            if (profileSection) profileSection.style.display = 'none';
         }
     }
 
-    setupThemeManager() {
-        // Инициализация темы
-        if (!window.themeManager) {
-            window.themeManager = new ThemeManager();
+        setupThemeManager() {
+            // Инициализация темы
+            if (!window.themeManager) {
+                window.themeManager = new ThemeManager();
+            }
         }
     }
-}
 
 // Закрытие выпадающего меню при клике вне его
 document.addEventListener('click', function(e) {

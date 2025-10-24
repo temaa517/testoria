@@ -237,59 +237,72 @@
 
     <!-- JavaScript -->
     <script>
-    // Функция переключения видимости пароля
-    function togglePassword(inputId) {
-        const input = document.getElementById(inputId);
-        const icon = input.parentNode.querySelector('.password-toggle i');
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        }
-    }
+document.addEventListener('DOMContentLoaded', function() {
+    const loginForm = document.getElementById('loginForm');
+    
+    if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('loginName').value.trim();
+            const password = document.getElementById('loginPassword').value;
 
-    // Обработка формы входа
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginForm = document.getElementById('loginForm');
-        
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
+            if (!name || !password) {
+                alert('Заполните все поля');
+                return;
+            }
+
+            console.log('=== ДЕБАГГИНГ АВТОРИЗАЦИИ ===');
+            console.log('1. Введенные данные:', { name, password: '***' });
+            
+            try {
+                // Проверяем наличие UserManager
+                console.log('2. UserManager определен:', typeof UserManager);
                 
-                const name = document.getElementById('loginName').value.trim();
-                const password = document.getElementById('loginPassword').value;
-
-                // Базовая валидация
-                if (!name) {
-                    alert('Введите имя пользователя');
+                if (typeof UserManager === 'undefined') {
+                    alert('Ошибка: UserManager не загружен');
                     return;
                 }
 
-                if (!password) {
-                    alert('Введите пароль');
-                    return;
-                }
-
-                try {
-                    const userManager = new UserManager();
-                    const user = userManager.loginByName(name, password);
-                    
+                const userManager = new UserManager();
+                console.log('3. userManager создан:', userManager);
+                
+                // Проверяем методы
+                console.log('4. loginByName метод:', typeof userManager.loginByName);
+                console.log('5. getUsers метод:', typeof userManager.getUsers);
+                
+                // Смотрим какие пользователи есть
+                const allUsers = userManager.getUsers();
+                console.log('6. Все пользователи в системе:', allUsers);
+                
+                // Пробуем найти пользователя
+                const foundUser = allUsers.find(u => u.name === name);
+                console.log('7. Найденный пользователь:', foundUser);
+                
+                // Пробуем войти
+                console.log('8. Пытаемся войти...');
+                const user = userManager.loginByName(name, password);
+                console.log('9. Результат входа:', user);
+                
+                if (user) {
+                    console.log('10. Успешный вход!');
                     alert(`Добро пожаловать, ${user.name}! Перенаправляем...`);
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
-
-                } catch (error) {
-                    alert(error.message);
+                } else {
+                    console.log('10. Вход не удался');
+                    alert('Неверное имя пользователя или пароль');
                 }
-            });
-        }
-    });
+
+            } catch (error) {
+                console.error('11. ОШИБКА:', error);
+                console.error('Стек ошибки:', error.stack);
+                alert('Произошла ошибка при входе: ' + error.message);
+            }
+        });
+    }
+});
 </script>
 <!-- Подключаем основные классы -->
 <script src="auth-core.js"></script>
