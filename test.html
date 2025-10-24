@@ -1412,54 +1412,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    class ThemeManager {
-        constructor() {
-            this.themeToggle = document.getElementById('themeToggle');
-            this.htmlElement = document.documentElement;
-            this.init();
-        }
-
-        init() {
-            const savedTheme = localStorage.getItem('theme');
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-            if (savedTheme) {
-                this.setTheme(savedTheme);
-            } else if (systemPrefersDark) {
-                this.setTheme('dark');
-            }
-
-            this.themeToggle.addEventListener('click', () => this.toggleTheme());
-
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    this.setTheme(e.matches ? 'dark' : 'light');
-                }
-            });
-        }
-
-        setTheme(theme) {
-            this.htmlElement.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            this.themeToggle.setAttribute('aria-label', 
-                theme === 'dark' ? 'Переключить на светлую тему' : 'Переключить на темную тему');
-        }
-
-        toggleTheme() {
-            const currentTheme = this.htmlElement.getAttribute('data-theme') || 'light';
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            this.setTheme(newTheme);
-
-            this.themeToggle.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                this.themeToggle.style.transform = 'scale(1)';
-            }, 150);
-        }
-    }
+    
 
     // Инициализация при загрузке страницы
    document.addEventListener('DOMContentLoaded', () => {
-    // ThemeManager уже инициализирован в auth-core.js
     new TestManager();
     
     // Плавная загрузка страницы
