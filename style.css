@@ -206,7 +206,7 @@ body {
     background: var(--bg-hero);
     color: white;
     padding: 120px 0 80px;
-    margin-top: 80px;
+    margin-top: 70px;
     transition: background 0.3s ease;
 }
 
@@ -1660,7 +1660,6 @@ body {
 .btn-full {
     width: 100%;
     justify-content: center;
-    margin-bottom: 1.5rem;
 }
 
 .auth-divider {
@@ -3824,6 +3823,7 @@ body {
 .user-card {
     text-align: center;
     padding: 20px 0;
+    padding-bottom: 0;
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 20px;
 }
