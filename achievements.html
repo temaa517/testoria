@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достижения - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                         <i class="fas fa-brain"></i>
+                          Testoria
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <!-- Кнопка профиля -->
+                    <div id="profile-section" class="profile-dropdown">
+                        <button class="profile-btn" id="profileBtn">
+                            👤 Профиль
+                        </button>
+                        <div class="dropdown-content" id="profileDropdown">
+                            <a href="profile.html">Мой профиль</a>
+                            <a href="my-tests.html">Мои тесты</a>
+                            <a href="achievements.html">Достижения</a>
+                            <a href="results.html">Результаты</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="profile.html">Профиль</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Достижения</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок страницы -->
+        <section class="page-header">
+            <div class="container">
+                <div class="page-header-content">
+                    <h1 class="page-title">
+                        <i class="fas fa-trophy"></i>
+                        Ваши достижения
+                    </h1>
+                    <p class="page-subtitle">Собирайте достижения и покажите свои успехи!</p>
+                    
+                    <!-- Статистика достижений -->
+                    <div class="achievements-stats">
+                        <div class="stat-badge">
+                            <div class="stat-number" id="unlockedCount">0</div>
+                            <div class="stat-label">Открыто</div>
+                        </div>
+                        <div class="stat-badge">
+                            <div class="stat-number" id="totalCount">7</div>
+                            <div class="stat-label">Всего</div>
+                        </div>
+                        <div class="stat-badge">
+                            <div class="stat-number" id="completionRate">0%</div>
+                            <div class="stat-label">Завершено</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основной контент достижений -->
+        <section class="achievements-content">
+            <div class="container">
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Достижения будут загружены через JavaScript -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        class AchievementsManager {
+            constructor() {
+                this.currentUser = null;
+                this.userManager = new UserManager();
+                this.init();
+            }
+
+            init() {
+                // Проверяем авторизацию
+                if (!this.userManager.getCurrentUser()) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                this.currentUser = this.userManager.getCurrentUser();
+                this.loadAchievements();
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // Выпадающее меню профиля
+                document.getElementById('profileBtn')?.addEventListener('click', () => {
+                    this.toggleProfileMenu();
+                });
+            }
+
+            toggleProfileMenu() {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                } else {
+                    dropdown.style.display = 'block';
+                    setTimeout(() => {
+                        document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
+                    }, 0);
+                }
+            }
+
+            getProgressHint(achievement, progressPercent) {
+                if (progressPercent === 0) return 'Только начинается...';
+                if (progressPercent < 25) return 'Есть куда стремиться!';
+                if (progressPercent < 50) return 'Уже неплохо!';
+                if (progressPercent < 75) return 'Отличный прогресс!';
+                if (progressPercent < 100) return 'Почти у цели!';
+                return 'Достижение завершено!';
+            }
+            
+            closeProfileMenu(e) {
+                const dropdown = document.getElementById('profileDropdown');
+                const profileBtn = document.getElementById('profileBtn');
+                if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            }
+
+            loadAchievements() {
+                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
+                
+                // Расширенная статистика
+                const stats = this.calculateAdvancedStats(userResults);
+                
+                const achievements = this.getAchievementsList();
+                let unlockedCount = 0;
+
+                const achievementsGrid = document.getElementById('achievementsGrid');
+                achievementsGrid.innerHTML = achievements.map(achievement => {
+                    const isUnlocked = achievement.condition(stats);
+                    const progress = achievement.progress(stats);
+                    const progressPercent = Math.min(Math.round(progress * 100), 100);
+
+                    if (isUnlocked) unlockedCount++;
+
+                    return `
+                        <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                            <div class="achievement-icon ${isUnlocked ? 'unlocked' : 'locked'}">
+                                <i class="${achievement.icon}"></i>
+                                ${isUnlocked ? '<div class="achievement-badge">✓</div>' : ''}
+                            </div>
+                            
+                            <div class="achievement-content">
+                                <h3 class="achievement-title">${achievement.title}</h3>
+                                <p class="achievement-description">${achievement.description}</p>
+                                
+                                <div class="achievement-progress">
+                                    <div class="progress-header">
+                                        <span class="progress-label">Прогресс выполнения</span>
+                                        <span class="progress-percent">${progressPercent}%</span>
+                                    </div>
+                                    
+                                    <div class="progress-container">
+                                        <div class="progress-track">
+                                            <div class="progress-fill ${progressPercent === 100 ? 'completed' : ''}" 
+                                                style="width: ${progressPercent}%">
+                                                ${progressPercent === 100 ? '<div class="progress-sparkle">✨</div>' : ''}
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="progress-milestones">
+                                            <div class="milestone ${progressPercent >= 25 ? 'reached' : ''}">25%</div>
+                                            <div class="milestone ${progressPercent >= 50 ? 'reached' : ''}">50%</div>
+                                            <div class="milestone ${progressPercent >= 75 ? 'reached' : ''}">75%</div>
+                                            <div class="milestone ${progressPercent >= 100 ? 'reached' : ''}">100%</div>
+                                        </div>
+                                    </div>
+                                    
+                                    ${!isUnlocked ? `
+                                        <div class="progress-hint">
+                                            <i class="fas fa-info-circle"></i>
+                                            ${this.getProgressHint(achievement, progressPercent)}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Обновляем статистику
+                document.getElementById('unlockedCount').textContent = unlockedCount;
+                document.getElementById('totalCount').textContent = achievements.length;
+                document.getElementById('completionRate').textContent = 
+                    Math.round((unlockedCount / achievements.length) * 100) + '%';
+            }
+
+            calculateAdvancedStats(userResults) {
+                if (userResults.length === 0) {
+                    return {
+                        testsCompleted: 0,
+                        totalTime: 0,
+                        totalQuestions: 0,
+                        fastestTest: null,
+                        dailyStreak: 0,
+                        consecutiveDays: 0,
+                        earlyBirdCompleted: false,
+                        nightOwlCompleted: false,
+                        weekendTests: 0,
+                        categoriesCompleted: 0
+                    };
+                }
+
+                // Базовая статистика
+                const testsCompleted = userResults.length;
+                const totalTime = userResults.reduce((total, test) => total + (test.timeSpent || 0), 0);
+                const totalQuestions = userResults.reduce((total, test) => total + (test.totalQuestions || 0), 0);
+                
+                // Самый быстрый тест
+                const fastestTest = Math.min(...userResults.map(test => test.timeSpent || Infinity));
+                
+                // Дополнительная статистика (упрощенная версия)
+                const uniqueDays = new Set(userResults.map(test => 
+                    new Date(test.completedAt).toDateString()
+                )).size;
+                
+                // Проверяем ранние утренние и ночные тесты
+                const earlyBirdCompleted = userResults.some(test => {
+                    const hour = new Date(test.completedAt).getHours();
+                    return hour >= 5 && hour < 7;
+                });
+                
+                const nightOwlCompleted = userResults.some(test => {
+                    const hour = new Date(test.completedAt).getHours();
+                    return hour >= 23 || hour < 5;
+                });
+                
+                // Тесты на выходных
+                const weekendTests = userResults.filter(test => {
+                    const day = new Date(test.completedAt).getDay();
+                    return day === 0 || day === 6; // 0 = воскресенье, 6 = суббота
+                }).length;
+
+                return {
+                    testsCompleted,
+                    totalTime,
+                    totalQuestions,
+                    fastestTest: fastestTest !== Infinity ? fastestTest : null,
+                    dailyStreak: Math.min(uniqueDays, 10), // Упрощенная версия стрика
+                    consecutiveDays: uniqueDays,
+                    earlyBirdCompleted,
+                    nightOwlCompleted,
+                    weekendTests,
+                    categoriesCompleted: Math.min(new Set(userResults.map(test => test.testId)).size, 5)
+                };
+            }
+
+            getAchievementsList() {
+                return [
+                    {
+                        id: 'first_blood',
+                        title: 'Первая кровь',
+                        description: 'Пройдите свой самый первый тест',
+                        icon: 'fas fa-tint',
+                        condition: (stats) => stats.testsCompleted >= 1,
+                        progress: (stats) => Math.min(stats.testsCompleted, 1)
+                    },
+                    {
+                        id: 'test_addict',
+                        title: 'Зависимый',
+                        description: 'Пройдите 25 тестов',
+                        icon: 'fas fa-syringe',
+                        condition: (stats) => stats.testsCompleted >= 25,
+                        progress: (stats) => Math.min(stats.testsCompleted / 25, 1)
+                    },
+                    {
+                        id: 'test_god',
+                        title: 'Бог тестов',
+                        description: 'Пройдите 100 тестов',
+                        icon: 'fas fa-crown',
+                        condition: (stats) => stats.testsCompleted >= 100,
+                        progress: (stats) => Math.min(stats.testsCompleted / 100, 1)
+                    },
+                    {
+                        id: 'speed_demon',
+                        title: 'Демон скорости',
+                        description: 'Пройдите тест за 1 минуту',
+                        icon: 'fas fa-running',
+                        condition: (stats) => stats.fastestTest && stats.fastestTest <= 60,
+                        progress: (stats) => stats.fastestTest ? Math.max(0, 1 - (stats.fastestTest / 60)) : 0
+                    },
+                    {
+                        id: 'marathon_man',
+                        title: 'Марафонец',
+                        description: 'Потратьте 24 часа на тесты',
+                        icon: 'fas fa-infinity',
+                        condition: (stats) => stats.totalTime >= 86400,
+                        progress: (stats) => Math.min(stats.totalTime / 86400, 1)
+                    },
+                    {
+                        id: 'question_overflow',
+                        title: 'Переполнение вопросов',
+                        description: 'Ответьте на 1000 вопросов',
+                        icon: 'fas fa-brain',
+                        condition: (stats) => stats.totalQuestions >= 1000,
+                        progress: (stats) => Math.min(stats.totalQuestions / 1000, 1)
+                    },
+                    {
+                        id: 'perfectionist',
+                        title: 'Перфекционист',
+                        description: 'Пройдите 10 тестов за день',
+                        icon: 'fas fa-star',
+                        condition: (stats) => stats.dailyStreak >= 10,
+                        progress: (stats) => Math.min((stats.dailyStreak || 0) / 10, 1)
+                    },
+                    {
+                        id: 'no_life',
+                        title: 'Без жизни',
+                        description: 'Проведите 7 дней подряд в тестах',
+                        icon: 'fas fa-moon',
+                        condition: (stats) => stats.consecutiveDays >= 7,
+                        progress: (stats) => Math.min((stats.consecutiveDays || 0) / 7, 1)
+                    },
+                    {
+                        id: 'category_conqueror',
+                        title: 'Покоритель категорий',
+                        description: 'Пройдите тесты из всех категорий',
+                        icon: 'fas fa-flag',
+                        condition: (stats) => stats.categoriesCompleted >= 5,
+                        progress: (stats) => Math.min((stats.categoriesCompleted || 0) / 5, 1)
+                    }
+                ];
+            }
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new AchievementsManager();
+        });
+    </script>
+
+    <!-- Подключаем скрипты -->
+    <script src="auth-core.js"></script>
+    <script src="auth-header.js"></script>
+</body>
+</html>

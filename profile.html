@@ -155,10 +155,14 @@
                                     <div class="stat-icon">
                                         <i class="fas fa-trophy"></i>
                                     </div>
-                                    <div class="stat-info">
-                                        <span class="stat-value" id="achievementsCount">0</span>
-                                        <span class="stat-label">Достижения</span>
-                                    </div>
+                                    <div class="stat-card clickable-stat" onclick="goToAchievements()">
+                                <div class="stat-icon">
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="achievementsCount">0</span>
+                                    <span class="stat-label">Достижения</span>
+                                </div>
+                            </div>
                                 </div>
                             </div>
 
@@ -311,6 +315,10 @@
             } catch (error) {
                 alert('Ошибка при обновлении имени: ' + error.message);
             }
+        }
+
+        function goToAchievements() {
+            window.location.href = 'achievements.html';
         }
 
         // Profile Manager
