@@ -438,7 +438,7 @@
                 this.loadRecentActivity();
             }
 
-            // ДОБАВЬ ЭТОТ МЕТОД
+            // Упрощенная система достижений (только за количество тестов)
             calculateAchievements(testsCount) {
                 if (testsCount >= 10) return 3;
                 if (testsCount >= 5) return 2;
@@ -474,8 +474,7 @@
                     <div class="history-item">
                         <div class="test-info">
                             <h4>${test.testTitle || 'Неизвестный тест'}</h4>
-                            <p class="test-score">Результат: ${test.score || 0}%</p>
-                            <p class="test-description">Правильных ответов: ${test.correctAnswers || 0}/${test.totalQuestions || '?'}</p>
+                            <p class="test-description">Пройдено вопросов: ${test.totalQuestions || '?'}</p>
                         </div>
                         <div class="test-meta">
                             <span class="test-date">${new Date(test.completedAt).toLocaleDateString('ru-RU')}</span>
@@ -503,17 +502,24 @@
                         <i class="fas fa-check-circle"></i>
                         <div class="activity-content">
                             <span class="activity-text">Пройден тест "${test.testTitle || 'Неизвестный тест'}"</span>
-                            <span class="activity-score">${test.score || 0}%</span>
                             <span class="activity-time">${this.formatRelativeTime(test.completedAt)}</span>
                         </div>
                     </div>
                 `).join('');
             }
 
-            formatTime(minutes) {
-                const hours = Math.floor(minutes / 60);
-                const mins = minutes % 60;
-                return hours > 0 ? `${hours}ч ${mins}м` : `${mins}м`;
+            formatTime(seconds) {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                
+                if (hours > 0) {
+                    return `${hours}ч ${minutes}м`;
+                } else if (minutes > 0) {
+                    return `${minutes}м ${secs}с`;
+                } else {
+                    return `${secs}с`;
+                }
             }
 
             formatRelativeTime(dateString) {

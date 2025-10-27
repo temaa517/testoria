@@ -930,45 +930,43 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        saveTestResult(testData, userAnswers, score, timeSpent) {
-        try {
-            const userManager = new UserManager();
-            const currentUser = userManager.getCurrentUser();
-            
-            if (!currentUser) {
-                console.log('Пользователь не авторизован, результат не сохранен');
-                return;
+        saveTestResult(testData, userAnswers, timeSpent) {
+            try {
+                const userManager = new UserManager();
+                const currentUser = userManager.getCurrentUser();
+                
+                if (!currentUser) {
+                    console.log('Пользователь не авторизован, результат не сохранен');
+                    return;
+                }
+
+                const testResult = {
+                    id: Date.now(),
+                    userId: currentUser.id,
+                    testId: testData.id,
+                    testTitle: testData.title,
+                    timeSpent: timeSpent,
+                    completedAt: new Date().toISOString(),
+                    answers: userAnswers,
+                    totalQuestions: testData.questions.length
+                };
+
+                // Получаем существующие результаты
+                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+                
+                // Добавляем новый результат
+                allResults.push(testResult);
+                
+                // Сохраняем обратно
+                localStorage.setItem('testResults', JSON.stringify(allResults));
+                
+                console.log('Результат теста сохранен:', testResult);
+                
+            } catch (error) {
+                console.error('Ошибка сохранения результата:', error);
             }
-
-            const testResult = {
-                id: Date.now(),
-                userId: currentUser.id,
-                testId: testData.id,
-                testTitle: testData.title,
-                score: score,
-                maxScore: 100,
-                timeSpent: timeSpent,
-                completedAt: new Date().toISOString(),
-                answers: userAnswers,
-                correctAnswers: userAnswers.filter(answer => answer.isCorrect).length,
-                totalQuestions: userAnswers.length
-            };
-
-            // Получаем существующие результаты
-            const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
-            
-            // Добавляем новый результат
-            allResults.push(testResult);
-            
-            // Сохраняем обратно
-            localStorage.setItem('testResults', JSON.stringify(allResults));
-            
-            console.log('Результат теста сохранен:', testResult);
-            
-        } catch (error) {
-            console.error('Ошибка сохранения результата:', error);
         }
-    }
+
         updateNavigation() {
             const isFirstQuestion = this.currentQuestionIndex === 0;
             const isLastQuestion = this.currentQuestionIndex === this.currentTest.questions.length - 1;
@@ -1422,10 +1420,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.saveTestResult(
                 this.currentTest,
                 this.userAnswers,
-                85, // временный балл (можно рассчитать)
-                600, // временное время (можно взять из таймера)
-                this.userAnswers.length, // правильные ответы
-                this.currentTest.questions.length // всего вопросов
+                600
             );
             
             // Сохраняем результат в localStorage для страницы результатов
