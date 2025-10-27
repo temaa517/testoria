@@ -1418,6 +1418,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         goToResults(result) {
+            // ВЫЗЫВАЕМ СОХРАНЕНИЕ РЕЗУЛЬТАТА В ПРОФИЛЬ
+            this.saveTestResult(
+                this.currentTest,
+                this.userAnswers,
+                85, // временный балл (можно рассчитать)
+                600, // временное время (можно взять из таймера)
+                this.userAnswers.length, // правильные ответы
+                this.currentTest.questions.length // всего вопросов
+            );
+            
             // Сохраняем результат в localStorage для страницы результатов
             const testResult = {
                 testId: this.testId,
@@ -1468,7 +1478,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script src="auth-core.js"></script> 
- <script src="auth-header.js"></script>
+<script src="auth-header.js"></script>
 
 </body>
 </html>

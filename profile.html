@@ -422,22 +422,40 @@
                     new Date().toLocaleDateString('ru-RU');
                 document.getElementById('userJoinDate').textContent = `Участник с ${joinDate}`;
 
-                // Статистика
-                const stats = this.currentUser.stats || {};
-                document.getElementById('testsCompleted').textContent = stats.testsCompleted || 0;
-                document.getElementById('totalTime').textContent = this.formatTime(stats.totalTime || 0);
-                document.getElementById('achievementsCount').textContent = (this.currentUser.achievements || []).length;
+                // СТАТИСТИКА ИЗ РЕЗУЛЬТАТОВ ТЕСТОВ
+                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
+                
+                const testsCompleted = userResults.length;
+                const totalTime = userResults.reduce((total, test) => total + (test.timeSpent || 0), 0);
+                
+                document.getElementById('testsCompleted').textContent = testsCompleted;
+                document.getElementById('totalTime').textContent = this.formatTime(totalTime);
+                document.getElementById('achievementsCount').textContent = this.calculateAchievements(testsCompleted);
 
                 // История и активность
                 this.loadHistory();
                 this.loadRecentActivity();
             }
 
+            // ДОБАВЬ ЭТОТ МЕТОД
+            calculateAchievements(testsCount) {
+                if (testsCount >= 10) return 3;
+                if (testsCount >= 5) return 2;
+                if (testsCount >= 1) return 1;
+                return 0;
+            }
+
             loadHistory() {
                 const historyList = document.getElementById('historyList');
-                const history = this.currentUser.history || [];
                 
-                if (history.length === 0) {
+                // Берем результаты из localStorage
+                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
+                
+                console.log('Загружаем историю тестов:', userResults);
+                
+                if (userResults.length === 0) {
                     historyList.innerHTML = `
                         <div class="empty-state">
                             <i class="fas fa-history"></i>
@@ -449,11 +467,15 @@
                     return;
                 }
 
-                historyList.innerHTML = history.map(test => `
+                // Сортируем по дате (новые сверху)
+                const sortedResults = userResults.sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
+                
+                historyList.innerHTML = sortedResults.map(test => `
                     <div class="history-item">
                         <div class="test-info">
                             <h4>${test.testTitle || 'Неизвестный тест'}</h4>
-                            <p>${test.result?.title || 'Результат не указан'}</p>
+                            <p class="test-score">Результат: ${test.score || 0}%</p>
+                            <p class="test-description">Правильных ответов: ${test.correctAnswers || 0}/${test.totalQuestions || '?'}</p>
                         </div>
                         <div class="test-meta">
                             <span class="test-date">${new Date(test.completedAt).toLocaleDateString('ru-RU')}</span>
@@ -465,8 +487,11 @@
 
             loadRecentActivity() {
                 const activityList = document.getElementById('recentActivity');
-                const history = this.currentUser.history || [];
-                const recentTests = history.slice(0, 5);
+                
+                // Берем результаты из localStorage
+                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
+                const recentTests = userResults.slice(0, 5).reverse(); // Последние 5
                 
                 if (recentTests.length === 0) {
                     activityList.innerHTML = '<p class="no-activity">Нет недавней активности</p>';
@@ -478,6 +503,7 @@
                         <i class="fas fa-check-circle"></i>
                         <div class="activity-content">
                             <span class="activity-text">Пройден тест "${test.testTitle || 'Неизвестный тест'}"</span>
+                            <span class="activity-score">${test.score || 0}%</span>
                             <span class="activity-time">${this.formatRelativeTime(test.completedAt)}</span>
                         </div>
                     </div>
