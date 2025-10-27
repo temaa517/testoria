@@ -513,10 +513,22 @@
         });
     </script>
 
-    <!-- Подключаем основные классы -->
-    <script src="auth-core.js"></script>
+<script src="auth-core.js"></script>
+<script src="auth-header.js"></script>
+<script src="js/profile-core.js"></script>
 
-    <!-- Подключаем управление хедером -->
-    <script src="auth-header.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Проверяем авторизацию
+        const userManager = new UserManager();
+        if (!userManager.getCurrentUser()) {
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Инициализируем профиль
+        new ProfileManager();
+    });
+</script>
 </body>
 </html>

@@ -929,7 +929,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.userAnswers.push({ questionId, value });
             }
         }
+        
+        saveTestResult(testData, userAnswers, score, timeSpent) {
+        try {
+            const userManager = new UserManager();
+            const currentUser = userManager.getCurrentUser();
+            
+            if (!currentUser) {
+                console.log('Пользователь не авторизован, результат не сохранен');
+                return;
+            }
 
+            const testResult = {
+                id: Date.now(),
+                userId: currentUser.id,
+                testId: testData.id,
+                testTitle: testData.title,
+                score: score,
+                maxScore: 100,
+                timeSpent: timeSpent,
+                completedAt: new Date().toISOString(),
+                answers: userAnswers,
+                correctAnswers: userAnswers.filter(answer => answer.isCorrect).length,
+                totalQuestions: userAnswers.length
+            };
+
+            // Получаем существующие результаты
+            const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+            
+            // Добавляем новый результат
+            allResults.push(testResult);
+            
+            // Сохраняем обратно
+            localStorage.setItem('testResults', JSON.stringify(allResults));
+            
+            console.log('Результат теста сохранен:', testResult);
+            
+        } catch (error) {
+            console.error('Ошибка сохранения результата:', error);
+        }
+    }
         updateNavigation() {
             const isFirstQuestion = this.currentQuestionIndex === 0;
             const isLastQuestion = this.currentQuestionIndex === this.currentTest.questions.length - 1;
@@ -1276,14 +1315,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Детальная система весов для каждого вопроса
                 const questionWeights = {
                     1: { // Твое отношение к дедлайнам?
-                        'kislyuk': 3,    // строгий но понимающий
+                        'kislyuk': 2,    // строгий но понимающий
                         'prutkina': 2,   // гибкий
                         'kulakovich': 2  // строгий
                     },
                     2: { // Любишь ли ты проводить пары?
                         'kislyuk': 2,    // любит когда понимают
-                        'prutkina': 0,   // не любит
-                        'shapovalov': 1  // нейтрально
+                        'prutkina': 2,   // не любит
+                        'shapovalov': 2  // нейтрально
                     },
                     3: { // Стиль общения
                         'kislyuk': 3,
@@ -1308,14 +1347,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     6: { // Срезы знаний
                         'kislyuk': 2,    // необходимы
-                        'prutkina': 0,   // ненавидит
+                        'prutkina': 2,   // ненавидит
                         'kulakovich': 3, // обожает
-                        'shapovalov': 1, // можно без
+                        'shapovalov': 2, // можно без
                         'leyko': 2       // не знает что это
                     },
                     7: { // Опоздавший студент
                         'kislyuk': 2,    // спросит причину
-                        'prutkina': 1,   // ничего страшного
+                        'prutkina': 2,   // ничего страшного
                         'kulakovich': 3, // отчитает
                         'shapovalov': 2, // пошутит
                         'leyko': 3       // сам проспал

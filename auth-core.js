@@ -75,7 +75,12 @@ class UserManager {
     }, 100);
     
     return user;
-}
+    }
+
+    getTestHistory(userId) {
+        const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+        return allResults.filter(result => result.userId === userId);
+    }
 
     logout() {
         this.currentUser = null;
@@ -154,6 +159,8 @@ class UserManager {
             }
         }
     }
+    
+    
 }
 
 // Функция для обновления отображения кнопок в шапке
