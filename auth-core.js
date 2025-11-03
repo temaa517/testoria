@@ -3,8 +3,14 @@
 // UserManager класс
 class UserManager {
     constructor() {
+        // Исправляем ключ на testoria-users
         this.users = JSON.parse(localStorage.getItem('testoria_users')) || [];
         this.currentUser = JSON.parse(localStorage.getItem('testoria_current_user')) || null;
+        
+        console.log('UserManager инициализирован:', {
+            totalUsers: this.users.length,
+            currentUser: this.currentUser
+        });
     }
     setCurrentUser(user) {
             this.currentUser = user;
@@ -185,7 +191,7 @@ class UserManager {
         
         if (userIndex !== -1) {
             users[userIndex].isAdmin = true;
-            this.saveUsers(); // Используем правильный метод сохранения
+            this.saveUsers(); // Теперь использует правильный ключ
             
             // Если это текущий пользователь, обновляем его данные
             const currentUser = this.getCurrentUser();
@@ -209,13 +215,13 @@ class UserManager {
         
         if (userIndex !== -1) {
             users[userIndex].isAdmin = false;
-            localStorage.setItem('users', JSON.stringify(users));
+            this.saveUsers(); // Используем правильный метод сохранения
             
             // Если это текущий пользователь, обновляем его данные
             const currentUser = this.getCurrentUser();
             if (currentUser && currentUser.id === userId) {
                 currentUser.isAdmin = false;
-                this.setCurrentUser(currentUser);
+                localStorage.setItem('testoria_current_user', JSON.stringify(currentUser));
             }
             
             console.log('❌ Права админа сняты:', users[userIndex].name);
