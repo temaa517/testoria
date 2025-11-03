@@ -167,18 +167,15 @@ class UserManager {
         let currentUser = user || this.getCurrentUser();
         if (!currentUser) return false;
         
-        // Если у текущего пользователя нет флага isAdmin, 
-        // проверяем актуальные данные из localStorage
-        if (currentUser.isAdmin === undefined) {
-            const users = this.getUsers();
-            const actualUser = users.find(u => u.id === currentUser.id);
-            if (actualUser) {
-                // ВОЗВРАЩАЕМ РЕЗУЛЬТАТ БЕЗ ВЫЗОВА setCurrentUser
-                return actualUser.isAdmin === true;
-            }
+        // Всегда проверяем актуальные данные из хранилища
+        const users = this.getUsers();
+        const actualUser = users.find(u => u.id === currentUser.id);
+        
+        if (actualUser) {
+            return actualUser.isAdmin === true;
         }
         
-        return currentUser.isAdmin === true;
+        return false;
     }
 
     // Метод для назначения пользователя админом
@@ -188,13 +185,13 @@ class UserManager {
         
         if (userIndex !== -1) {
             users[userIndex].isAdmin = true;
-            localStorage.setItem('users', JSON.stringify(users));
+            this.saveUsers(); // Используем правильный метод сохранения
             
             // Если это текущий пользователь, обновляем его данные
             const currentUser = this.getCurrentUser();
             if (currentUser && currentUser.id === userId) {
                 currentUser.isAdmin = true;
-                this.setCurrentUser(currentUser);
+                localStorage.setItem('testoria_current_user', JSON.stringify(currentUser));
             }
             
             console.log('✅ Пользователь назначен админом:', users[userIndex].name);

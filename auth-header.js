@@ -43,17 +43,31 @@ class AuthHeaderManager {
 
     // Показываем/скрываем админ-ссылку в меню профиля
     toggleAdminLink(currentUser) {
-        const adminLink = document.querySelector('.admin-link');
-        if (adminLink) {
-            const userManager = new UserManager();
-            const isAdmin = currentUser ? userManager.isAdmin(currentUser) : false;
-            
-            if (isAdmin) {
-                adminLink.style.display = 'block';
+        const adminLinks = document.querySelectorAll('.admin-link');
+        
+        adminLinks.forEach(adminLink => {
+            if (currentUser) {
+                const userManager = new UserManager();
+                const isAdmin = userManager.isAdmin(currentUser);
+                
+                console.log('Проверка прав админа:', {
+                    user: currentUser.name,
+                    isAdmin: isAdmin,
+                    userData: currentUser
+                });
+                
+                if (isAdmin) {
+                    adminLink.style.display = 'block';
+                    console.log('✅ Показываем админ-ссылку для:', currentUser.name);
+                } else {
+                    adminLink.style.display = 'none';
+                    console.log('❌ Скрываем админ-ссылку для:', currentUser.name);
+                }
             } else {
                 adminLink.style.display = 'none';
+                console.log('❌ Нет пользователя - скрываем админ-ссылку');
             }
-        }
+        });
     }
 
         setupThemeManager() {
