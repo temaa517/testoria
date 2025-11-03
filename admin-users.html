@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .users-management {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .users-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted-text);
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .users-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .users-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .users-table tr:hover {
+            background: var(--hover-color);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .user-email {
+            font-size: 12px;
+            color: var(--muted-text);
+            margin-top: 2px;
+        }
+
+        .admin-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted-text);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html" class="nav-link">
+                        <i class="fas fa-phone"></i>
+                        Контакты
+                    </a>
+                    <a href="admin.html" class="nav-link">
+                        <i class="fas fa-crown"></i>
+                        Админ-панель
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div id="profile-section" class="profile-dropdown">
+                        <button class="profile-btn" id="profileBtn">
+                            👤 Профиль
+                        </button>
+                        <div class="dropdown-content" id="profileDropdown">
+                            <a href="profile.html">Мой профиль</a>
+                            <a href="my-tests.html">Мои тесты</a>
+                            <a href="achievements.html">Достижения</a>
+                            <a href="results.html">Результаты</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <a href="admin.html">Админ-панель</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Управление пользователями</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок страницы -->
+        <section class="page-header">
+            <div class="container">
+                <div class="page-header-content">
+                    <a href="admin.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                        Назад в админ-панель
+                    </a>
+                    <h1 class="page-title">
+                        <i class="fas fa-user-cog"></i>
+                        Управление пользователями
+                    </h1>
+                    <p class="page-subtitle">Просмотр и управление всеми пользователями платформы</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Статистика пользователей -->
+        <section class="admin-content">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card admin-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalUsers">0</span>
+                            <span class="stat-label">Всего пользователей</span>
+                        </div>
+                    </div>
+                    <div class="stat-card admin-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="totalAdmins">0</span>
+                            <span class="stat-label">Администраторов</span>
+                        </div>
+                    </div>
+                    <div class="stat-card admin-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="activeUsers">0</span>
+                            <span class="stat-label">Активных</span>
+                        </div>
+                    </div>
+                    <div class="stat-card admin-stat">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="testsCompleted">0</span>
+                            <span class="stat-label">Пройдено тестов</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Управление пользователями -->
+                <div class="users-management">
+                    <div class="users-header">
+                        <h2>
+                            <i class="fas fa-list"></i>
+                            Список пользователей
+                        </h2>
+                        <div class="search-box">
+                            <input type="text" id="userSearch" placeholder="       Поиск по имени или email...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>Пользователь</th>
+                                    <th>Дата регистрации</th>
+                                    <th>Статус</th>
+                                    <th>Прогресс</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Сюда будут загружаться пользователи -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                    <p>Платформа увлекательных тестов для каждого</p>
+                    <div class="social-icons">
+                        <a href="https://t.me/ttemkatut" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-compass"></i>
+                        Навигация
+                    </h4>
+                    <a href="index.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html">
+                        <i class="fas fa-arrow-right"></i>
+                        О нас
+                    </a>
+                    <a href="contact.html">
+                        <i class="fas fa-arrow-right"></i>
+                        Контакты
+                    </a>
+                </div>
+                <div class="footer-section">
+                    <h4>
+                        <i class="fas fa-envelope"></i>
+                        Контакты
+                    </h4>
+                    <p>
+                        <i class="fas fa-envelope"></i>
+                        Email: hello@testoria.cloud
+                    </p>
+                    <p>
+                        <i class="fas fa-phone"></i>
+                        Телефон: +375 (01) 234-56-78
+                    </p>
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i>
+                        Адрес: г. Минск, ул. Уручская, 81Б
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    <i class="far fa-copyright"></i>
+                    2025 Testoria. Все права защищены.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        class UsersManager {
+            constructor() {
+                this.userManager = new UserManager();
+                this.allUsers = [];
+                this.filteredUsers = [];
+                this.init();
+            }
+
+            init() {
+                if (!this.checkAdminAccess()) {
+                    return;
+                }
+
+                this.loadUsers();
+                this.setupEventListeners();
+            }
+
+            checkAdminAccess() {
+                const user = this.userManager.getCurrentUser();
+                
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return false;
+                }
+
+                if (!this.userManager.isAdmin(user)) {
+                    this.showAccessDenied();
+                    return false;
+                }
+
+                return true;
+            }
+
+            showAccessDenied() {
+                document.querySelector('main').innerHTML = `
+                    <div class="container">
+                        <div class="access-denied">
+                            <i class="fas fa-lock"></i>
+                            <h2>Доступ запрещен</h2>
+                            <p>У вас недостаточно прав для доступа к этой странице.</p>
+                            <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadUsers() {
+                this.allUsers = this.userManager.getUsers();
+                this.filteredUsers = [...this.allUsers];
+                this.renderUsersTable();
+                this.updateStats();
+            }
+
+            updateStats() {
+                const adminUsers = this.allUsers.filter(user => user.isAdmin);
+                const activeUsers = this.allUsers.filter(user => {
+                    const created = new Date(user.createdAt);
+                    const now = new Date();
+                    const diffTime = Math.abs(now - created);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    return diffDays <= 30; // Активны в последние 30 дней
+                });
+
+                const totalTests = this.allUsers.reduce((sum, user) => {
+                    return sum + (user.stats?.testsCompleted || 0);
+                }, 0);
+
+                document.getElementById('totalUsers').textContent = this.allUsers.length;
+                document.getElementById('totalAdmins').textContent = adminUsers.length;
+                document.getElementById('activeUsers').textContent = activeUsers.length;
+                document.getElementById('testsCompleted').textContent = totalTests;
+            }
+
+            renderUsersTable() {
+                const tbody = document.getElementById('usersTableBody');
+                
+                if (this.filteredUsers.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <p>Пользователи не найдены</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                tbody.innerHTML = this.filteredUsers.map(user => `
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    ${user.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                    <div class="user-name">${this.escapeHtml(user.name)}</div>
+                                    ${user.email ? `<div class="user-email">${this.escapeHtml(user.email)}</div>` : ''}
+                                </div>
+                            </div>
+                        </td>
+                        <td>${this.formatDate(user.createdAt)}</td>
+                        <td>
+                            ${user.isAdmin ? '<span class="admin-badge">👑 Админ</span>' : '👤 Пользователь'}
+                        </td>
+                        <td>
+                            <small>Тестов: ${user.stats?.testsCompleted || 0}</small>
+                        </td>
+                        <td>
+                            <div class="user-actions">
+                                ${!user.isAdmin ? 
+                                    `<button class="btn-sm btn-success" onclick="usersManager.makeAdmin('${user.id}')">
+                                        Сделать админом
+                                    </button>` :
+                                    `<button class="btn-sm btn-warning" onclick="usersManager.removeAdmin('${user.id}')">
+                                        Убрать админ
+                                    </button>`
+                                }
+                                <button class="btn-sm btn-secondary" onclick="usersManager.viewUserDetails('${user.id}')">
+                                    Подробнее
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            setupEventListeners() {
+                // Поиск пользователей
+                const searchInput = document.getElementById('userSearch');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.filterUsers(e.target.value);
+                    });
+                }
+
+                // Выпадающее меню профиля
+                document.getElementById('profileBtn')?.addEventListener('click', () => {
+                    this.toggleProfileMenu();
+                });
+            }
+
+            filterUsers(searchTerm) {
+                if (!searchTerm) {
+                    this.filteredUsers = [...this.allUsers];
+                } else {
+                    const term = searchTerm.toLowerCase();
+                    this.filteredUsers = this.allUsers.filter(user => 
+                        user.name.toLowerCase().includes(term) ||
+                        (user.email && user.email.toLowerCase().includes(term))
+                    );
+                }
+                this.renderUsersTable();
+            }
+
+            makeAdmin(userId) {
+                if (confirm('Вы уверены, что хотите сделать этого пользователя администратором?')) {
+                    const success = this.userManager.makeAdmin(userId);
+                    if (success) {
+                        this.loadUsers();
+                        this.showNotification('Пользователь назначен администратором', 'success');
+                    }
+                }
+            }
+
+            removeAdmin(userId) {
+                if (confirm('Вы уверены, что хотите снять права администратора?')) {
+                    const success = this.userManager.removeAdmin(userId);
+                    if (success) {
+                        this.loadUsers();
+                        this.showNotification('Права администратора сняты', 'warning');
+                    }
+                }
+            }
+
+            viewUserDetails(userId) {
+                const user = this.allUsers.find(u => u.id === userId);
+                if (user) {
+                    const testHistory = this.userManager.getTestHistory(userId);
+                    
+                    alert(`
+Детали пользователя:
+─────────────────
+Имя: ${user.name}
+Email: ${user.email || 'Не указан'}
+ID: ${user.id}
+Дата регистрации: ${this.formatDate(user.createdAt)}
+Статус: ${user.isAdmin ? '👑 Администратор' : '👤 Пользователь'}
+─────────────────
+Статистика:
+• Пройдено тестов: ${user.stats?.testsCompleted || 0}
+• Всего времени: ${Math.round((user.stats?.totalTime || 0) / 60)} мин.
+• Тестов в истории: ${testHistory.length}
+                    `);
+                }
+            }
+
+            showNotification(message, type = 'info') {
+                alert(message);
+            }
+
+            formatDate(dateString) {
+                if (!dateString) return 'Неизвестно';
+                const date = new Date(dateString);
+                return date.toLocaleDateString('ru-RU');
+            }
+
+            escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
+
+            toggleProfileMenu() {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                } else {
+                    dropdown.style.display = 'block';
+                    setTimeout(() => {
+                        document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
+                    }, 0);
+                }
+            }
+
+            closeProfileMenu(e) {
+                const dropdown = document.getElementById('profileDropdown');
+                const profileBtn = document.getElementById('profileBtn');
+                if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            }
+        }
+
+        // Создаем глобальный экземпляр
+        const usersManager = new UsersManager();
+    </script>
+
+    <!-- Подключаем скрипты -->
+    <script src="auth-core.js"></script>
+    <script src="auth-header.js"></script>
+</body>
+</html>
