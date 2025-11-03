@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Testoria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <div class="logo">
+                    <h3>
+                        <i class="fas fa-brain"></i>
+                        Testoria
+                    </h3>
+                </div>
+                <nav class="nav">
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-home"></i>
+                        Главная
+                    </a>
+                    <a href="catalog.html" class="nav-link">
+                        <i class="fas fa-list"></i>
+                        Каталог тестов
+                    </a>
+                    <a href="about.html" class="nav-link">
+                        <i class="fas fa-info-circle"></i>
+                        О нас
+                    </a>
+                    <a href="admin.html" class="nav-link active">
+                        <i class="fas fa-crown"></i>
+                        Админ-панель
+                    </a>
+                </nav>
+                <div class="header-controls">
+                    <button class="theme-toggle" id="themeToggle" aria-label="Переключить на темную тему">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                        <span class="theme-thumb"></span>
+                    </button>
+                    <div id="profile-section" class="profile-dropdown">
+                        <button class="profile-btn" id="profileBtn">
+                            👤 Профиль
+                        </button>
+                        <div class="dropdown-content" id="profileDropdown">
+                            <a href="profile.html">Мой профиль</a>
+                            <a href="my-tests.html">Мои тесты</a>
+                            <a href="achievements.html">Достижения</a>
+                            <a href="results.html">Результаты</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <!-- Хлебные крошки -->
+        <section class="breadcrumbs">
+            <div class="container">
+                <nav class="breadcrumbs-nav">
+                    <a href="index.html">Главная</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Админ-панель</span>
+                </nav>
+            </div>
+        </section>
+
+        <!-- Заголовок страницы -->
+        <section class="page-header">
+            <div class="container">
+                <div class="page-header-content">
+                    <h1 class="page-title">
+                        <i class="fas fa-crown"></i>
+                        Админ-панель
+                    </h1>
+                    <p class="page-subtitle">Управление платформой Testoria</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Основной контент админ-панели -->
+        <section class="admin-content">
+            <div class="container">
+                <!-- Статистика платформы -->
+                <div class="admin-stats">
+                    <h2>
+                        <i class="fas fa-chart-line"></i>
+                        Статистика платформы
+                    </h2>
+                    <div class="stats-grid">
+                        <div class="stat-card admin-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalUsers">0</span>
+                                <span class="stat-label">Всего пользователей</span>
+                            </div>
+                        </div>
+                        <div class="stat-card admin-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalTests">0</span>
+                                <span class="stat-label">Активных тестов</span>
+                            </div>
+                        </div>
+                        <div class="stat-card admin-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalCompletions">0</span>
+                                <span class="stat-label">Пройдено тестов</span>
+                            </div>
+                        </div>
+                        <div class="stat-card admin-stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="avgRating">0.0</span>
+                                <span class="stat-label">Средний рейтинг</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Быстрые действия -->
+                <div class="admin-actions">
+                    <h2>
+                        <i class="fas fa-bolt"></i>
+                        Быстрые действия
+                    </h2>
+                    <div class="actions-grid">
+                        <div class="action-card" onclick="openTestCreator()">
+                            <div class="action-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h3>Создать тест</h3>
+                            <p>Добавить новый тест в каталог</p>
+                        </div>
+                        <div class="action-card" onclick="openTestManager()">
+                            <div class="action-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <h3>Управление тестами</h3>
+                            <p>Редактировать существующие тесты</p>
+                        </div>
+                        <div class="action-card" onclick="openUserManager()">
+                            <div class="action-icon">
+                                <i class="fas fa-user-cog"></i>
+                            </div>
+                            <h3>Управление пользователями</h3>
+                            <p>Просмотр и управление пользователями</p>
+                        </div>
+                        <div class="action-card" onclick="openAnalytics()">
+                            <div class="action-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h3>Аналитика</h3>
+                            <p>Подробная статистика платформы</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Последняя активность -->
+                <div class="recent-admin-activity">
+                    <h2>
+                        <i class="fas fa-history"></i>
+                        Последняя активность
+                    </h2>
+                    <div class="activity-list" id="adminActivity">
+                        <div class="activity-item">
+                            <i class="fas fa-info-circle"></i>
+                            <div class="activity-content">
+                                <span class="activity-text">Здесь будет отображаться последняя активность на платформе</span>
+                                <span class="activity-time">Только что</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <!-- ... существующий футер ... -->
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        class AdminManager {
+            constructor() {
+                this.currentUser = null;
+                this.userManager = new UserManager();
+                this.init();
+            }
+
+            init() {
+                // Проверяем авторизацию и права админа
+                if (!this.checkAdminAccess()) {
+                    return;
+                }
+
+                this.currentUser = this.userManager.getCurrentUser();
+                this.loadAdminData();
+                this.setupEventListeners();
+            }
+
+            checkAdminAccess() {
+                const user = this.userManager.getCurrentUser();
+                
+                if (!user) {
+                    // Пользователь не авторизован
+                    window.location.href = 'login.html';
+                    return false;
+                }
+
+                // Проверяем флаг isAdmin
+                if (!this.userManager.isAdmin(user)) {
+                    this.showAccessDenied();
+                    return false;
+                }
+
+                return true;
+            }
+
+            showAccessDenied() {
+                document.querySelector('main').innerHTML = `
+                    <div class="container">
+                        <div class="access-denied">
+                            <i class="fas fa-lock"></i>
+                            <h2>Доступ запрещен</h2>
+                            <p>У вас недостаточно прав для доступа к админ-панели.</p>
+                            <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadAdminData() {
+                // Загружаем базовую статистику
+                this.loadPlatformStats();
+            }
+
+            loadPlatformStats() {
+                // Временные данные - потом заменим на реальную статистику
+                const allUsers = this.userManager.getUsers();
+                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+                const testsData = Object.keys(window.testsData || {}).length;
+
+                document.getElementById('totalUsers').textContent = allUsers.length;
+                document.getElementById('totalTests').textContent = testsData;
+                document.getElementById('totalCompletions').textContent = allResults.length;
+                document.getElementById('avgRating').textContent = '4.8';
+            }
+
+            setupEventListeners() {
+                // Выпадающее меню профиля
+                document.getElementById('profileBtn')?.addEventListener('click', () => {
+                    this.toggleProfileMenu();
+                });
+            }
+
+            toggleProfileMenu() {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                } else {
+                    dropdown.style.display = 'block';
+                    setTimeout(() => {
+                        document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
+                    }, 0);
+                }
+            }
+
+            closeProfileMenu(e) {
+                const dropdown = document.getElementById('profileDropdown');
+                const profileBtn = document.getElementById('profileBtn');
+                if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            }
+        }
+
+        // Глобальные функции для быстрых действий
+        function openTestCreator() {
+            alert('Конструктор тестов будет доступен в следующем обновлении!');
+        }
+
+        function openTestManager() {
+            alert('Управление тестами будет доступно в следующем обновлении!');
+        }
+
+        function openUserManager() {
+            alert('Управление пользователями будет доступно в следующем обновлении!');
+        }
+
+        function openAnalytics() {
+            alert('Аналитика будет доступна в следующем обновлении!');
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new AdminManager();
+        });
+    </script>
+
+    <!-- Подключаем скрипты -->
+    <script src="auth-core.js"></script>
+    <script src="auth-header.js"></script>
+</body>
+</html>

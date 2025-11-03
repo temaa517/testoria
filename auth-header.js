@@ -19,7 +19,7 @@ class AuthHeaderManager {
         
         console.log('Обновление хедера, текущий пользователь:', currentUser);
         
-        if (currentUser && currentUser.name) { // ДОБАВИЛИ ПРОВЕРКУ
+        if (currentUser && currentUser.name) {
             if (authButtons) authButtons.style.display = 'none';
             if (profileSection) profileSection.style.display = 'block';
             
@@ -28,9 +28,31 @@ class AuthHeaderManager {
             if (profileName) {
                 profileName.textContent = currentUser.name;
             }
+            
+            // ПОКАЗЫВАЕМ/СКРЫВАЕМ АДМИН-ССЫЛКУ В МЕНЮ
+            this.toggleAdminLink(currentUser);
+            
         } else {
             if (authButtons) authButtons.style.display = 'flex';
             if (profileSection) profileSection.style.display = 'none';
+            
+            // Скрываем админ-ссылку
+            this.toggleAdminLink(null);
+        }
+    }
+
+    // Показываем/скрываем админ-ссылку в меню профиля
+    toggleAdminLink(currentUser) {
+        const adminLink = document.querySelector('.admin-link');
+        if (adminLink) {
+            const userManager = new UserManager();
+            const isAdmin = currentUser ? userManager.isAdmin(currentUser) : false;
+            
+            if (isAdmin) {
+                adminLink.style.display = 'block';
+            } else {
+                adminLink.style.display = 'none';
+            }
         }
     }
 

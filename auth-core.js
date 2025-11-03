@@ -6,7 +6,10 @@ class UserManager {
         this.users = JSON.parse(localStorage.getItem('testoria_users')) || [];
         this.currentUser = JSON.parse(localStorage.getItem('testoria_current_user')) || null;
     }
-
+    setCurrentUser(user) {
+            this.currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+        }
     getUsers() {
         return this.users;
     }
@@ -160,7 +163,76 @@ class UserManager {
         }
     }
     
-    
+    isAdmin(user = null) {
+        let currentUser = user || this.getCurrentUser();
+        if (!currentUser) return false;
+        
+        // Если у текущего пользователя нет флага isAdmin, 
+        // проверяем актуальные данные из localStorage
+        if (currentUser.isAdmin === undefined) {
+            const users = this.getUsers();
+            const actualUser = users.find(u => u.id === currentUser.id);
+            if (actualUser) {
+                // ВОЗВРАЩАЕМ РЕЗУЛЬТАТ БЕЗ ВЫЗОВА setCurrentUser
+                return actualUser.isAdmin === true;
+            }
+        }
+        
+        return currentUser.isAdmin === true;
+    }
+
+    // Метод для назначения пользователя админом
+    makeAdmin(userId) {
+        const users = this.getUsers();
+        const userIndex = users.findIndex(u => u.id === userId);
+        
+        if (userIndex !== -1) {
+            users[userIndex].isAdmin = true;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Если это текущий пользователь, обновляем его данные
+            const currentUser = this.getCurrentUser();
+            if (currentUser && currentUser.id === userId) {
+                currentUser.isAdmin = true;
+                this.setCurrentUser(currentUser);
+            }
+            
+            console.log('✅ Пользователь назначен админом:', users[userIndex].name);
+            return true;
+        }
+        
+        console.log('❌ Пользователь не найден');
+        return false;
+    }
+
+    // Метод для снятия прав админа
+    removeAdmin(userId) {
+        const users = this.getUsers();
+        const userIndex = users.findIndex(u => u.id === userId);
+        
+        if (userIndex !== -1) {
+            users[userIndex].isAdmin = false;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Если это текущий пользователь, обновляем его данные
+            const currentUser = this.getCurrentUser();
+            if (currentUser && currentUser.id === userId) {
+                currentUser.isAdmin = false;
+                this.setCurrentUser(currentUser);
+            }
+            
+            console.log('❌ Права админа сняты:', users[userIndex].name);
+            return true;
+        }
+        
+        return false;
+    }
+
+    // Получить всех админов
+    getAdmins() {
+        const users = this.getUsers();
+        return users.filter(user => user.isAdmin === true);
+    }
 }
 
 // Функция для обновления отображения кнопок в шапке
