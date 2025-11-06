@@ -403,190 +403,205 @@
             </div>
         </div>
     </footer>
-
+    
+<!-- Подключаем скрипты -->
+    <script src="auth-core.js"></script>
+    <script src="auth-header.js"></script>
     <!-- JavaScript -->
     <script>
-        class UsersManager {
-            constructor() {
-                this.userManager = new UserManager();
-                this.allUsers = [];
-                this.filteredUsers = [];
+    class UsersManager {
+        constructor() {
+            console.log('🔄 Инициализация UsersManager...');
+            
+            // Сохраняем экземпляр в window сразу при создании
+            window.usersManager = this;
+            
+            this.userManager = new UserManager();
+            this.allUsers = [];
+            this.filteredUsers = [];
+            
+            // Откладываем init чтобы избежать проблем с загрузкой
+            setTimeout(() => {
                 this.init();
+            }, 100);
+        }
+
+        init() {
+            console.log('🚀 Запуск UsersManager.init()...');
+            
+            if (!this.checkAdminAccess()) {
+                return;
             }
 
-            init() {
-                if (!this.checkAdminAccess()) {
-                    return;
-                }
+            this.loadUsers();
+            this.setupEventListeners();
+            
+            console.log('✅ UsersManager полностью инициализирован');
+        }
 
-                this.loadUsers();
-                this.setupEventListeners();
+        checkAdminAccess() {
+            const user = this.userManager.getCurrentUser();
+            
+            if (!user) {
+                window.location.href = 'login.html';
+                return false;
             }
 
-            checkAdminAccess() {
-                const user = this.userManager.getCurrentUser();
-                
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return false;
-                }
-
-                if (!this.userManager.isAdmin(user)) {
-                    this.showAccessDenied();
-                    return false;
-                }
-
-                return true;
+            if (!this.userManager.isAdmin(user)) {
+                this.showAccessDenied();
+                return false;
             }
 
-            showAccessDenied() {
-                document.querySelector('main').innerHTML = `
-                    <div class="container">
-                        <div class="access-denied">
-                            <i class="fas fa-lock"></i>
-                            <h2>Доступ запрещен</h2>
-                            <p>У вас недостаточно прав для доступа к этой странице.</p>
-                            <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
-                        </div>
+            return true;
+        }
+
+        showAccessDenied() {
+            document.querySelector('main').innerHTML = `
+                <div class="container">
+                    <div class="access-denied">
+                        <i class="fas fa-lock"></i>
+                        <h2>Доступ запрещен</h2>
+                        <p>У вас недостаточно прав для доступа к этой странице.</p>
+                        <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
                     </div>
-                `;
-            }
+                </div>
+            `;
+        }
 
-            loadUsers() {
-                this.allUsers = this.userManager.getUsers();
-                this.filteredUsers = [...this.allUsers];
-                this.renderUsersTable();
-                this.updateStats();
-            }
+        loadUsers() {
+            console.log('📥 Загрузка пользователей...');
+            this.allUsers = this.userManager.getUsers();
+            this.filteredUsers = [...this.allUsers];
+            this.renderUsersTable();
+            this.updateStats();
+        }
 
-            updateStats() {
-                const adminUsers = this.allUsers.filter(user => user.isAdmin);
-                const activeUsers = this.allUsers.filter(user => {
-                    const created = new Date(user.createdAt);
-                    const now = new Date();
-                    const diffTime = Math.abs(now - created);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    return diffDays <= 30; // Активны в последние 30 дней
-                });
+        updateStats() {
+            const adminUsers = this.allUsers.filter(user => user.isAdmin);
+            const activeUsers = this.allUsers.filter(user => {
+                const created = new Date(user.createdAt);
+                const now = new Date();
+                const diffTime = Math.abs(now - created);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays <= 30;
+            });
 
-                const totalTests = this.allUsers.reduce((sum, user) => {
-                    return sum + (user.stats?.testsCompleted || 0);
-                }, 0);
+            const totalTests = this.allUsers.reduce((sum, user) => {
+                return sum + (user.stats?.testsCompleted || 0);
+            }, 0);
 
-                document.getElementById('totalUsers').textContent = this.allUsers.length;
-                document.getElementById('totalAdmins').textContent = adminUsers.length;
-                document.getElementById('activeUsers').textContent = activeUsers.length;
-                document.getElementById('testsCompleted').textContent = totalTests;
-            }
+            document.getElementById('totalUsers').textContent = this.allUsers.length;
+            document.getElementById('totalAdmins').textContent = adminUsers.length;
+            document.getElementById('activeUsers').textContent = activeUsers.length;
+            document.getElementById('testsCompleted').textContent = totalTests;
+        }
 
-            renderUsersTable() {
-                const tbody = document.getElementById('usersTableBody');
-                
-                if (this.filteredUsers.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="5" class="empty-state">
-                                <i class="fas fa-users"></i>
-                                <p>Пользователи не найдены</p>
-                            </td>
-                        </tr>
-                    `;
-                    return;
-                }
-
-                tbody.innerHTML = this.filteredUsers.map(user => `
+        renderUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            
+            if (this.filteredUsers.length === 0) {
+                tbody.innerHTML = `
                     <tr>
-                        <td>
-                            <div class="user-info">
-                                <div class="user-avatar">
-                                    ${user.name.charAt(0).toUpperCase()}
-                                </div>
-                                <div>
-                                    <div class="user-name">${this.escapeHtml(user.name)}</div>
-                                    ${user.email ? `<div class="user-email">${this.escapeHtml(user.email)}</div>` : ''}
-                                </div>
-                            </div>
-                        </td>
-                        <td>${this.formatDate(user.createdAt)}</td>
-                        <td>
-                            ${user.isAdmin ? '<span class="admin-badge">👑 Админ</span>' : '👤 Пользователь'}
-                        </td>
-                        <td>
-                            <small>Тестов: ${user.stats?.testsCompleted || 0}</small>
-                        </td>
-                        <td>
-                            <div class="user-actions">
-                                ${!user.isAdmin ? 
-                                    `<button class="btn-sm btn-success" onclick="usersManager.makeAdmin('${user.id}')">
-                                        Сделать админом
-                                    </button>` :
-                                    `<button class="btn-sm btn-warning" onclick="usersManager.removeAdmin('${user.id}')">
-                                        Убрать админ
-                                    </button>`
-                                }
-                                <button class="btn-sm btn-secondary" onclick="usersManager.viewUserDetails('${user.id}')">
-                                    Подробнее
-                                </button>
-                            </div>
+                        <td colspan="5" class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <p>Пользователи не найдены</p>
                         </td>
                     </tr>
-                `).join('');
+                `;
+                return;
             }
 
-            setupEventListeners() {
-                // Поиск пользователей
-                const searchInput = document.getElementById('userSearch');
-                if (searchInput) {
-                    searchInput.addEventListener('input', (e) => {
-                        this.filterUsers(e.target.value);
-                    });
-                }
+            tbody.innerHTML = this.filteredUsers.map(user => `
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <div class="user-avatar">
+                                ${user.name.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <div class="user-name">${this.escapeHtml(user.name)}</div>
+                                ${user.email ? `<div class="user-email">${this.escapeHtml(user.email)}</div>` : ''}
+                            </div>
+                        </div>
+                    </td>
+                    <td>${this.formatDate(user.createdAt)}</td>
+                    <td>
+                        ${user.isAdmin ? '<span class="admin-badge">👑 Админ</span>' : '👤 Пользователь'}
+                    </td>
+                    <td>
+                        <small>Тестов: ${user.stats?.testsCompleted || 0}</small>
+                    </td>
+                    <td>
+                        <div class="user-actions">
+                            ${!user.isAdmin ? 
+                                `<button class="btn-sm btn-success" onclick="makeAdmin('${user.id}')">
+                                    Сделать админом
+                                </button>` :
+                                `<button class="btn-sm btn-warning" onclick="removeAdmin('${user.id}')">
+                                    Убрать админ
+                                </button>`
+                            }
+                            <button class="btn-sm btn-secondary" onclick="viewUserDetails('${user.id}')">
+                                Подробнее
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
 
-                // Выпадающее меню профиля
-                document.getElementById('profileBtn')?.addEventListener('click', () => {
-                    this.toggleProfileMenu();
+        setupEventListeners() {
+            const searchInput = document.getElementById('userSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    this.filterUsers(e.target.value);
                 });
             }
 
-            filterUsers(searchTerm) {
-                if (!searchTerm) {
-                    this.filteredUsers = [...this.allUsers];
-                } else {
-                    const term = searchTerm.toLowerCase();
-                    this.filteredUsers = this.allUsers.filter(user => 
-                        user.name.toLowerCase().includes(term) ||
-                        (user.email && user.email.toLowerCase().includes(term))
-                    );
-                }
-                this.renderUsersTable();
-            }
+            document.getElementById('profileBtn')?.addEventListener('click', () => {
+                this.toggleProfileMenu();
+            });
+        }
 
-            makeAdmin(userId) {
-                if (confirm('Вы уверены, что хотите сделать этого пользователя администратором?')) {
-                    const success = this.userManager.makeAdmin(userId);
-                    if (success) {
-                        this.loadUsers();
-                        this.showNotification('Пользователь назначен администратором', 'success');
-                    }
-                }
+        filterUsers(searchTerm) {
+            if (!searchTerm) {
+                this.filteredUsers = [...this.allUsers];
+            } else {
+                const term = searchTerm.toLowerCase();
+                this.filteredUsers = this.allUsers.filter(user => 
+                    user.name.toLowerCase().includes(term) ||
+                    (user.email && user.email.toLowerCase().includes(term))
+                );
             }
+            this.renderUsersTable();
+        }
 
-            removeAdmin(userId) {
-                if (confirm('Вы уверены, что хотите снять права администратора?')) {
-                    const success = this.userManager.removeAdmin(userId);
-                    if (success) {
-                        this.loadUsers();
-                        this.showNotification('Права администратора сняты', 'warning');
-                    }
+        makeAdmin(userId) {
+            if (confirm('Вы уверены, что хотите сделать этого пользователя администратором?')) {
+                const success = this.userManager.makeAdmin(userId);
+                if (success) {
+                    this.loadUsers();
+                    this.showNotification('Пользователь назначен администратором', 'success');
                 }
             }
+        }
 
-            viewUserDetails(userId) {
-                const user = this.allUsers.find(u => u.id === userId);
-                if (user) {
-                    const testHistory = this.userManager.getTestHistory(userId);
-                    
-                    alert(`
+        removeAdmin(userId) {
+            if (confirm('Вы уверены, что хотите снять права администратора?')) {
+                const success = this.userManager.removeAdmin(userId);
+                if (success) {
+                    this.loadUsers();
+                    this.showNotification('Права администратора сняты', 'warning');
+                }
+            }
+        }
+
+        viewUserDetails(userId) {
+            const user = this.allUsers.find(u => u.id === userId);
+            if (user) {
+                const testHistory = this.userManager.getTestHistory(userId);
+                
+                alert(`
 Детали пользователя:
 ─────────────────
 Имя: ${user.name}
@@ -599,55 +614,96 @@ ID: ${user.id}
 • Пройдено тестов: ${user.stats?.testsCompleted || 0}
 • Всего времени: ${Math.round((user.stats?.totalTime || 0) / 60)} мин.
 • Тестов в истории: ${testHistory.length}
-                    `);
-                }
-            }
-
-            showNotification(message, type = 'info') {
-                alert(message);
-            }
-
-            formatDate(dateString) {
-                if (!dateString) return 'Неизвестно';
-                const date = new Date(dateString);
-                return date.toLocaleDateString('ru-RU');
-            }
-
-            escapeHtml(unsafe) {
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-
-            toggleProfileMenu() {
-                const dropdown = document.getElementById('profileDropdown');
-                if (dropdown.style.display === 'block') {
-                    dropdown.style.display = 'none';
-                } else {
-                    dropdown.style.display = 'block';
-                    setTimeout(() => {
-                        document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
-                    }, 0);
-                }
-            }
-
-            closeProfileMenu(e) {
-                const dropdown = document.getElementById('profileDropdown');
-                const profileBtn = document.getElementById('profileBtn');
-                if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
+                `);
             }
         }
 
-        window.usersManager = new UsersManager();
-    </script>
+        showNotification(message, type = 'info') {
+            alert(message);
+        }
 
-    <!-- Подключаем скрипты -->
-    <script src="auth-core.js"></script>
-    <script src="auth-header.js"></script>
+        formatDate(dateString) {
+            if (!dateString) return 'Неизвестно';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        toggleProfileMenu() {
+            const dropdown = document.getElementById('profileDropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+                setTimeout(() => {
+                    document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
+                }, 0);
+            }
+        }
+
+        closeProfileMenu(e) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileBtn = document.getElementById('profileBtn');
+            if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        }
+    }
+
+    // Создаем глобальный экземпляр и сохраняем в window
+    window.usersManager = new UsersManager();
+
+    // Глобальные функции для кнопок действий
+    window.makeAdmin = function(userId) {
+        if (window.usersManager) {
+            window.usersManager.makeAdmin(userId);
+        } else {
+            console.error('usersManager не найден');
+            const userManager = new UserManager();
+            if (confirm('Сделать пользователя администратором?')) {
+                userManager.makeAdmin(userId);
+                location.reload();
+            }
+        }
+    };
+
+    window.removeAdmin = function(userId) {
+        if (window.usersManager) {
+            window.usersManager.removeAdmin(userId);
+        } else {
+            console.error('usersManager не найден');
+            const userManager = new UserManager();
+            if (confirm('Убрать права администратора?')) {
+                userManager.removeAdmin(userId);
+                location.reload();
+            }
+        }
+    };
+
+    window.viewUserDetails = function(userId) {
+        if (window.usersManager) {
+            window.usersManager.viewUserDetails(userId);
+        } else {
+            console.error('usersManager не найден');
+            const userManager = new UserManager();
+            const user = userManager.getUsers().find(u => u.id === userId);
+            if (user) {
+                alert(`Пользователь: ${user.name}\nID: ${user.id}\nАдмин: ${user.isAdmin ? 'Да' : 'Нет'}`);
+            }
+        }
+    };
+
+    console.log('✅ Админ-панель пользователей загружена');
+</script>
+
+    
 </body>
 </html>
