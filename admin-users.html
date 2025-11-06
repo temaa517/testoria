@@ -643,8 +643,7 @@ ID: ${user.id}
             }
         }
 
-        // Создаем глобальный экземпляр
-        const usersManager = new UsersManager();
+        window.usersManager = new UsersManager();
     </script>
 
     <!-- Подключаем скрипты -->
