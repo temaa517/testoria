@@ -143,13 +143,6 @@
                         Быстрые действия
                     </h2>
                     <div class="actions-grid">
-                        <div class="action-card" onclick="openTestCreator()">
-                            <div class="action-icon">
-                                <i class="fas fa-plus-circle"></i>
-                            </div>
-                            <h3>Создать тест</h3>
-                            <p>Добавить новый тест в каталог</p>
-                        </div>
                         <div class="action-card" onclick="openTestManager()">
                             <div class="action-icon">
                                 <i class="fas fa-edit"></i>
@@ -345,7 +338,7 @@
         }
 
         function openTestManager() {
-            alert('Управление тестами будет доступно в следующем обновлении!');
+            window.location.href = 'admin-tests.html';
         }
 
         function openUserManager() {
