@@ -396,69 +396,69 @@
     </main>
 
     <!-- Модальное окно редактирования теста -->
-    <div id="editTestModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="editTestTitle">Редактирование теста</h3>
-                <span class="close" onclick="closeEditTestModal()">&times;</span>
+<div id="editTestModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="editTestTitle">Редактирование теста</h3>
+            <span class="close" id="closeEditTest">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Название теста</label>
+                <input type="text" id="editTestName" class="form-control" placeholder="Введите название теста">
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Название теста</label>
-                    <input type="text" id="editTestName" class="form-control" placeholder="Введите название теста">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Описание</label>
-                    <textarea id="editTestDescription" class="form-control" rows="3" placeholder="Описание теста"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Лимит времени (минут)</label>
-                    <input type="number" id="editTestTimeLimit" class="form-control" placeholder="0 для безлимитного времени">
-                </div>
-                
-                <h4>Вопросы</h4>
-                <div class="questions-list" id="editQuestionsList">
-                    <!-- Вопросы будут загружены здесь -->
-                </div>
-                
-                <button class="btn-sm btn-success" onclick="addNewQuestion()">
-                    <i class="fas fa-plus"></i> Добавить вопрос
-                </button>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea id="editTestDescription" class="form-control" rows="3" placeholder="Описание теста"></textarea>
             </div>
-            <div class="modal-footer">
-                <button class="btn-sm btn-danger" onclick="closeEditTestModal()">Отмена</button>
-                <button class="btn-sm btn-primary" onclick="saveTestChanges()">Сохранить изменения</button>
+            <div class="form-group">
+                <label class="form-label">Лимит времени (минут)</label>
+                <input type="number" id="editTestTimeLimit" class="form-control" placeholder="0 для безлимитного времени">
             </div>
+            
+            <h4>Вопросы</h4>
+            <div class="questions-list" id="editQuestionsList">
+                <!-- Вопросы будут загружены здесь -->
+            </div>
+            
+            <button class="btn-sm btn-success" id="addQuestionBtn">
+                <i class="fas fa-plus"></i> Добавить вопрос
+            </button>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-sm btn-danger" id="cancelEditTest">Отмена</button>
+            <button class="btn-sm btn-primary" id="saveTestChanges">Сохранить изменения</button>
         </div>
     </div>
+</div>
 
-    <!-- Модальное окно создания теста -->
-    <div id="createTestModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Создание нового теста</h3>
-                <span class="close" onclick="closeCreateTestModal()">&times;</span>
+<!-- Модальное окно создания теста -->
+<div id="createTestModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Создание нового теста</h3>
+            <span class="close" id="closeCreateTest">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label class="form-label">Название теста</label>
+                <input type="text" id="createTestName" class="form-control" placeholder="Введите название теста">
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Название теста</label>
-                    <input type="text" id="createTestName" class="form-control" placeholder="Введите название теста">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Описание</label>
-                    <textarea id="createTestDescription" class="form-control" rows="3" placeholder="Описание теста"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Лимит времени (минут)</label>
-                    <input type="number" id="createTestTimeLimit" class="form-control" value="10">
-                </div>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea id="createTestDescription" class="form-control" rows="3" placeholder="Описание теста"></textarea>
             </div>
-            <div class="modal-footer">
-                <button class="btn-sm btn-danger" onclick="closeCreateTestModal()">Отмена</button>
-                <button class="btn-sm btn-success" onclick="createNewTest()">Создать тест</button>
+            <div class="form-group">
+                <label class="form-label">Лимит времени (минут)</label>
+                <input type="number" id="createTestTimeLimit" class="form-control" value="10">
             </div>
         </div>
+        <div class="modal-footer">
+            <button class="btn-sm btn-danger" id="cancelCreateTest">Отмена</button>
+            <button class="btn-sm btn-success" id="confirmCreateTest">Создать тест</button>
+        </div>
     </div>
+</div>
 
     <!-- Футер -->
     <footer class="footer">
@@ -1979,31 +1979,119 @@ class TestsManager {
     }
 
     setupEventListeners() {
+        console.log('🎯 Настройка обработчиков событий...');
+        
         // Поиск тестов
         const searchInput = document.getElementById('testSearch');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 this.filterTests(e.target.value);
             });
+            console.log('✅ Поиск настроен');
+        }
+
+        // Кнопка создания теста в хедере
+        const createBtn = document.querySelector('.create-test-btn');
+        if (createBtn) {
+            createBtn.addEventListener('click', () => {
+                this.openCreateTestModal();
+            });
+            console.log('✅ Кнопка создания настроена');
+        }
+
+        // Модальное окно создания теста
+        const confirmCreateBtn = document.getElementById('confirmCreateTest');
+        const cancelCreateBtn = document.getElementById('cancelCreateTest');
+        const closeCreateBtn = document.getElementById('closeCreateTest');
+        
+        if (confirmCreateBtn) {
+            confirmCreateBtn.addEventListener('click', () => {
+                this.createNewTest();
+            });
+        }
+        
+        if (cancelCreateBtn) {
+            cancelCreateBtn.addEventListener('click', () => {
+                this.closeCreateTestModal();
+            });
+        }
+        
+        if (closeCreateBtn) {
+            closeCreateBtn.addEventListener('click', () => {
+                this.closeCreateTestModal();
+            });
+        }
+
+        // Модальное окно редактирования теста
+        const saveChangesBtn = document.getElementById('saveTestChanges');
+        const cancelEditBtn = document.getElementById('cancelEditTest');
+        const closeEditBtn = document.getElementById('closeEditTest');
+        const addQuestionBtn = document.getElementById('addQuestionBtn');
+        
+        if (saveChangesBtn) {
+            saveChangesBtn.addEventListener('click', () => {
+                this.saveTestChanges();
+            });
+        }
+        
+        if (cancelEditBtn) {
+            cancelEditBtn.addEventListener('click', () => {
+                this.closeEditTestModal();
+            });
+        }
+        
+        if (closeEditBtn) {
+            closeEditBtn.addEventListener('click', () => {
+                this.closeEditTestModal();
+            });
+        }
+        
+        if (addQuestionBtn) {
+            addQuestionBtn.addEventListener('click', () => {
+                this.addNewQuestion();
+            });
         }
 
         // Меню профиля
-        document.getElementById('profileBtn')?.addEventListener('click', () => {
-            this.toggleProfileMenu();
-        });
+        const profileBtn = document.getElementById('profileBtn');
+        if (profileBtn) {
+            profileBtn.addEventListener('click', () => {
+                this.toggleProfileMenu();
+            });
+        }
 
-        // Закрытие модальных окон при клике вне их
-        window.addEventListener('click', (e) => {
-            const editModal = document.getElementById('editTestModal');
-            const createModal = document.getElementById('createTestModal');
-            
-            if (e.target === editModal) {
+        // Закрытие модальных окон по ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
                 this.closeEditTestModal();
-            }
-            if (e.target === createModal) {
                 this.closeCreateTestModal();
             }
         });
+
+        console.log('✅ Все обработчики настроены');
+    }
+
+    openCreateTestModal() {
+        console.log('📝 Открытие формы создания теста...');
+        const modal = document.getElementById('createTestModal');
+        if (modal) {
+            modal.style.display = 'block';
+            
+            // Фокусируемся на поле названия
+            setTimeout(() => {
+                const nameInput = document.getElementById('createTestName');
+                if (nameInput) nameInput.focus();
+            }, 100);
+        } else {
+            console.error('❌ Модальное окно создания не найдено');
+        }
+    }
+
+    closeCreateTestModal() {
+        const modal = document.getElementById('createTestModal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
     }
 
     filterTests(searchTerm) {
@@ -2058,12 +2146,21 @@ class TestsManager {
     }
 
     createNewTest() {
+        console.log('🎯 Запуск создания теста...');
+        
+        // Получаем элементы формы
         const nameInput = document.getElementById('createTestName');
         const descriptionInput = document.getElementById('createTestDescription');
         const timeLimitInput = document.getElementById('createTestTimeLimit');
         
+        console.log('Элементы формы:', {
+            nameInput: !!nameInput,
+            descriptionInput: !!descriptionInput,
+            timeLimitInput: !!timeLimitInput
+        });
+        
         if (!nameInput || !descriptionInput || !timeLimitInput) {
-            alert('❌ Элементы формы не найдены');
+            alert('❌ Ошибка: форма не найдена');
             return;
         }
         
@@ -2071,36 +2168,48 @@ class TestsManager {
         const description = descriptionInput.value.trim();
         const timeLimit = parseInt(timeLimitInput.value) || 0;
 
+        console.log('Данные формы:', { name, description, timeLimit });
+        
         if (!name) {
-            alert('Введите название теста');
+            alert('📝 Введите название теста');
+            nameInput.focus();
             return;
         }
 
+        // Создаем новый тест
         const newTest = {
-            id: 'test_' + Date.now().toString(),
+            id: 'test_' + Date.now(),
             title: name,
             description: description,
             timeLimit: timeLimit,
             questions: [],
             createdAt: new Date().toISOString(),
-            category: 'custom'
+            category: 'custom',
+            image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
         };
 
-        console.log('🆕 Создаем новый тест:', newTest);
+        console.log('🆕 Создаваемый тест:', newTest);
         
+        // Добавляем в массив тестов
         this.tests.push(newTest);
+        
+        // Сохраняем
         this.saveTestsToStorage();
+        
+        // Обновляем интерфейс
         this.renderTestsGrid();
+        
+        // Закрываем модальное окно
         this.closeCreateTestModal();
         
-        // Очищаем форму
-        nameInput.value = '';
-        descriptionInput.value = '';
-        timeLimitInput.value = '10';
+        // Показываем уведомление
+        alert(`✅ Тест "${name}" создан! Теперь вы можете добавить вопросы.`);
         
-        alert('✅ Новый тест создан! Теперь вы можете добавить вопросы.');
+        // Автоматически открываем редактирование
+        setTimeout(() => {
+            this.editTest(newTest.id);
+        }, 500);
     }
-
     toggleProfileMenu() {
         const dropdown = document.getElementById('profileDropdown');
         if (dropdown.style.display === 'block') {
@@ -2182,8 +2291,24 @@ class TestsManager {
         }, 100);
     });
     // Инициализация
-    document.addEventListener('DOMContentLoaded', () => {
+    // Инициализация
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 Загрузка управления тестами...');
+        
+        // Создаем экземпляр менеджера
         window.testsManager = new TestsManager();
+        
+        // Проверяем есть ли тесты через 2 секунды
+        setTimeout(() => {
+            const existingTests = JSON.parse(localStorage.getItem('testoria_tests') || '[]');
+            if (existingTests.length === 0) {
+                console.log('🆕 Тестов нет, создаем демо...');
+                if (confirm('Тесты не найдены. Создать демо-тесты?')) {
+                    initializeTestsDatabase();
+                    window.testsManager.loadTests();
+                }
+            }
+        }, 2000);
     });
 
     </script>
