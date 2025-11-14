@@ -491,145 +491,241 @@
     <script src="auth-core.js"></script>
     <script src="auth-header.js"></script>
     <script>
-        // Аналитика для админ-панели
-        class AnalyticsManager {
-            constructor() {
-                this.userManager = new UserManager();
-                this.charts = {};
-                this.currentTimeRange = 7;
-                this.init();
+    // Аналитика для админ-панели
+    class AnalyticsManager {
+        constructor() {
+            this.userManager = new UserManager();
+            this.charts = {};
+            this.currentTimeRange = 7;
+            this.init();
+        }
+
+        init() {
+            console.log('📊 Инициализация аналитики...');
+            
+            if (!this.checkAdminAccess()) {
+                return;
             }
 
-            init() {
-                console.log('📊 Инициализация аналитики...');
-                
-                if (!this.checkAdminAccess()) {
-                    return;
-                }
-
-                this.loadData();
-                this.setupEventListeners();
-                this.setupCharts();
+            // Проверяем загрузку Chart.js
+            if (typeof Chart === 'undefined') {
+                console.error('❌ Chart.js не загружен!');
+                this.showChartError();
+                return;
             }
 
-            checkAdminAccess() {
-                const user = this.userManager.getCurrentUser();
-                
-                if (!user) {
-                    window.location.href = 'login.html';
-                    return false;
-                }
+            console.log('✅ Chart.js доступен');
+            this.loadData();
+            this.setupEventListeners();
+            this.setupCharts();
+        }
 
-                if (!this.userManager.isAdmin(user)) {
-                    this.showAccessDenied();
-                    return false;
-                }
-
-                return true;
-            }
-
-            showAccessDenied() {
-                document.querySelector('main').innerHTML = `
-                    <div class="container">
-                        <div class="access-denied">
-                            <i class="fas fa-lock"></i>
-                            <h2>Доступ запрещен</h2>
-                            <p>У вас недостаточно прав для доступа к этой странице.</p>
-                            <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
-                        </div>
+        showChartError() {
+            const chartContainers = document.querySelectorAll('.chart-container');
+            chartContainers.forEach(container => {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--muted-text);">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h3>График не загружен</h3>
+                        <p>Библиотека Chart.js не подключена</p>
                     </div>
                 `;
+            });
+        }
+
+        checkAdminAccess() {
+            const user = this.userManager.getCurrentUser();
+            
+            if (!user) {
+                window.location.href = 'login.html';
+                return false;
             }
 
-            loadData() {
-                console.log('📥 Загрузка данных аналитики...');
-                
-                const users = this.userManager.getUsers();
-                const testResults = JSON.parse(localStorage.getItem('testResults')) || [];
-                
-                this.calculateMetrics(users, testResults);
-                this.updateOverview(users, testResults);
+            if (!this.userManager.isAdmin(user)) {
+                this.showAccessDenied();
+                return false;
+            }
+
+            return true;
+        }
+
+        showAccessDenied() {
+            document.querySelector('main').innerHTML = `
+                <div class="container">
+                    <div class="access-denied">
+                        <i class="fas fa-lock"></i>
+                        <h2>Доступ запрещен</h2>
+                        <p>У вас недостаточно прав для доступа к этой странице.</p>
+                        <a href="index.html" class="btn btn-primary">Вернуться на главную</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        loadData() {
+            console.log('📥 Загрузка данных аналитики...');
+            
+            const users = this.userManager.getUsers();
+            const testResults = JSON.parse(localStorage.getItem('testResults')) || [];
+            
+            this.calculateMetrics(users, testResults);
+            this.updateOverview(users, testResults);
+            
+            // Обновляем графики только если они созданы
+            if (Object.keys(this.charts).length > 0) {
                 this.updateCharts(users, testResults);
-                this.updateMetricsTable(users, testResults);
             }
+            
+            this.updateMetricsTable(users, testResults);
+        }
 
-            calculateMetrics(users, testResults) {
-                // Основные метрики
-                this.metrics = {
-                    totalUsers: users.length,
-                    activeUsers: this.getActiveUsers(users),
-                    testsCompleted: testResults.length,
-                    avgScore: this.getAverageScore(testResults),
-                    avgTime: this.getAverageTime(testResults),
-                    retentionRate: this.getRetentionRate(users),
-                    popularTests: this.getPopularTests(testResults)
-                };
+        calculateMetrics(users, testResults) {
+            // Основные метрики
+            this.metrics = {
+                totalUsers: users.length,
+                activeUsers: this.getActiveUsers(users),
+                testsCompleted: testResults.length,
+                avgScore: this.getAverageScore(testResults),
+                avgTime: this.getAverageTime(testResults),
+                retentionRate: this.getRetentionRate(users),
+                popularTests: this.getPopularTests(testResults)
+            };
+        }
+
+        getActiveUsers(users) {
+            const now = new Date();
+            return users.filter(user => {
+                const created = new Date(user.createdAt);
+                const diffTime = Math.abs(now - created);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return diffDays <= 30;
+            }).length;
+        }
+
+        getAverageScore(testResults) {
+            if (testResults.length === 0) return 0;
+            const total = testResults.reduce((sum, result) => sum + (result.score || 0), 0);
+            return Math.round((total / testResults.length) * 100) / 100;
+        }
+
+        getAverageTime(testResults) {
+            if (testResults.length === 0) return 0;
+            const total = testResults.reduce((sum, result) => sum + (result.timeSpent || 0), 0);
+            return Math.round(total / testResults.length);
+        }
+
+        getRetentionRate(users) {
+            if (users.length === 0) return 0;
+            const activeUsers = this.getActiveUsers(users);
+            return Math.round((activeUsers / users.length) * 100);
+        }
+
+        getPopularTests(testResults) {
+            const testCounts = {};
+            testResults.forEach(result => {
+                const testName = result.testTitle || 'Неизвестный тест';
+                testCounts[testName] = (testCounts[testName] || 0) + 1;
+            });
+            
+            return Object.entries(testCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5);
+        }
+
+        updateOverview(users, testResults) {
+            console.log('🔄 Обновление статистики...');
+            
+            // Создаем элементы если их нет
+            this.ensureStatsElements();
+            
+            // Обновляем с проверками
+            const elements = {
+                'totalUsers': this.metrics.totalUsers,
+                'activeUsers': this.metrics.activeUsers,
+                'testsCompleted': this.metrics.testsCompleted,
+                'avgScore': this.metrics.avgScore + '%',
+                'usersChange': '+12%',
+                'activeChange': '+8%', 
+                'testsChange': '+25%',
+                'scoreChange': '+3%'
+            };
+            
+            for (const [id, value] of Object.entries(elements)) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                } else {
+                    console.warn(`❌ Элемент ${id} не найден`);
+                }
             }
-
-            getActiveUsers(users) {
-                const now = new Date();
-                return users.filter(user => {
-                    const created = new Date(user.createdAt);
-                    const diffTime = Math.abs(now - created);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    return diffDays <= 30; // Активны в последние 30 дней
-                }).length;
+            
+            console.log('✅ Статистика обновлена');
+        }
+        ensureStatsElements() {
+            const statsContainer = document.querySelector('.stats-overview');
+            if (!statsContainer) {
+                console.error('❌ Контейнер статистики не найден');
+                return;
             }
-
-            getAverageScore(testResults) {
-                if (testResults.length === 0) return 0;
-                const total = testResults.reduce((sum, result) => sum + (result.score || 0), 0);
-                return Math.round((total / testResults.length) * 100) / 100;
-            }
-
-            getAverageTime(testResults) {
-                if (testResults.length === 0) return 0;
-                const total = testResults.reduce((sum, result) => sum + (result.timeSpent || 0), 0);
-                return Math.round(total / testResults.length);
-            }
-
-            getRetentionRate(users) {
-                if (users.length === 0) return 0;
-                const activeUsers = this.getActiveUsers(users);
-                return Math.round((activeUsers / users.length) * 100);
-            }
-
-            getPopularTests(testResults) {
-                const testCounts = {};
-                testResults.forEach(result => {
-                    const testName = result.testTitle || 'Неизвестный тест';
-                    testCounts[testName] = (testCounts[testName] || 0) + 1;
-                });
-                
-                return Object.entries(testCounts)
-                    .sort((a, b) => b[1] - a[1])
-                    .slice(0, 5);
-            }
-
-            updateOverview(users, testResults) {
-                document.getElementById('totalUsers').textContent = this.metrics.totalUsers;
-                document.getElementById('activeUsers').textContent = this.metrics.activeUsers;
-                document.getElementById('testsCompleted').textContent = this.metrics.testsCompleted;
-                document.getElementById('avgScore').textContent = this.metrics.avgScore + '%';
-                
-                // Простые "изменения" для демонстрации
-                document.getElementById('usersChange').textContent = '+12%';
-                document.getElementById('activeChange').textContent = '+8%';
-                document.getElementById('testsChange').textContent = '+25%';
-                document.getElementById('scoreChange').textContent = '+3%';
-            }
-
-            setupCharts() {
+            
+            // Проверяем и создаем элементы если нужно
+            const statIds = ['totalUsers', 'activeUsers', 'testsCompleted', 'avgScore'];
+            const changeIds = ['usersChange', 'activeChange', 'testsChange', 'scoreChange'];
+            
+            // Создаем элементы статистики если их нет
+            statIds.forEach((id, index) => {
+                if (!document.getElementById(id)) {
+                    console.log(`🛠️ Создаем элемент ${id}`);
+                    const statCard = statsContainer.children[index];
+                    if (statCard) {
+                        const valueElement = document.createElement('div');
+                        valueElement.id = id;
+                        valueElement.className = 'stat-value';
+                        valueElement.textContent = '0';
+                        
+                        const existingValue = statCard.querySelector('.stat-value');
+                        if (existingValue) {
+                            existingValue.replaceWith(valueElement);
+                        }
+                    }
+                }
+            });
+            
+            // Создаем элементы изменений если их нет
+            changeIds.forEach((id, index) => {
+                if (!document.getElementById(id)) {
+                    console.log(`🛠️ Создаем элемент ${id}`);
+                    const statCard = statsContainer.children[index];
+                    if (statCard) {
+                        const changeElement = document.createElement('div');
+                        changeElement.id = id;
+                        changeElement.className = 'stat-change change-positive';
+                        changeElement.textContent = '+0%';
+                        
+                        const existingChange = statCard.querySelector('.stat-change');
+                        if (existingChange) {
+                            existingChange.replaceWith(changeElement);
+                        } else {
+                            statCard.appendChild(changeElement);
+                        }
+                    }
+                }
+            });
+        }
+        setupCharts() {
+            console.log('📈 Создание графиков...');
+            
+            try {
                 // График активности
-                this.charts.activity = new Chart(
-                    document.getElementById('activityChart'),
-                    {
+                const activityCtx = document.getElementById('activityChart');
+                if (activityCtx) {
+                    this.charts.activity = new Chart(activityCtx, {
                         type: 'line',
                         data: {
-                            labels: [],
+                            labels: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
                             datasets: [{
-                                label: 'Активность пользователей',
-                                data: [],
+                                label: 'Активность',
+                                data: [12, 19, 8, 15, 22, 18, 25],
                                 borderColor: '#4361ee',
                                 backgroundColor: 'rgba(67, 97, 238, 0.1)',
                                 tension: 0.4,
@@ -639,65 +735,40 @@
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    display: false
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    beginAtZero: true,
-                                    grid: {
-                                        color: 'rgba(0,0,0,0.1)'
-                                    }
-                                },
-                                x: {
-                                    grid: {
-                                        display: false
-                                    }
-                                }
-                            }
+                            plugins: { legend: { display: false } }
                         }
-                    }
-                );
+                    });
+                }
 
                 // График популярности тестов
-                this.charts.tests = new Chart(
-                    document.getElementById('testsChart'),
-                    {
+                const testsCtx = document.getElementById('testsChart');
+                if (testsCtx) {
+                    this.charts.tests = new Chart(testsCtx, {
                         type: 'doughnut',
                         data: {
-                            labels: [],
+                            labels: ['Тест 1', 'Тест 2', 'Тест 3'],
                             datasets: [{
-                                data: [],
-                                backgroundColor: [
-                                    '#4361ee', '#3a0ca3', '#7209b7', 
-                                    '#f72585', '#4cc9f0'
-                                ]
+                                data: [40, 30, 20],
+                                backgroundColor: ['#4361ee', '#3a0ca3', '#7209b7']
                             }]
                         },
                         options: {
                             responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: {
-                                    position: 'bottom'
-                                }
-                            }
+                            maintainAspectRatio: false
                         }
-                    }
-                );
+                    });
+                }
 
                 // График времени
-                this.charts.time = new Chart(
-                    document.getElementById('timeChart'),
-                    {
+                const timeCtx = document.getElementById('timeChart');
+                if (timeCtx) {
+                    this.charts.time = new Chart(timeCtx, {
                         type: 'bar',
                         data: {
-                            labels: [],
+                            labels: ['Тест 1', 'Тест 2', 'Тест 3'],
                             datasets: [{
-                                label: 'Среднее время (мин)',
-                                data: [],
+                                label: 'Время (мин)',
+                                data: [8, 12, 6],
                                 backgroundColor: '#7209b7'
                             }]
                         },
@@ -705,19 +776,19 @@
                             responsive: true,
                             maintainAspectRatio: false
                         }
-                    }
-                );
+                    });
+                }
 
                 // График результатов
-                this.charts.results = new Chart(
-                    document.getElementById('resultsChart'),
-                    {
+                const resultsCtx = document.getElementById('resultsChart');
+                if (resultsCtx) {
+                    this.charts.results = new Chart(resultsCtx, {
                         type: 'bar',
                         data: {
                             labels: ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'],
                             datasets: [{
-                                label: 'Количество результатов',
-                                data: [0, 0, 0, 0, 0],
+                                label: 'Результаты',
+                                data: [5, 10, 15, 20, 25],
                                 backgroundColor: '#4cc9f0'
                             }]
                         },
@@ -725,185 +796,159 @@
                             responsive: true,
                             maintainAspectRatio: false
                         }
-                    }
-                );
-            }
-
-            updateCharts(users, testResults) {
-                this.updateActivityChart(users, testResults);
-                this.updateTestsChart(testResults);
-                this.updateTimeChart(testResults);
-                this.updateResultsChart(testResults);
-            }
-
-            updateActivityChart(users, testResults) {
-                const days = this.currentTimeRange;
-                const labels = [];
-                const data = [];
-                
-                // Генерируем демо-данные
-                for (let i = days - 1; i >= 0; i--) {
-                    const date = new Date();
-                    date.setDate(date.getDate() - i);
-                    labels.push(date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }));
-                    data.push(Math.floor(Math.random() * 20) + 5); // Демо-данные
+                    });
                 }
-                
-                this.charts.activity.data.labels = labels;
-                this.charts.activity.data.datasets[0].data = data;
-                this.charts.activity.update();
-            }
 
-            updateTestsChart(testResults) {
+                console.log('✅ Все графики созданы');
+            } catch (error) {
+                console.error('❌ Ошибка создания графиков:', error);
+                this.showChartError();
+            }
+        }
+
+        updateCharts(users, testResults) {
+            console.log('🔄 Обновление графиков...');
+            
+            try {
+                // Обновляем данные на реальные
                 const popularTests = this.metrics.popularTests;
                 
-                if (popularTests.length > 0) {
+                if (popularTests.length > 0 && this.charts.tests) {
                     this.charts.tests.data.labels = popularTests.map(t => t[0]);
                     this.charts.tests.data.datasets[0].data = popularTests.map(t => t[1]);
-                } else {
-                    this.charts.tests.data.labels = ['Нет данных'];
-                    this.charts.tests.data.datasets[0].data = [1];
+                    this.charts.tests.update();
                 }
-                
-                this.charts.tests.update();
-            }
 
-            updateTimeChart(testResults) {
-                // Демо-данные по времени
-                const testNames = this.metrics.popularTests.map(t => t[0]);
-                const times = testNames.map(() => Math.floor(Math.random() * 20) + 5);
-                
-                this.charts.time.data.labels = testNames;
-                this.charts.time.data.datasets[0].data = times;
-                this.charts.time.update();
-            }
-
-            updateResultsChart(testResults) {
-                // Распределение результатов
-                const distribution = [0, 0, 0, 0, 0];
-                
-                testResults.forEach(result => {
-                    const score = result.score || 0;
-                    if (score <= 20) distribution[0]++;
-                    else if (score <= 40) distribution[1]++;
-                    else if (score <= 60) distribution[2]++;
-                    else if (score <= 80) distribution[3]++;
-                    else distribution[4]++;
-                });
-                
-                this.charts.results.data.datasets[0].data = distribution;
-                this.charts.results.update();
-            }
-
-            updateMetricsTable(users, testResults) {
-                const table = document.getElementById('metricsTable');
-                
-                const metrics = [
-                    { name: 'Общее количество пользователей', value: this.metrics.totalUsers, change: '+12%', status: 'good' },
-                    { name: 'Активные пользователи', value: this.metrics.activeUsers, change: '+8%', status: 'good' },
-                    { name: 'Пройдено тестов', value: this.metrics.testsCompleted, change: '+25%', status: 'good' },
-                    { name: 'Средний результат', value: this.metrics.avgScore + '%', change: '+3%', status: 'average' },
-                    { name: 'Среднее время прохождения', value: Math.round(this.metrics.avgTime / 60) + ' мин', change: '-2%', status: 'good' },
-                    { name: 'Удержание пользователей', value: this.metrics.retentionRate + '%', change: '+5%', status: 'good' },
-                    { name: 'Самый популярный тест', value: this.metrics.popularTests[0]?.[0] || 'Нет данных', change: '0%', status: 'average' }
-                ];
-                
-                table.innerHTML = metrics.map(metric => `
-                    <tr>
-                        <td>${metric.name}</td>
-                        <td>${metric.value}</td>
-                        <td>${metric.change}</td>
-                        <td>
-                            <span class="metric-badge metric-${metric.status}">
-                                ${metric.status === 'good' ? '📈 Хорошо' : 
-                                metric.status === 'average' ? '📊 Средне' : '📉 Плохо'}
-                            </span>
-                        </td>
-                    </tr>
-                `).join('');
-            }
-
-            setupEventListeners() {
-                // Фильтры по времени
-                document.querySelectorAll('.time-filter').forEach(button => {
-                    button.addEventListener('click', (e) => {
-                        const days = parseInt(e.target.dataset.days);
-                        this.currentTimeRange = days;
-                        
-                        // Обновляем активный класс
-                        document.querySelectorAll('.time-filter').forEach(btn => {
-                            btn.classList.remove('active');
-                        });
-                        e.target.classList.add('active');
-                        
-                        // Перезагружаем данные
-                        this.loadData();
+                // Обновляем распределение результатов
+                if (this.charts.results) {
+                    const distribution = [0, 0, 0, 0, 0];
+                    testResults.forEach(result => {
+                        const score = result.score || 0;
+                        if (score <= 20) distribution[0]++;
+                        else if (score <= 40) distribution[1]++;
+                        else if (score <= 60) distribution[2]++;
+                        else if (score <= 80) distribution[3]++;
+                        else distribution[4]++;
                     });
-                });
-
-                // Меню профиля
-                document.getElementById('profileBtn')?.addEventListener('click', () => {
-                    this.toggleProfileMenu();
-                });
-            }
-
-            toggleProfileMenu() {
-                const dropdown = document.getElementById('profileDropdown');
-                if (dropdown.style.display === 'block') {
-                    dropdown.style.display = 'none';
-                } else {
-                    dropdown.style.display = 'block';
-                    setTimeout(() => {
-                        document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
-                    }, 0);
+                    
+                    this.charts.results.data.datasets[0].data = distribution;
+                    this.charts.results.update();
                 }
-            }
 
-            closeProfileMenu(e) {
-                const dropdown = document.getElementById('profileDropdown');
-                const profileBtn = document.getElementById('profileBtn');
-                if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
+            } catch (error) {
+                console.error('❌ Ошибка обновления графиков:', error);
             }
         }
 
-        // Функция экспорта данных
-        function exportData() {
-            const userManager = new UserManager();
-            const users = userManager.getUsers();
-            const testResults = JSON.parse(localStorage.getItem('testResults')) || [];
+        updateMetricsTable(users, testResults) {
+            const table = document.getElementById('metricsTable');
+            if (!table) return;
+
+            const metrics = [
+                { name: 'Общее количество пользователей', value: this.metrics.totalUsers, change: '+12%', status: 'good' },
+                { name: 'Активные пользователи', value: this.metrics.activeUsers, change: '+8%', status: 'good' },
+                { name: 'Пройдено тестов', value: this.metrics.testsCompleted, change: '+25%', status: 'good' },
+                { name: 'Средний результат', value: this.metrics.avgScore + '%', change: '+3%', status: 'average' },
+                { name: 'Среднее время прохождения', value: Math.round(this.metrics.avgTime / 60) + ' мин', change: '-2%', status: 'good' },
+                { name: 'Удержание пользователей', value: this.metrics.retentionRate + '%', change: '+5%', status: 'good' },
+                { name: 'Самый популярный тест', value: this.metrics.popularTests[0]?.[0] || 'Нет данных', change: '0%', status: 'average' }
+            ];
             
-            const data = {
-                exportDate: new Date().toISOString(),
-                users: users,
-                testResults: testResults,
-                metrics: {
-                    totalUsers: users.length,
-                    activeUsers: users.filter(u => {
-                        const created = new Date(u.createdAt);
-                        const diff = (new Date() - created) / (1000 * 60 * 60 * 24);
-                        return diff <= 30;
-                    }).length,
-                    testsCompleted: testResults.length
-                }
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `testoria-analytics-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            alert('✅ Данные экспортированы в JSON файл');
+            table.innerHTML = metrics.map(metric => `
+                <tr>
+                    <td>${metric.name}</td>
+                    <td>${metric.value}</td>
+                    <td>${metric.change}</td>
+                    <td>
+                        <span class="metric-badge metric-${metric.status}">
+                            ${metric.status === 'good' ? '📈 Хорошо' : 
+                            metric.status === 'average' ? '📊 Средне' : '📉 Плохо'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            new AnalyticsManager();
-        });
-    </script>
+        setupEventListeners() {
+            // Фильтры по времени
+            document.querySelectorAll('.time-filter').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const days = parseInt(e.target.dataset.days);
+                    this.currentTimeRange = days;
+                    
+                    document.querySelectorAll('.time-filter').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    e.target.classList.add('active');
+                    
+                    this.loadData();
+                });
+            });
+
+            // Меню профиля
+            document.getElementById('profileBtn')?.addEventListener('click', () => {
+                this.toggleProfileMenu();
+            });
+        }
+
+        toggleProfileMenu() {
+            const dropdown = document.getElementById('profileDropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+                setTimeout(() => {
+                    document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
+                }, 0);
+            }
+        }
+
+        closeProfileMenu(e) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileBtn = document.getElementById('profileBtn');
+            if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                dropdown.style.display = 'none';
+            }
+        }
+    }
+
+    // Функция экспорта данных
+    function exportData() {
+        const userManager = new UserManager();
+        const users = userManager.getUsers();
+        const testResults = JSON.parse(localStorage.getItem('testResults')) || [];
+        
+        const data = {
+            exportDate: new Date().toISOString(),
+            users: users,
+            testResults: testResults,
+            metrics: {
+                totalUsers: users.length,
+                activeUsers: users.filter(u => {
+                    const created = new Date(u.createdAt);
+                    const diff = (new Date() - created) / (1000 * 60 * 60 * 24);
+                    return diff <= 30;
+                }).length,
+                testsCompleted: testResults.length
+            }
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `testoria-analytics-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        alert('✅ Данные экспортированы в JSON файл');
+    }
+
+    // Инициализация при загрузке
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('🚀 Запуск аналитики...');
+        new AnalyticsManager();
+    });
+</script>
 </body>
 </html>

@@ -1096,6 +1096,146 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             ]
         },
+        8: {
+                id: 8,
+                title: "Какая ты пицца? 🍕",
+                description: "Узнай, какая пицца скрывается в глубинах твоей души! От классической Маргариты до ананасового кошмара.",
+                image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80",
+                category: "fun",
+                timeLimit: 3,
+                questions: [
+                    {
+                        id: 1,
+                        question: "Твое тесто?",
+                        options: [
+                            { id: 1, text: "Тонкое и хрустящее", value: "thin_crust" },
+                            { id: 2, text: "Пышное и мягкое", value: "thick_crust" },
+                            { id: 3, text: "Сгоревшее по краям", value: "burnt_crust" },
+                            { id: 4, text: "Еще не доделали", value: "raw_dough" }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        question: "Твой сыр?",
+                        options: [
+                            { id: 1, text: "Моцарелла - классика", value: "margherita" },
+                            { id: 2, text: "Четыре сыра - я сложный", value: "quattro_formaggi" },
+                            { id: 3, text: "Плавится неравномерно", value: "cheap_cheese" },
+                            { id: 4, text: "А сыр вообще есть?", value: "vegan_pizza" }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        question: "Твои добавки?",
+                        options: [
+                            { id: 1, text: "Пепперони - всегда да", value: "pepperoni" },
+                            { id: 2, text: "Ананасы, я же особенный", value: "hawaiian" },
+                            { id: 3, text: "Все что было в холодильнике", value: "everything_pizza" },
+                            { id: 4, text: "Просто кетчуп", value: "student_pizza" }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        question: "Как тебя режут?",
+                        options: [
+                            { id: 1, text: "Аккуратные треугольники", value: "classic_cut" },
+                            { id: 2, text: "Квадраты - я же для вечеринки", value: "party_cut" },
+                            { id: 3, text: "Криво ножом для масла", value: "messy_cut" },
+                            { id: 4, text: "Руками, я ж домашняя", value: "grandma_pizza" }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        question: "Твоя цена?",
+                        options: [
+                            { id: 1, text: "Премиум - я стою того", value: "gourmet_pizza" },
+                            { id: 2, text: "Акция 2 по цене 1", value: "discount_pizza" },
+                            { id: 3, text: "Бесплатно с доставкой", value: "promo_pizza" },
+                            { id: 4, text: "Дороже чем должна быть", value: "airport_pizza" }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        question: "Где тебя едят?",
+                        options: [
+                            { id: 1, text: "В итальянском ресторане", value: "authentic_pizza" },
+                            { id: 2, text: "Перед компом с сериалом", value: "netflix_pizza" },
+                            { id: 3, text: "На ходу по дороге домой", value: "street_pizza" },
+                            { id: 4, text: "В 3 часа ночи у холодильника", value: "drunk_pizza" }
+                        ]
+                    },
+                    {
+                        id: 7,
+                        question: "Твой соус?",
+                        options: [
+                            { id: 1, text: "Томатный - традиции прежде всего", value: "classic_sauce" },
+                            { id: 2, text: "Барбекю - я же смелый", value: "bbq_sauce" },
+                            { id: 3, text: "Слишком много соуса", value: "soupy_pizza" },
+                            { id: 4, text: "А соус вообще нужен?", value: "dry_pizza" }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        question: "Твое состояние на следующий день?",
+                        options: [
+                            { id: 1, text: "Идеальная как новенькая", value: "cold_pizza" },
+                            { id: 2, text: "Размокшая в микроволновке", value: "reheated_pizza" },
+                            { id: 3, text: "Съели всю сразу", value: "popular_pizza" },
+                            { id: 4, text: "Забыли в коробке на столе", value: "forgotten_pizza" }
+                        ]
+                    }
+                ],
+                results: [
+                    {
+                        type: "margherita",
+                        title: "Ты - Классическая Маргарита! ",
+                        description: "Простая, элегантная и неизменно вкусная! Тебя любят все - от итальянских неаполитанцев до студентов. Твое тесто идеально, сыр тянется фотогенично, а базилик добавляет ту самую изюминку. Ты - эталон пиццестроения!",
+                        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    },
+                    {
+                        type: "pepperoni",
+                        title: "Ты - Острая Пепперони! ",
+                        description: "Смелая, пикантная и незабываемая! Твои колбаски хрустят, сыр плавится, а специи щекочут вкусовые рецепторы. Идеальна для вечеринок, просмотра футбола и моментов, когда нужно добавить остроты в жизнь!",
+                        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1Y-sH11PTeWWtxDJJU48SwMjGH36M4CVMXA&s"
+                    },
+                    {
+                        type: "hawaiian", 
+                        title: "Ты - Гавайская С Ананасами! ",
+                        description: "Ты либо обожаема, либо ненавидима - середины нет! Ананасы на пицце? Это гениально или кощунство? Не важно! Ты идешь своим путем и не боишься выделяться. Подходит для смелых экспериментаторов!",
+                        image: "https://kulinarnia.ru/wp-content/uploads/2016/01/pitstsa-gavayskaya-s-ananasami-recept.jpg"
+                    },
+                    {
+                        type: "quattro_formaggi",
+                        title: "Ты - Утонченная Четыре Сыра! ",
+                        description: "Изысканная, сложная и немного снобистская! Твой вкус понимают только истинные гурманы. Комбинация сыров заставляет плакать от счастья, а отсутствие томатного соуса - твоя фишка. Для тех, кто ценит глубину вкуса!",
+                        image: "https://roosters-pizza.ru/wa-data/public/shop/products/17/00/17/images/946/946.970@2x.jpg"
+                    },
+                    {
+                        type: "student_pizza",
+                        title: "Ты - Студенческая Пицца! ",
+                        description: "Дешево, сердито и на скорую руку! Тесто из чего попало, кетчуп вместо соуса, колбаса вместо пепперони. Но знаешь что? Ты все равно невероятно вкусная в 3 часа ночи перед сессией! Символ выживания в условиях ограниченного бюджета.",
+                        image: "https://www.russianfood.com/dycontent/images_upl/14/big_13772.jpg"
+                    },
+                    {
+                        type: "everything_pizza",
+                        title: "Ты - Пицца 'Все Сразу'! ",
+                        description: "Грибы, оливки, перец, курица, ананасы, креветки и еще 15 начинок! Ты - цирк на тесте! Немного перегружена, но зато с тобой не соскучишься. Идеальна для тех, кто не может определиться и хочет сразу всё!",
+                        image: "https://irecommend.ru/sites/default/files/imagecache/copyright1/user-images/948510/EsPwgzdN3JHo1mQs1Kvlg.jpg"
+                    },
+                    {
+                        type: "burnt_crust",
+                        title: "Ты - Подгоревшая Пицца! ",
+                        description: "Кто-то отвлекся и забыл про тебя в духовке? Не беда! Твои обугленные края придают тебе характер. Немного горьковатая, но со своей изюминкой. Подходит для любителей экстрима и тех, кто не боится экспериментов!",
+                        image: "https://media.istockphoto.com/id/184133705/ru/%D1%84%D0%BE%D1%82%D0%BE/%D1%82%D0%B5%D0%BC%D0%BD%D1%8B%D0%B9-%D1%81%D0%BE%D0%B6%D0%B6%D0%B5%D0%BD%D0%BD%D1%8B%D1%85-%D0%BA%D0%B0%D0%BB%D0%BE%D1%80%D0%B8%D0%B9-%D0%BF%D0%B8%D1%86%D1%86%D0%B0.jpg?s=612x612&w=0&k=20&c=10mtgAL0zPKuY4UGJasBx5z3RKhowzaOLQexszqIUq0="
+                    },
+                    {
+                        type: "vegan_pizza",
+                        title: "Ты - Веганская Пицца! ",
+                        description: "Без сыра, без мяса, но с душой! Твои овощи хрустят, тофу удивляет, а авокадо добавляет кремовости. Ты доказываешь, что можно быть вкусной без животных продуктов. Для тех, кто заботится о планете и своем здоровье!",
+                        image: "https://images.unsplash.com/photo-1571997478779-2adcbbe9ab2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    }
+                ]
+            },
 
         9: {
             id: 9,
@@ -1934,7 +2074,185 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.goToResults(result);
                     return;
                 }
-            // Для теста про преподавателей МКП (ID 9)
+
+                if (this.testId === 7) {
+                    const chairScores = {
+                        'gaming_chair': 0,
+                        'office_chair': 0,
+                        'throne': 0,
+                        'ikea_chair': 0,
+                        'broken_chair': 0,
+                        'bean_bag': 0,
+                        'plastic_chair': 0
+                    };
+
+                    const answerMapping = {
+                        // Вопрос 1: Удобство
+                        'gaming_chair': ['gaming_chair'],
+                        'hard_chair': ['plastic_chair', 'wooden_chair'],
+                        'designer_chair': ['throne'],
+                        'broken_chair': ['broken_chair'],
+                        
+                        // Вопрос 2: Колесики
+                        'office_chair': ['office_chair'],
+                        'ikea_chair': ['ikea_chair'],
+                        'wooden_chair': ['plastic_chair', 'wooden_chair'],
+                        'bean_bag': ['bean_bag'],
+                        
+                        // Вопрос 3: Скрип
+                        'vintage_chair': ['wooden_chair'],
+                        'broken_chair': ['broken_chair'],
+                        'gaming_chair': ['gaming_chair'],
+                        'plastic_chair': ['plastic_chair'],
+                        
+                        // Вопрос 4: Подлокотники
+                        'armchair': ['gaming_chair'],
+                        'throne': ['throne'],
+                        'stool': ['plastic_chair', 'stool'],
+                        'fake_leather_chair': ['office_chair'],
+                        
+                        // Вопрос 5: Движение
+                        'office_chair': ['office_chair'],
+                        'heavy_chair': ['throne'],
+                        'built_in_chair': ['wooden_chair'],
+                        'wheelchair': ['gaming_chair'],
+                        
+                        // Вопрос 6: Икеа
+                        'ikea_chair': ['ikea_chair'],
+                        'designer_chair': ['throne'],
+                        'broken_chair': ['broken_chair'],
+                        'throne': ['throne'],
+                        
+                        // Вопрос 7: Ножки
+                        'standard_chair': ['office_chair'],
+                        'bar_stool': ['stool'],
+                        'designer_chair': ['throne'],
+                        'broken_chair': ['broken_chair'],
+                        
+                        // Вопрос 8: Тёща
+                        'wooden_chair': ['wooden_chair'],
+                        'soft_chair': ['bean_bag'],
+                        'plastic_chair': ['plastic_chair'],
+                        'guest_chair': ['ikea_chair']
+                    };
+
+                    // Подсчет баллов
+                    this.userAnswers.forEach(answer => {
+                        const value = answer.value;
+                        const relatedChairs = answerMapping[value];
+                        
+                        if (relatedChairs) {
+                            relatedChairs.forEach(chair => {
+                                chairScores[chair] += 3;
+                            });
+                        }
+                    });
+
+                    // Находим победителя
+                    let maxChair = '';
+                    let maxScore = 0;
+                    
+                    for (const [chair, score] of Object.entries(chairScores)) {
+                        if (score > maxScore) {
+                            maxScore = score;
+                            maxChair = chair;
+                        }
+                    }
+
+                    const result = this.currentTest.results.find(r => r.type === maxChair) || this.currentTest.results[0];
+                    this.goToResults(result);
+                    return;
+                }
+                if (this.testId === 8) {
+                    const pizzaScores = {
+                        'margherita': 0,
+                        'pepperoni': 0,
+                        'hawaiian': 0,
+                        'quattro_formaggi': 0,
+                        'student_pizza': 0,
+                        'everything_pizza': 0,
+                        'burnt_crust': 0,
+                        'vegan_pizza': 0
+                    };
+
+                    const answerMapping = {
+                        // Вопрос 1: Тесто
+                        'thin_crust': ['margherita', 'pepperoni'],
+                        'thick_crust': ['quattro_formaggi', 'everything_pizza'],
+                        'burnt_crust': ['burnt_crust'],
+                        'raw_dough': ['student_pizza'],
+                        
+                        // Вопрос 2: Сыр
+                        'margherita': ['margherita'],
+                        'quattro_formaggi': ['quattro_formaggi'],
+                        'cheap_cheese': ['student_pizza', 'everything_pizza'],
+                        'vegan_pizza': ['vegan_pizza'],
+                        
+                        // Вопрос 3: Добавки
+                        'pepperoni': ['pepperoni'],
+                        'hawaiian': ['hawaiian'],
+                        'everything_pizza': ['everything_pizza'],
+                        'student_pizza': ['student_pizza'],
+                        
+                        // Вопрос 4: Нарезка
+                        'classic_cut': ['margherita', 'quattro_formaggi'],
+                        'party_cut': ['everything_pizza', 'pepperoni'],
+                        'messy_cut': ['student_pizza'],
+                        'grandma_pizza': ['margherita'],
+                        
+                        // Вопрос 5: Цена
+                        'gourmet_pizza': ['quattro_formaggi'],
+                        'discount_pizza': ['student_pizza', 'everything_pizza'],
+                        'promo_pizza': ['hawaiian'],
+                        'airport_pizza': ['pepperoni'],
+                        
+                        // Вопрос 6: Место поедания
+                        'authentic_pizza': ['margherita'],
+                        'netflix_pizza': ['pepperoni', 'everything_pizza'],
+                        'street_pizza': ['student_pizza'],
+                        'drunk_pizza': ['burnt_crust', 'student_pizza'],
+                        
+                        // Вопрос 7: Соус
+                        'classic_sauce': ['margherita'],
+                        'bbq_sauce': ['pepperoni'],
+                        'soupy_pizza': ['everything_pizza'],
+                        'dry_pizza': ['vegan_pizza', 'quattro_formaggi'],
+                        
+                        // Вопрос 8: Состояние на след день
+                        'cold_pizza': ['margherita'],
+                        'reheated_pizza': ['student_pizza'],
+                        'popular_pizza': ['pepperoni', 'everything_pizza'],
+                        'forgotten_pizza': ['burnt_crust', 'hawaiian']
+                    };
+
+                    // Подсчет баллов
+                    this.userAnswers.forEach(answer => {
+                        const value = answer.value;
+                        const relatedPizzas = answerMapping[value];
+                        
+                        if (relatedPizzas) {
+                            relatedPizzas.forEach(pizza => {
+                                pizzaScores[pizza] += 3;
+                            });
+                        }
+                    });
+
+                    // Находим победителя
+                    let maxPizza = '';
+                    let maxScore = 0;
+                    
+                    for (const [pizza, score] of Object.entries(pizzaScores)) {
+                        if (score > maxScore) {
+                            maxScore = score;
+                            maxPizza = pizza;
+                        }
+                    }
+
+                    const result = this.currentTest.results.find(r => r.type === maxPizza) || this.currentTest.results[0];
+                    this.goToResults(result);
+                    return;
+                }
+                
             if (this.testId === 9) {
                 const teacherScores = {
                     'kislyuk': 0,
