@@ -200,6 +200,18 @@
                                     <label for="userNameInput">Имя пользователя</label>
                                     <input type="text" id="userNameInput" class="form-control">
                                 </div>
+                                <div class="setting-item">
+                                    <div class="setting-info">
+                                        <h3><i class="fas fa-bell"></i> Уведомления о новых тестах</h3>
+                                        <p>Получать уведомления при добавлении новых тестов на платформу</p>
+                                    </div>
+                                    <div class="setting-control">
+                                        <label class="switch">
+                                            <input type="checkbox" id="notificationsToggle">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" id="saveUserName">
                                     <i class="fas fa-save"></i>
                                     Сохранить изменения
@@ -555,6 +567,83 @@
             new ThemeManager();
             new ProfileManager();
         });
+
+        class ProfileSettings {
+        constructor() {
+            this.userManager = new UserManager();
+            this.currentUser = this.userManager.getCurrentUser();
+            this.init();
+        }
+
+        init() {
+            if (!this.currentUser) {
+                console.log('❌ Пользователь не авторизован');
+                return;
+            }
+
+            this.loadCurrentSettings();
+            this.setupEventListeners();
+        }
+
+        loadCurrentSettings() {
+            // Загружаем текущие настройки пользователя
+            const notificationsToggle = document.getElementById('notificationsToggle');
+            if (notificationsToggle) {
+                notificationsToggle.checked = this.currentUser.notifications !== false;
+            }
+        }
+
+        setupEventListeners() {
+            // Сохранение настроек
+            const saveBtn = document.getElementById('saveSettings');
+            if (saveBtn) {
+                saveBtn.addEventListener('click', () => {
+                    this.saveSettings();
+                });
+            }
+
+            // Автосохранение при переключении
+            const notificationsToggle = document.getElementById('notificationsToggle');
+            if (notificationsToggle) {
+                notificationsToggle.addEventListener('change', () => {
+                    this.saveSettings();
+                });
+            }
+        }
+
+        saveSettings() {
+            const notificationsToggle = document.getElementById('notificationsToggle');
+            
+            if (!notificationsToggle) return;
+
+            const notificationsEnabled = notificationsToggle.checked;
+            
+            const success = this.userManager.updateUserNotifications(
+                this.currentUser.id, 
+                notificationsEnabled
+            );
+
+            if (success) {
+                this.showNotification(
+                    `✅ Уведомления ${notificationsEnabled ? 'включены' : 'выключены'}`,
+                    'success'
+                );
+            } else {
+                this.showNotification('❌ Ошибка сохранения настроек', 'error');
+            }
+        }
+
+        showNotification(message, type = 'info') {
+            // Простое уведомление
+            alert(message);
+        }
+    }
+
+    // Инициализация при загрузке страницы
+    document.addEventListener('DOMContentLoaded', () => {
+        new ProfileSettings();
+    });
+
     </script>
 
 <script src="auth-core.js"></script>
@@ -574,5 +663,7 @@
         new ProfileManager();
     });
 </script>
+
+
 </body>
 </html>

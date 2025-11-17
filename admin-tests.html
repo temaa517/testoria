@@ -2205,6 +2205,10 @@ class TestsManager {
         // Показываем уведомление
         alert(`✅ Тест "${name}" создан! Теперь вы можете добавить вопросы.`);
         
+        setTimeout(() => {
+        this.sendNewTestNotifications(newTest);
+        }, 1000);
+
         // Автоматически открываем редактирование
         setTimeout(() => {
             this.editTest(newTest.id);
@@ -2238,6 +2242,41 @@ class TestsManager {
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     }
+
+    sendNewTestNotifications(newTest) {
+        const userManager = new UserManager();
+        const usersWithNotifications = userManager.getUsersWithNotifications();
+        
+        if (usersWithNotifications.length > 0) {
+            console.log(`📢 Отправка уведомлений о новом тесте для ${usersWithNotifications.length} пользователей`);
+            
+            // Здесь можно добавить:
+            // - Отправку email
+            // - Push-уведомления
+            // - Внутренние уведомления в системе
+            
+            // Пока просто покажем сообщение в админке
+            const notification = {
+                type: 'new_test',
+                testId: newTest.id,
+                testTitle: newTest.title,
+                timestamp: new Date().toISOString(),
+                message: `Добавлен новый тест: "${newTest.title}"`
+            };
+            
+            // Сохраняем уведомление в localStorage
+            this.saveNotification(notification);
+            
+            console.log(`✅ Уведомления отправлены для ${usersWithNotifications.length} пользователей`);
+        }
+    }
+
+    saveNotification(notification) {
+        const notifications = JSON.parse(localStorage.getItem('testoria_notifications') || '[]');
+        notifications.push(notification);
+        localStorage.setItem('testoria_notifications', JSON.stringify(notifications));
+    }
+
 }
 
     // Глобальные функции для вызова из HTML

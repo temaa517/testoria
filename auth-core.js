@@ -3,14 +3,13 @@
 // UserManager класс
 class UserManager {
     constructor() {
-        // Исправляем ключ на testoria-users
         this.users = JSON.parse(localStorage.getItem('testoria_users')) || [];
         this.currentUser = JSON.parse(localStorage.getItem('testoria_current_user')) || null;
         
-        console.log('UserManager инициализирован:', {
-            totalUsers: this.users.length,
-            currentUser: this.currentUser
-        });
+        // Автоматическое восстановление если пользователей нет
+        if (this.users.length === 0) {
+            this.createDefaultUsers();
+        }
     }
     setCurrentUser(user) {
             this.currentUser = user;
@@ -30,6 +29,7 @@ class UserManager {
             name: userData.name,
             password: this.hashPassword(userData.password),
             createdAt: new Date().toISOString(),
+            notifications: true, // По умолчанию включены уведомления
             stats: {
                 testsCompleted: 0,
                 totalTime: 0,
@@ -43,12 +43,31 @@ class UserManager {
         this.saveUsers();
         this.loginByName(userData.name, userData.password);
         
-        // Обновляем хедер после регистрации
-        if (window.authHeaderManager) {
-            window.authHeaderManager.updateHeader();
-        }
-        
         return newUser;
+    }
+
+    // Добавим метод для обновления настроек уведомлений
+    updateUserNotifications(userId, notificationsEnabled) {
+        const userIndex = this.users.findIndex(u => u.id === userId);
+        if (userIndex !== -1) {
+            this.users[userIndex].notifications = notificationsEnabled;
+            this.saveUsers();
+            
+            // Обновляем текущего пользователя если это он
+            if (this.currentUser && this.currentUser.id === userId) {
+                this.currentUser.notifications = notificationsEnabled;
+                localStorage.setItem('testoria_current_user', JSON.stringify(this.currentUser));
+            }
+            
+            console.log(`✅ Уведомления ${notificationsEnabled ? 'включены' : 'выключены'} для пользователя ${this.users[userIndex].name}`);
+            return true;
+        }
+        return false;
+    }
+
+    // Метод для получения пользователей с включенными уведомлениями
+    getUsersWithNotifications() {
+        return this.users.filter(user => user.notifications === true);
     }
 
     loginByName(name, password) {
