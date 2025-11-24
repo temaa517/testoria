@@ -142,7 +142,13 @@
                     
                     <div class="contact-form">
                         <h2>Форма обратной связи</h2>
-                        <form id="feedbackForm">
+                        <form id="feedbackForm" action="https://formsubmit.co/artzebal9@gmail.com" method="POST">
+                            <!-- Скрытые поля для настройки FormSubmit -->
+                            <input type="hidden" name="_captcha" value="false">
+                            <input type="hidden" name="_subject" value="Новое сообщение с Testoria">
+                            <input type="hidden" name="_template" value="table">
+                            <input type="hidden" name="_next" value="">
+                            
                             <div class="form-group">
                                 <label for="name">Ваше имя *</label>
                                 <input type="text" id="name" name="name" required 
@@ -285,257 +291,210 @@
     <!-- JavaScript -->
     <script>
         class ContactForm {
-            constructor() {
-                this.form = document.getElementById('feedbackForm');
-                this.submitBtn = document.getElementById('submitBtn');
-                this.btnText = this.submitBtn.querySelector('.btn-text');
-                this.btnLoader = this.submitBtn.querySelector('.btn-loader');
-                this.notificationsContainer = document.getElementById('notificationsContainer');
-                
-                this.init();
-            }
+    constructor() {
+        this.form = document.getElementById('feedbackForm');
+        this.submitBtn = document.getElementById('submitBtn');
+        this.btnText = this.submitBtn.querySelector('.btn-text');
+        this.btnLoader = this.submitBtn.querySelector('.btn-loader');
+        this.notificationsContainer = document.getElementById('notificationsContainer');
+        
+        this.init();
+    }
 
-            init() {
-                this.setupEventListeners();
-                this.setupCharacterCounter();
-            }
+    init() {
+        this.setupEventListeners();
+        this.setupCharacterCounter();
+    }
 
-            setupEventListeners() {
-                this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-                
-                // Валидация в реальном времени
-                const inputs = this.form.querySelectorAll('input, textarea, select');
-                inputs.forEach(input => {
-                    input.addEventListener('blur', () => this.validateField(input));
-                    input.addEventListener('input', () => this.clearError(input));
-                });
-            }
+    setupEventListeners() {
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // Валидация в реальном времени
+        const inputs = this.form.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => this.validateField(input));
+            input.addEventListener('input', () => this.clearError(input));
+        });
+    }
 
-            setupCharacterCounter() {
-                const messageTextarea = document.getElementById('message');
-                const charCount = document.getElementById('charCount');
-                
-                messageTextarea.addEventListener('input', () => {
-                    const length = messageTextarea.value.length;
-                    charCount.textContent = length;
-                    
-                    if (length > 500) {
-                        charCount.style.color = 'var(--error-color)';
-                    } else if (length > 400) {
-                        charCount.style.color = 'var(--warning-color)';
+    setupCharacterCounter() {
+        const messageTextarea = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+        
+        messageTextarea.addEventListener('input', () => {
+            const length = messageTextarea.value.length;
+            charCount.textContent = length;
+            
+            if (length > 500) {
+                charCount.style.color = 'var(--error-color)';
+            } else if (length > 400) {
+                charCount.style.color = 'var(--warning-color)';
+            } else {
+                charCount.style.color = 'var(--text-secondary)';
+            }
+        });
+    }
+
+    validateField(field) {
+        const value = field.value.trim();
+        const errorElement = document.getElementById(field.id + 'Error');
+
+        switch(field.type) {
+            case 'text':
+                if (field.id === 'name') {
+                    if (!value) {
+                        this.showError(field, 'Введите ваше имя');
+                    } else if (value.length < 2) {
+                        this.showError(field, 'Имя должно содержать минимум 2 символа');
                     } else {
-                        charCount.style.color = 'var(--text-secondary)';
+                        this.clearError(field);
                     }
-                });
-            }
-
-            validateField(field) {
-                const value = field.value.trim();
-                const errorElement = document.getElementById(field.id + 'Error');
-
-                switch(field.type) {
-                    case 'text':
-                        if (field.id === 'name') {
-                            if (!value) {
-                                this.showError(field, 'Введите ваше имя');
-                            } else if (value.length < 2) {
-                                this.showError(field, 'Имя должно содержать минимум 2 символа');
-                            } else {
-                                this.clearError(field);
-                            }
-                        }
-                        break;
-                    
-                    case 'email':
-                        if (!value) {
-                            this.showError(field, 'Введите email адрес');
-                        } else if (!this.isValidEmail(value)) {
-                            this.showError(field, 'Введите корректный email адрес');
-                        } else {
-                            this.clearError(field);
-                        }
-                        break;
-                    
-                    case 'textarea':
-                        if (!value) {
-                            this.showError(field, 'Введите сообщение');
-                        } else if (value.length < 10) {
-                            this.showError(field, 'Сообщение должно содержать минимум 10 символов');
-                        } else if (value.length > 500) {
-                            this.showError(field, 'Сообщение не должно превышать 500 символов');
-                        } else {
-                            this.clearError(field);
-                        }
-                        break;
-                    
-                    case 'checkbox':
-                        if (!field.checked) {
-                            this.showError(field, 'Необходимо согласие на обработку данных');
-                        } else {
-                            this.clearError(field);
-                        }
-                        break;
                 }
-            }
-
-            isValidEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
-
-            showError(field, message) {
-                field.classList.add('error');
-                const errorElement = document.getElementById(field.id + 'Error');
-                if (errorElement) {
-                    errorElement.textContent = message;
+                break;
+            
+            case 'email':
+                if (!value) {
+                    this.showError(field, 'Введите email адрес');
+                } else if (!this.isValidEmail(value)) {
+                    this.showError(field, 'Введите корректный email адрес');
+                } else {
+                    this.clearError(field);
                 }
-            }
-
-            clearError(field) {
-                field.classList.remove('error');
-                const errorElement = document.getElementById(field.id + 'Error');
-                if (errorElement) {
-                    errorElement.textContent = '';
+                break;
+            
+            case 'textarea':
+                if (!value) {
+                    this.showError(field, 'Введите сообщение');
+                } else if (value.length < 10) {
+                    this.showError(field, 'Сообщение должно содержать минимум 10 символов');
+                } else if (value.length > 500) {
+                    this.showError(field, 'Сообщение не должно превышать 500 символов');
+                } else {
+                    this.clearError(field);
                 }
-            }
-
-            validateForm() {
-                let isValid = true;
-                const requiredFields = this.form.querySelectorAll('[required]');
-                
-                requiredFields.forEach(field => {
-                    this.validateField(field);
-                    if (field.classList.contains('error')) {
-                        isValid = false;
-                    }
-                });
-
-                return isValid;
-            }
-
-            async handleSubmit(e) {
-                e.preventDefault();
-                
-                if (!this.validateForm()) {
-                    this.showNotification('Пожалуйста, исправьте ошибки в форме', 'error');
-                    return;
+                break;
+            
+            case 'checkbox':
+                if (!field.checked) {
+                    this.showError(field, 'Необходимо согласие на обработку данных');
+                } else {
+                    this.clearError(field);
                 }
+                break;
+        }
+    }
 
-                this.setLoading(true);
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
 
-                try {
-                    // Имитация отправки на сервер
-                    await this.sendFormData();
-                    
-                    this.showNotification('Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.', 'success');
-                    this.form.reset();
-                    document.getElementById('charCount').textContent = '0';
-                    
-                } catch (error) {
-                    this.showNotification('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.', 'error');
-                } finally {
-                    this.setLoading(false);
-                }
+    showError(field, message) {
+        field.classList.add('error');
+        const errorElement = document.getElementById(field.id + 'Error');
+        if (errorElement) {
+            errorElement.textContent = message;
+        }
+    }
+
+    clearError(field) {
+        field.classList.remove('error');
+        const errorElement = document.getElementById(field.id + 'Error');
+        if (errorElement) {
+            errorElement.textContent = '';
+        }
+    }
+
+    validateForm() {
+        let isValid = true;
+        const requiredFields = this.form.querySelectorAll('[required]');
+        
+        requiredFields.forEach(field => {
+            this.validateField(field);
+            if (field.classList.contains('error')) {
+                isValid = false;
             }
+        });
 
-            async sendFormData() {
-                // Имитация задержки сети
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                const formData = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    subject: document.getElementById('subject').value,
-                    message: document.getElementById('message').value,
-                    timestamp: new Date().toISOString()
-                };
+        return isValid;
+    }
 
-                // В реальном приложении здесь будет fetch запрос к серверу
-                console.log('Отправка данных формы:', formData);
-                
-                // Сохраняем в localStorage для демонстрации
-                const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
-                submissions.push(formData);
-                localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
-                
-                return { success: true };
-            }
-
-                setLoading(loading) {
-                    if (loading) {
-                        this.submitBtn.disabled = true;
-                        this.submitBtn.classList.add('loading');
-                        this.btnText.style.display = 'none';
-                        this.btnLoader.style.display = 'block';
-                    } else {
-                        this.submitBtn.disabled = false;
-                        this.submitBtn.classList.remove('loading');
-                        this.btnText.style.display = 'block';
-                        this.btnLoader.style.display = 'none';
-                }
-                }
-
-            showNotification(message, type = 'info') {
-                const notification = document.createElement('div');
-                notification.className = `notification notification-${type}`;
-                notification.innerHTML = `
-                    <div class="notification-content">
-                        <i class="fas fa-${this.getNotificationIcon(type)}"></i>
-                        <span>${message}</span>
-                    </div>
-                    <button class="notification-close" onclick="this.parentElement.remove()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-
-                this.notificationsContainer.appendChild(notification);
-
-                // Автоматическое удаление через 5 секунд
-                setTimeout(() => {
-                    if (notification.parentElement) {
-                        notification.remove();
-                    }
-                }, 5000);
-            }
-
-            getNotificationIcon(type) {
-                const icons = {
-                    success: 'check-circle',
-                    error: 'exclamation-circle',
-                    warning: 'exclamation-triangle',
-                    info: 'info-circle'
-                };
-                return icons[type] || 'info-circle';
-            }
+    async handleSubmit(e) {
+        e.preventDefault();
+        
+        if (!this.validateForm()) {
+            this.showNotification('Пожалуйста, исправьте ошибки в форме', 'error');
+            return;
         }
 
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            new ThemeManager();
-            new ContactForm();
-            
-            // Плавная загрузка страницы
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.3s ease-in-out';
-            
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
+        this.setLoading(true);
 
-            // Плавный переход по ссылкам
-            document.querySelectorAll('a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    if (link.href && link.href.includes('.html') && !link.href.includes('#')) {
-                        e.preventDefault();
-                        document.body.style.opacity = '0';
-                        setTimeout(() => {
-                            window.location.href = link.href;
-                        }, 300);
-                    }
-                });
-            });
-        });
-    </script>
+        try {
+            // Форма отправится автоматически через FormSubmit
+            // Мы просто показываем уведомление
+            this.showNotification('Сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.', 'success');
+            
+            // Очищаем форму через 2 секунды
+            setTimeout(() => {
+                this.form.reset();
+                document.getElementById('charCount').textContent = '0';
+            }, 2000);
+            
+        } catch (error) {
+            this.showNotification('Произошла ошибка при отправке. Пожалуйста, попробуйте позже.', 'error');
+        } finally {
+            this.setLoading(false);
+        }
+    }
+
+    setLoading(loading) {
+        if (loading) {
+            this.submitBtn.disabled = true;
+            this.submitBtn.classList.add('loading');
+            this.btnText.style.display = 'none';
+            this.btnLoader.style.display = 'block';
+        } else {
+            this.submitBtn.disabled = false;
+            this.submitBtn.classList.remove('loading');
+            this.btnText.style.display = 'block';
+            this.btnLoader.style.display = 'none';
+        }
+    }
+
+    showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${this.getNotificationIcon(type)}"></i>
+                <span>${message}</span>
+            </div>
+            <button class="notification-close" onclick="this.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+
+        this.notificationsContainer.appendChild(notification);
+
+        // Автоматическое удаление через 5 секунд
+        setTimeout(() => {
+            if (notification.parentElement) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'exclamation-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
+}
+</script>
 <!-- Подключаем основные классы -->
 <script src="auth-core.js"></script>
 
