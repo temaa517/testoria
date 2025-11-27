@@ -334,7 +334,7 @@
 
         // Глобальные функции для быстрых действий
         function openTestCreator() {
-            alert('Конструктор тестов будет доступен в следующем обновлении!');
+            testoriaAlerts.success('Конструктор тестов будет доступен в следующем обновлении!');
         }
 
         function openTestManager() {
@@ -356,6 +356,8 @@
     </script>
 
     <!-- Подключаем скрипты -->
+     <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
     <script src="auth-core.js"></script>
     <script src="auth-header.js"></script>
 </body>

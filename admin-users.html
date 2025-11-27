@@ -401,6 +401,8 @@
     </footer>
 
 <!-- Подключаем скрипты -->
+ <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
     <script src="auth-core.js"></script>
     <script src="auth-header.js"></script>
     <!-- JavaScript -->
@@ -597,7 +599,7 @@
             if (user) {
                 const testHistory = this.userManager.getTestHistory(userId);
                 
-                alert(`
+                testoriaAlerts.success(`
 Детали пользователя:
 ─────────────────
 Имя: ${user.name}
@@ -615,7 +617,7 @@ ID: ${user.id}
         }
 
         showNotification(message, type = 'info') {
-            alert(message);
+            testoriaAlerts.success(message);
         }
 
         formatDate(dateString) {
@@ -692,7 +694,7 @@ ID: ${user.id}
             const userManager = new UserManager();
             const user = userManager.getUsers().find(u => u.id === userId);
             if (user) {
-                alert(`Пользователь: ${user.name}\nID: ${user.id}\nАдмин: ${user.isAdmin ? 'Да' : 'Нет'}`);
+                testoriaAlerts.success(`Пользователь: ${user.name}\nID: ${user.id}\nАдмин: ${user.isAdmin ? 'Да' : 'Нет'}`);
             }
         }
     };

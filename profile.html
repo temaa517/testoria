@@ -301,7 +301,7 @@
             localStorage.removeItem('testoria_current_user');
             
             // Показываем сообщение
-            alert('Вы успешно вышли из аккаунта!');
+            testoriaAlerts.success('Вы успешно вышли из аккаунта!');
             
             // Переходим на главную
             window.location.href = 'index.html';
@@ -316,7 +316,7 @@
         function updateUserName() {
             const newName = document.getElementById('userNameInput').value.trim();
             if (!newName) {
-                alert('Введите имя пользователя');
+                testoriaAlerts.success('Введите имя пользователя');
                 return;
             }
 
@@ -326,10 +326,10 @@
                 userData.name = newName;
                 localStorage.setItem('testoria_current_user', JSON.stringify(userData));
                 
-                alert('Имя пользователя обновлено!');
+                testoriaAlerts.success('Имя пользователя обновлено!');
                 location.reload();
             } catch (error) {
-                alert('Ошибка при обновлении имени: ' + error.message);
+                testoriaAlerts.success('Ошибка при обновлении имени: ' + error.message);
             }
         }
 
@@ -635,7 +635,7 @@
 
         showNotification(message, type = 'info') {
             // Простое уведомление
-            alert(message);
+            testoriaAlerts.success(message);
         }
     }
 
@@ -645,7 +645,8 @@
     });
 
     </script>
-
+<!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
 <script src="auth-core.js"></script>
 <script src="auth-header.js"></script>
 <script src="js/profile-core.js"></script>

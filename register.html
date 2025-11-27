@@ -278,17 +278,17 @@
 
                 // Базовая валидация
                 if (!name) {
-                    alert('Введите имя пользователя');
+                    testoriaAlerts.success('Введите имя пользователя');
                     return;
                 }
 
                 if (!password) {
-                    alert('Введите пароль');
+                    testoriaAlerts.success('Введите пароль');
                     return;
                 }
 
                 if (password !== confirmPassword) {
-                    alert('Пароли не совпадают');
+                    testoriaAlerts.success('Пароли не совпадают');
                     return;
                 }
 
@@ -299,19 +299,21 @@
                         password: password
                     });
                     
-                    alert(`Аккаунт ${user.name} успешно создан! Перенаправляем...`);
+                    testoriaAlerts.success(`Аккаунт ${user.name} успешно создан! Перенаправляем...`);
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
 
                 } catch (error) {
-                    alert(error.message);
+                    testoriaAlerts.success(error.message);
                 }
             });
         }
     });
 </script>
 <!-- Подключаем основные классы -->
+ <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
 <script src="auth-core.js"></script>
 
 <!-- Подключаем управление хедером -->

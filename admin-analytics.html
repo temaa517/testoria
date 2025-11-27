@@ -488,6 +488,8 @@
     </footer>
 
     <!-- JavaScript -->
+     <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
     <script src="auth-core.js"></script>
     <script src="auth-header.js"></script>
     <script>
@@ -941,7 +943,7 @@
         a.click();
         URL.revokeObjectURL(url);
         
-        alert('✅ Данные экспортированы в JSON файл');
+        testoriaAlerts.success('✅ Данные экспортированы в JSON файл');
     }
 
     // Инициализация при загрузке

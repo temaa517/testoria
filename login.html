@@ -251,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('loginPassword').value;
 
             if (!name || !password) {
-                alert('Заполните все поля');
+             testoriaAlerts.success('Заполните все поля');
                 return;
             }
 
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('2. UserManager определен:', typeof UserManager);
                 
                 if (typeof UserManager === 'undefined') {
-                    alert('Ошибка: UserManager не загружен');
+                    testoriaAlerts.success('Ошибка: UserManager не загружен');
                     return;
                 }
 
@@ -289,25 +289,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (user) {
                     console.log('10. Успешный вход!');
-                    alert(`Добро пожаловать, ${user.name}! Перенаправляем...`);
+                    testoriaAlerts.successalert(`Добро пожаловать, ${user.name}! Перенаправляем...`);
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } else {
                     console.log('10. Вход не удался');
-                    alert('Неверное имя пользователя или пароль');
+                    testoriaAlerts.success('Неверное имя пользователя или пароль');
                 }
 
             } catch (error) {
                 console.error('11. ОШИБКА:', error);
                 console.error('Стек ошибки:', error.stack);
-                alert('Произошла ошибка при входе: ' + error.message);
+                testoriaAlerts.success('Произошла ошибка при входе: ' + error.message);
             }
         });
     }
 });
 </script>
 <!-- Подключаем основные классы -->
+ <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
 <script src="auth-core.js"></script>
 
 <!-- Подключаем управление хедером -->

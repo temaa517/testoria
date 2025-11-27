@@ -390,7 +390,7 @@
 
     showNotification(message, type = 'info') {
         // Временное уведомление
-        alert(message);
+        testoriaAlerts.success(message);
     }
 }
 
@@ -409,6 +409,8 @@
         });
     </script>
     <!-- Подключаем основные классы -->
+     <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
 <script src="auth-core.js"></script>
 
 </body>

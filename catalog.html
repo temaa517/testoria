@@ -801,7 +801,7 @@ function getCategoryName(category) {
 // Заглушка для тестов
 function showTestModal(testId) {
     const test = allTests.find(t => t.id == testId);
-    alert(`Тест "${test.title}" скоро будет доступен! Сейчас мы работаем над системой тестирования.`);
+   testoriaAlerts.success(`Тест "${test.title}" скоро будет доступен! Сейчас мы работаем над системой тестирования.`);
 }
 
 
@@ -809,6 +809,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new ThemeManager();
 });
     </script>
+    <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
 <!-- Подключаем основные классы -->
 <script src="auth-core.js"></script>
 

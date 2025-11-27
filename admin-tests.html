@@ -1820,7 +1820,7 @@ class TestsManager {
     editTest(testId) {
         const test = this.tests.find(t => t.id === testId);
         if (!test) {
-            alert('Тест не найден');
+            testoriaAlerts.success('Тест не найден');
             return;
         }
 
@@ -1919,7 +1919,7 @@ class TestsManager {
         
         const answers = this.currentEditingTest.questions[questionIndex].answers;
         if (answers.length <= 2) {
-            alert('Должно быть минимум 2 ответа');
+            testoriaAlerts.success('Должно быть минимум 2 ответа');
             return;
         }
         
@@ -1959,7 +1959,7 @@ class TestsManager {
         this.renderTestsGrid();
         this.closeEditTestModal();
         
-        alert('✅ Изменения сохранены!');
+        testoriaAlerts.success('✅ Изменения сохранены!');
     }
 
     deleteTest(testId) {
@@ -1971,7 +1971,7 @@ class TestsManager {
         this.saveTestsToStorage();
         this.renderTestsGrid();
         
-        alert('✅ Тест удален!');
+        testoriaAlerts.success('✅ Тест удален!');
     }
 
     saveTestsToStorage() {
@@ -2160,7 +2160,7 @@ class TestsManager {
         });
         
         if (!nameInput || !descriptionInput || !timeLimitInput) {
-            alert('❌ Ошибка: форма не найдена');
+            testoriaAlerts.success('❌ Ошибка: форма не найдена');
             return;
         }
         
@@ -2171,7 +2171,7 @@ class TestsManager {
         console.log('Данные формы:', { name, description, timeLimit });
         
         if (!name) {
-            alert('📝 Введите название теста');
+            testoriaAlerts.success('📝 Введите название теста');
             nameInput.focus();
             return;
         }
@@ -2203,7 +2203,7 @@ class TestsManager {
         this.closeCreateTestModal();
         
         // Показываем уведомление
-        alert(`✅ Тест "${name}" создан! Теперь вы можете добавить вопросы.`);
+        testoriaAlerts.success(`✅ Тест "${name}" создан! Теперь вы можете добавить вопросы.`);
         
         setTimeout(() => {
         this.sendNewTestNotifications(newTest);
@@ -2301,9 +2301,9 @@ class TestsManager {
         if (window.testsManager) {
             window.testsManager.tests = tests;
             window.testsManager.renderTestsGrid();
-            alert(`✅ Создано ${tests.length} тестов!`);
+            testoriaAlerts.success(`✅ Создано ${tests.length} тестов!`);
         } else {
-            alert('❌ testsManager не загружен');
+            testoriaAlerts.success('❌ testsManager не загружен');
         }
         
         return tests;
@@ -2352,6 +2352,8 @@ class TestsManager {
 
     </script>
     <!-- JavaScript -->
+     <!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
     <script src="auth-core.js"></script>
     <script src="auth-header.js"></script>
 

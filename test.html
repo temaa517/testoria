@@ -2901,7 +2901,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         showNotification(message, type = 'info') {
             // Временное уведомление - потом заменим на красивый компонент
-            alert(message);
+            testoriaAlerts.success(message);
         }
 
         showError(message) {
@@ -2934,7 +2934,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
-
+<!-- В конце body, перед другими скриптами -->
+<script src="js/custom-alerts.js"></script>
 <script src="auth-core.js"></script> 
 <script src="auth-header.js"></script>
 
