@@ -212,7 +212,33 @@
     }
 
     loadResults() {
-        // Загружаем результаты из localStorage
+        // Проверяем, есть ли ID результата в URL параметрах
+        const urlParams = new URLSearchParams(window.location.search);
+        const resultId = urlParams.get('resultId');
+        
+        if (resultId) {
+            // Загружаем результат по ID из testResults
+            const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
+            const result = allResults.find(r => r.id == resultId);
+            
+            if (result && result.result) {
+                // Преобразуем формат результата для отображения
+                this.testResult = {
+                    testId: result.testId,
+                    testTitle: result.testTitle,
+                    userAnswers: result.answers || result.userAnswers || [],
+                    result: result.result,
+                    completedAt: result.completedAt
+                };
+                this.displayResults();
+                return;
+            } else {
+                this.showError('Результат не найден.');
+                return;
+            }
+        }
+        
+        // Если нет ID в URL, загружаем последний результат (для обратной совместимости)
         const savedResult = localStorage.getItem('lastTestResult');
         
         if (!savedResult) {
@@ -239,6 +265,8 @@
     createResultsHTML(result) {
         const test = this.testResult;
         const completionDate = new Date(test.completedAt).toLocaleDateString('ru-RU');
+        const userAnswers = test.userAnswers || test.answers || [];
+        const questionsCount = userAnswers.length || test.totalQuestions || 0;
         
         return `
             <div class="results-success">
@@ -250,15 +278,15 @@
                 
                 <div class="result-card">
                     <div class="result-image">
-                        <img src="${result.image}" alt="${result.title}" onerror="this.src='https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
+                        <img src="${result.image || 'https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'}" alt="${result.title}" onerror="this.src='https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'">
                     </div>
                     <div class="result-content">
                         <div class="result-badge">
                             <i class="fas fa-award"></i>
                             Ваш результат
                         </div>
-                        <h2 class="result-type">${result.title}</h2>
-                        <p class="result-description">${result.description}</p>
+                        <h2 class="result-type">${result.title || 'Результат'}</h2>
+                        <p class="result-description">${result.description || 'Тест успешно завершен'}</p>
                         <div class="result-meta">
                             <span class="result-date">
                                 <i class="far fa-calendar"></i>
@@ -266,7 +294,7 @@
                             </span>
                             <span class="result-questions">
                                 <i class="far fa-question-circle"></i>
-                                ${test.userAnswers.length} вопросов
+                                ${questionsCount} вопросов
                             </span>
                         </div>
                     </div>

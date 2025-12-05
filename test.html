@@ -1805,25 +1805,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        saveTestResult(testData, userAnswers, timeSpent) {
+        saveTestResult(testData, userAnswers, timeSpent, result = null) {
             try {
                 const userManager = new UserManager();
                 const currentUser = userManager.getCurrentUser();
                 
                 if (!currentUser) {
                     console.log('Пользователь не авторизован, результат не сохранен');
-                    return;
+                    return null;
                 }
 
+                const resultId = Date.now();
                 const testResult = {
-                    id: Date.now(),
+                    id: resultId,
                     userId: currentUser.id,
                     testId: testData.id,
                     testTitle: testData.title,
                     timeSpent: timeSpent,
                     completedAt: new Date().toISOString(),
                     answers: userAnswers,
-                    totalQuestions: testData.questions.length
+                    totalQuestions: testData.questions.length,
+                    result: result // Сохраняем результат для отображения на странице результатов
                 };
 
                 // Получаем существующие результаты
@@ -1836,9 +1838,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('testResults', JSON.stringify(allResults));
                 
                 console.log('Результат теста сохранен:', testResult);
+                return resultId;
                 
             } catch (error) {
                 console.error('Ошибка сохранения результата:', error);
+                return null;
             }
         }
 
@@ -2879,13 +2883,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         goToResults(result) {
-            // ВЫЗЫВАЕМ СОХРАНЕНИЕ РЕЗУЛЬТАТА В ПРОФИЛЬ
-            this.saveTestResult(
-                this.currentTest,
-                this.userAnswers,
-                600
-            );
-            
             // Сохраняем результат в localStorage для страницы результатов
             const testResult = {
                 testId: this.testId,
@@ -2895,8 +2892,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 completedAt: new Date().toISOString()
             };
             
+            // ВЫЗЫВАЕМ СОХРАНЕНИЕ РЕЗУЛЬТАТА В ПРОФИЛЬ (с result)
+            const resultId = this.saveTestResult(
+                this.currentTest,
+                this.userAnswers,
+                600,
+                result
+            );
+            
             localStorage.setItem('lastTestResult', JSON.stringify(testResult));
-            window.location.href = `results.html?test=${this.testId}`;
+            window.location.href = `results.html?test=${this.testId}&resultId=${resultId}`;
         }
 
         showNotification(message, type = 'info') {

@@ -3590,6 +3590,8 @@ body {
 .history-item:hover {
     border-color: var(--primary-color);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .test-info h4 {

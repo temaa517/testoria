@@ -126,7 +126,7 @@ class ProfileManager {
         }
 
         historyList.innerHTML = testHistory.map(test => `
-            <div class="history-item">
+            <div class="history-item" style="cursor: pointer;" onclick="window.location.href='results.html?resultId=${test.id}'">
                 <div class="test-info">
                     <h4>${test.testTitle || 'Неизвестный тест'}</h4>
                     <p class="test-score">Результат: ${test.score || 0}%</p>
@@ -135,6 +135,7 @@ class ProfileManager {
                 <div class="test-meta">
                     <span class="test-date">${new Date(test.completedAt || Date.now()).toLocaleDateString('ru-RU')}</span>
                     <span class="test-time">${this.formatTime(test.timeSpent || 0)}</span>
+                    <i class="fas fa-arrow-right" style="margin-left: 10px; opacity: 0.6;"></i>
                 </div>
             </div>
         `).join('');
