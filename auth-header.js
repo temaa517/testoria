@@ -72,9 +72,25 @@ class AuthHeaderManager {
 
         setupThemeManager() {
             // Инициализация темы
-            if (!window.themeManager) {
-                window.themeManager = new ThemeManager();
-            }
+            // Используем функцию для повторных попыток, если ThemeManager еще не загружен
+            const initTheme = () => {
+                if (typeof ThemeManager !== 'undefined') {
+                    if (!window.themeManager) {
+                        try {
+                            window.themeManager = new ThemeManager();
+                            console.log('✅ ThemeManager инициализирован');
+                        } catch (error) {
+                            console.error('Ошибка инициализации ThemeManager:', error);
+                        }
+                    }
+                } else {
+                    // Если ThemeManager еще не загружен, ждем и пробуем снова
+                    setTimeout(initTheme, 50);
+                }
+            };
+            
+            // Пробуем инициализировать сразу
+            initTheme();
         }
     }
 
@@ -101,7 +117,17 @@ function toggleProfileMenu() {
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Инициализация AuthHeaderManager');
-    window.authHeaderManager = new AuthHeaderManager();
+    
+    // Убеждаемся, что ThemeManager загружен перед инициализацией
+    if (typeof ThemeManager === 'undefined') {
+        console.warn('ThemeManager не найден, ожидаем загрузки...');
+        // Ждем загрузки скриптов
+        setTimeout(() => {
+            window.authHeaderManager = new AuthHeaderManager();
+        }, 50);
+    } else {
+        window.authHeaderManager = new AuthHeaderManager();
+    }
     
     // Плавная загрузка страницы
     document.body.style.opacity = '0';

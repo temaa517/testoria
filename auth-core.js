@@ -297,8 +297,38 @@ class ThemeManager {
             this.setTheme('dark');
         }
 
+        // Убеждаемся, что кнопка переключения темы найдена
+        if (!this.themeToggle) {
+            this.themeToggle = document.getElementById('themeToggle');
+        }
+
         if (this.themeToggle) {
-            this.themeToggle.addEventListener('click', () => this.toggleTheme());
+            // Удаляем все существующие обработчики перед добавлением нового
+            const newToggle = this.themeToggle.cloneNode(true);
+            if (this.themeToggle.parentNode) {
+                this.themeToggle.parentNode.replaceChild(newToggle, this.themeToggle);
+                this.themeToggle = newToggle;
+            }
+            
+            // Добавляем обработчик клика
+            this.themeToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleTheme();
+            });
+        } else {
+            console.warn('Кнопка переключения темы не найдена, попробуем позже...');
+            // Пробуем найти кнопку через небольшую задержку
+            setTimeout(() => {
+                this.themeToggle = document.getElementById('themeToggle');
+                if (this.themeToggle) {
+                    this.themeToggle.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.toggleTheme();
+                    });
+                }
+            }, 100);
         }
 
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {

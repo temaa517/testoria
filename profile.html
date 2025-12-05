@@ -307,8 +307,9 @@
             window.location.href = 'index.html';
         }
 
-        function confirmLogout() {
-            if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
+        async function confirmLogout() {
+            const confirmed = await customConfirm('Вы уверены, что хотите выйти из аккаунта?', 'Подтверждение выхода');
+            if (confirmed) {
                 logout();
             }
         }
@@ -564,7 +565,7 @@
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            new ThemeManager();
+            // ThemeManager инициализируется через auth-header.js
             new ProfileManager();
         });
 

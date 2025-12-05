@@ -422,6 +422,82 @@ const allTests = [
     }
 ];
 
+// Загружаем тесты из админ-панели и преобразуем их в формат каталога
+function loadAdminTests() {
+    try {
+        const adminTests = JSON.parse(localStorage.getItem('testoria_tests') || '[]');
+        
+        if (!Array.isArray(adminTests) || adminTests.length === 0) {
+            return [];
+        }
+        
+        // Локальная функция для получения иконки категории
+        const getCategoryIconLocal = (category) => {
+            const icons = {
+                'food': 'fas fa-utensils',
+                'animals': 'fas fa-paw',
+                'tech': 'fas fa-code',
+                'memes': 'fas fa-laugh-beam',
+                'entertainment': 'fas fa-film',
+                'psychology': 'fas fa-brain',
+                'games': 'fas fa-gamepad',
+                'custom': 'fas fa-star'
+            };
+            return icons[category] || 'fas fa-question';
+        };
+        
+        // Преобразуем тесты из формата админ-панели в формат каталога
+        const catalogTests = adminTests.map(test => {
+            // Преобразуем дату из ISO формата в формат YYYY-MM-DD
+            let dateStr = "2024-01-01";
+            if (test.createdAt) {
+                const date = new Date(test.createdAt);
+                dateStr = date.toISOString().split('T')[0];
+            }
+            
+            // Определяем категорию (если 'custom', используем 'memes' как default)
+            const category = test.category === 'custom' ? 'memes' : (test.category || 'memes');
+            
+            // Получаем иконку на основе категории
+            const icon = getCategoryIconLocal(category);
+            
+            return {
+                id: test.id,
+                title: test.title || 'Без названия',
+                category: category,
+                description: test.description || 'Описание отсутствует',
+                image: test.image || 'https://images.unsplash.com/photo-1485451456034-3f9391c6f769?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+                icon: icon,
+                rating: 4.5, // Дефолтный рейтинг для новых тестов
+                votes: 0, // Начальное количество голосов
+                time: test.timeLimit || 10, // Используем timeLimit как time
+                date: dateStr
+            };
+        });
+        
+        return catalogTests;
+    } catch (error) {
+        console.error('Ошибка при загрузке тестов из админ-панели:', error);
+        return [];
+    }
+}
+
+// Объединяем тесты из каталога с тестами из админ-панели
+const adminTests = loadAdminTests();
+const allTestsWithAdmin = [...allTests, ...adminTests];
+
+// Обновляем массив allTests
+allTests.length = 0;
+allTests.push(...allTestsWithAdmin);
+
+// Обновляем счетчик общего количества тестов
+document.addEventListener('DOMContentLoaded', () => {
+    const totalTestsElement = document.getElementById('totalTests');
+    if (totalTestsElement) {
+        totalTestsElement.textContent = allTests.length;
+    }
+});
+
 // Настройки пагинации
 const TESTS_PER_PAGE = 9;
 let currentPage = 1;
@@ -780,7 +856,8 @@ function getCategoryIcon(category) {
         'memes': 'fas fa-laugh-beam',
         'entertainment': 'fas fa-film',
         'psychology': 'fas fa-brain',
-        'games': 'fas fa-gamepad'
+        'games': 'fas fa-gamepad',
+        'custom': 'fas fa-star'
     };
     return icons[category] || 'fas fa-question';
 }
@@ -793,7 +870,8 @@ function getCategoryName(category) {
         'memes': 'Мемы',
         'entertainment': 'Развлечения',
         'psychology': 'Психология',
-        'games': 'Игры'
+        'games': 'Игры',
+        'custom': 'Пользовательские'
     };
     return names[category] || 'Другое';
 }
@@ -805,9 +883,7 @@ function showTestModal(testId) {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    new ThemeManager();
-});
+// ThemeManager инициализируется через auth-header.js
     </script>
     <!-- В конце body, перед другими скриптами -->
 <script src="js/custom-alerts.js"></script>

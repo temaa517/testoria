@@ -164,7 +164,7 @@ class ProfileManager {
     updateUserName() {
         const newName = document.getElementById('userNameInput').value.trim();
         if (!newName) {
-            alert('Введите имя пользователя');
+            testoriaAlerts.warning('Введите имя пользователя');
             return;
         }
 
@@ -173,15 +173,16 @@ class ProfileManager {
             this.userManager.updateUserName(this.currentUser.id, newName);
             this.currentUser.name = newName;
             
-            alert('Имя пользователя обновлено!');
+            testoriaAlerts.success('Имя пользователя обновлено!');
             this.loadProfileData(); // Обновляем отображение
         } catch (error) {
-            alert('Ошибка при обновлении имени: ' + error.message);
+            testoriaAlerts.error('Ошибка при обновлении имени: ' + error.message);
         }
     }
 
-    logout() {
-        if (confirm('Вы уверены, что хотите выйти из аккаунта?')) {
+    async logout() {
+        const confirmed = await customConfirm('Вы уверены, что хотите выйти из аккаунта?', 'Подтверждение выхода');
+        if (confirmed) {
             this.userManager.logout();
             window.location.href = 'index.html';
         }

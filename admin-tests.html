@@ -1896,8 +1896,10 @@ class TestsManager {
         this.renderQuestionsList(this.currentEditingTest.questions);
     }
 
-    deleteQuestion(questionIndex) {
-        if (!this.currentEditingTest || !confirm('Удалить этот вопрос?')) return;
+    async deleteQuestion(questionIndex) {
+        if (!this.currentEditingTest) return;
+        const confirmed = await customConfirm('Удалить этот вопрос?', 'Подтверждение удаления');
+        if (!confirmed) return;
         
         this.currentEditingTest.questions.splice(questionIndex, 1);
         this.renderQuestionsList(this.currentEditingTest.questions);
@@ -1914,8 +1916,10 @@ class TestsManager {
         this.renderQuestionsList(this.currentEditingTest.questions);
     }
 
-    deleteAnswer(questionIndex, answerIndex) {
-        if (!this.currentEditingTest || !confirm('Удалить этот ответ?')) return;
+    async deleteAnswer(questionIndex, answerIndex) {
+        if (!this.currentEditingTest) return;
+        const confirmed = await customConfirm('Удалить этот ответ?', 'Подтверждение удаления');
+        if (!confirmed) return;
         
         const answers = this.currentEditingTest.questions[questionIndex].answers;
         if (answers.length <= 2) {
@@ -1962,8 +1966,9 @@ class TestsManager {
         testoriaAlerts.success('✅ Изменения сохранены!');
     }
 
-    deleteTest(testId) {
-        if (!confirm('Вы уверены, что хотите удалить этот тест? Это действие нельзя отменить.')) {
+    async deleteTest(testId) {
+        const confirmed = await customConfirm('Вы уверены, что хотите удалить этот тест? Это действие нельзя отменить.', 'Подтверждение удаления');
+        if (!confirmed) {
             return;
         }
         
@@ -2318,11 +2323,12 @@ class TestsManager {
             window.testsManager = new TestsManager();
             
             // Проверяем есть ли тесты через 2 секунды
-            setTimeout(() => {
+            setTimeout(async () => {
                 const existingTests = JSON.parse(localStorage.getItem('testoria_tests') || '[]');
                 if (existingTests.length === 0) {
                     console.log('🆕 Тестов нет, предлагаем создать...');
-                    if (confirm('Тесты не найдены. Создать демо-тесты?')) {
+                    const confirmed = await customConfirm('Тесты не найдены. Создать демо-тесты?', 'Создание демо-тестов');
+                    if (confirmed) {
                         createSampleTests();
                     }
                 }
@@ -2338,11 +2344,12 @@ class TestsManager {
         window.testsManager = new TestsManager();
         
         // Проверяем есть ли тесты через 2 секунды
-        setTimeout(() => {
+        setTimeout(async () => {
             const existingTests = JSON.parse(localStorage.getItem('testoria_tests') || '[]');
             if (existingTests.length === 0) {
                 console.log('🆕 Тестов нет, создаем демо...');
-                if (confirm('Тесты не найдены. Создать демо-тесты?')) {
+                const confirmed = await customConfirm('Тесты не найдены. Создать демо-тесты?', 'Создание демо-тестов');
+                if (confirmed) {
                     initializeTestsDatabase();
                     window.testsManager.loadTests();
                 }

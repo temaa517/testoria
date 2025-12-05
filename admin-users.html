@@ -574,23 +574,25 @@
             this.renderUsersTable();
         }
 
-        makeAdmin(userId) {
-            if (confirm('Вы уверены, что хотите сделать этого пользователя администратором?')) {
-                const success = this.userManager.makeAdmin(userId);
-                if (success) {
-                    this.loadUsers();
-                    this.showNotification('Пользователь назначен администратором', 'success');
-                }
+        async makeAdmin(userId) {
+            const confirmed = await customConfirm('Вы уверены, что хотите сделать этого пользователя администратором?', 'Назначение администратора');
+            if (!confirmed) return;
+            
+            const success = this.userManager.makeAdmin(userId);
+            if (success) {
+                this.loadUsers();
+                this.showNotification('Пользователь назначен администратором', 'success');
             }
         }
 
-        removeAdmin(userId) {
-            if (confirm('Вы уверены, что хотите снять права администратора?')) {
-                const success = this.userManager.removeAdmin(userId);
-                if (success) {
-                    this.loadUsers();
-                    this.showNotification('Права администратора сняты', 'warning');
-                }
+        async removeAdmin(userId) {
+            const confirmed = await customConfirm('Вы уверены, что хотите снять права администратора?', 'Снятие прав администратора');
+            if (!confirmed) return;
+            
+            const success = this.userManager.removeAdmin(userId);
+            if (success) {
+                this.loadUsers();
+                this.showNotification('Права администратора сняты', 'warning');
             }
         }
 
@@ -660,26 +662,28 @@ ID: ${user.id}
     window.usersManager = new UsersManager();
 
     // Глобальные функции для кнопок действий
-    window.makeAdmin = function(userId) {
+    window.makeAdmin = async function(userId) {
         if (window.usersManager) {
-            window.usersManager.makeAdmin(userId);
+            await window.usersManager.makeAdmin(userId);
         } else {
             console.error('usersManager не найден');
             const userManager = new UserManager();
-            if (confirm('Сделать пользователя администратором?')) {
+            const confirmed = await customConfirm('Сделать пользователя администратором?', 'Назначение администратора');
+            if (confirmed) {
                 userManager.makeAdmin(userId);
                 location.reload();
             }
         }
     };
 
-    window.removeAdmin = function(userId) {
+    window.removeAdmin = async function(userId) {
         if (window.usersManager) {
-            window.usersManager.removeAdmin(userId);
+            await window.usersManager.removeAdmin(userId);
         } else {
             console.error('usersManager не найден');
             const userManager = new UserManager();
-            if (confirm('Убрать права администратора?')) {
+            const confirmed = await customConfirm('Убрать права администратора?', 'Снятие прав администратора');
+            if (confirmed) {
                 userManager.removeAdmin(userId);
                 location.reload();
             }

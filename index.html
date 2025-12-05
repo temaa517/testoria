@@ -307,14 +307,13 @@
 
         function showTestModal(testId) {
             const test = popularTests.find(t => t.id == testId);
-            alert(`Тест "${test.title}" скоро будет доступен! Сейчас мы работаем над системой тестирования.`);
+            testoriaAlerts.success(`Тест "${test.title}" скоро будет доступен! Сейчас мы работаем над системой тестирования.`);
         }
 
     
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', () => {
-            new ThemeManager();
             displayPopularTests();
             
             // Плавная загрузка страницы
@@ -339,10 +338,11 @@
             });
         });
     </script>
-   <!-- Подключаем основные классы -->
-<script src="auth-core.js"></script>
 
-<!-- Подключаем управление хедером -->
+
+<script src="js/custom-alerts.js"></script>
+<script src="auth-core.js"></script>
 <script src="auth-header.js"></script>
+
 </body>
 </html>
