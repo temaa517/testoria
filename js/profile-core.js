@@ -1,7 +1,17 @@
 class ProfileManager {
     constructor() {
+        // Предотвращаем двойную инициализацию, если скрипт вызывается дважды
+        if (window.__profileManagerInstance) {
+            return window.__profileManagerInstance;
+        }
+        window.__profileManagerInstance = this;
+
         this.currentUser = null;
         this.userManager = new UserManager();
+        this.siteTimeKey = null;
+        this.siteTimeTotalSeconds = 0;
+        this.sessionStart = null;
+        this.siteTimerId = null;
         this.init();
     }
 
@@ -14,6 +24,7 @@ class ProfileManager {
         
         this.currentUser = this.userManager.getCurrentUser();
         this.setupEventListeners();
+        this.initSiteTimeTracking();
         this.loadProfileData();
     }
 
@@ -80,7 +91,7 @@ class ProfileManager {
         const stats = this.calculateStatistics(testHistory);
         
         document.getElementById('testsCompleted').textContent = stats.testsCompleted;
-        document.getElementById('totalTime').textContent = this.formatTime(stats.totalTime);
+        this.updateTotalTimeDisplay();
         document.getElementById('achievementsCount').textContent = stats.achievementsCount;
 
         this.loadRecentActivity(testHistory);
@@ -94,7 +105,6 @@ class ProfileManager {
 
     calculateStatistics(testHistory) {
         const testsCompleted = testHistory.length;
-        const totalTime = testHistory.reduce((total, test) => total + (test.timeSpent || 0), 0);
         
         // Простая система достижений
         const achievements = [];
@@ -104,7 +114,6 @@ class ProfileManager {
 
         return {
             testsCompleted,
-            totalTime,
             achievementsCount: achievements.length
         };
     }
@@ -185,6 +194,7 @@ class ProfileManager {
         const confirmed = await customConfirm('Вы уверены, что хотите выйти из аккаунта?', 'Подтверждение выхода');
         if (confirmed) {
             this.userManager.logout();
+            this.persistSiteTime();
             window.location.href = 'index.html';
         }
     }
@@ -192,7 +202,10 @@ class ProfileManager {
     formatTime(seconds) {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
-        return hours > 0 ? `${hours}ч ${minutes}м` : `${minutes}м`;
+        const secs = Math.floor(seconds % 60);
+        if (hours > 0) return `${hours}ч ${minutes}м ${secs}с`;
+        if (minutes > 0) return `${minutes}м ${secs}с`;
+        return `${secs}с`;
     }
 
     formatRelativeTime(dateString) {
@@ -208,5 +221,57 @@ class ProfileManager {
         if (diffHours < 24) return `${diffHours} ч назад`;
         if (diffDays < 7) return `${diffDays} д назад`;
         return date.toLocaleDateString('ru-RU');
+    }
+
+    initSiteTimeTracking() {
+        if (!this.currentUser) return;
+
+        this.siteTimeKey = `testoria_site_time_${this.currentUser.id}`;
+        this.siteTimeTotalSeconds = this.getStoredSiteTime();
+        this.sessionStart = Date.now();
+
+        // Начальное отображение
+        this.updateTotalTimeDisplay();
+
+        // Живое обновление каждую секунду
+        this.siteTimerId = setInterval(() => this.updateTotalTimeDisplay(), 1000);
+
+        // Сохраняем время при уходе/смене вкладки
+        window.addEventListener('beforeunload', () => this.persistSiteTime());
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                this.persistSiteTime();
+            } else {
+                this.sessionStart = Date.now();
+            }
+        });
+    }
+
+    getStoredSiteTime() {
+        const stored = parseInt(localStorage.getItem(this.siteTimeKey), 10);
+        return Number.isFinite(stored) && stored >= 0 ? stored : 0;
+    }
+
+    getCurrentTotalSiteSeconds() {
+        const elapsed = this.sessionStart ? Math.max(0, Math.floor((Date.now() - this.sessionStart) / 1000)) : 0;
+        return this.siteTimeTotalSeconds + elapsed;
+    }
+
+    updateTotalTimeDisplay() {
+        const totalSeconds = this.getCurrentTotalSiteSeconds();
+        const totalTimeEl = document.getElementById('totalTime');
+        if (totalTimeEl) {
+            totalTimeEl.textContent = this.formatTime(totalSeconds);
+        }
+    }
+
+    persistSiteTime() {
+        if (!this.currentUser || this.sessionStart === null) return;
+
+        const elapsed = Math.max(0, Math.floor((Date.now() - this.sessionStart) / 1000));
+        this.siteTimeTotalSeconds += elapsed;
+        this.sessionStart = Date.now();
+
+        localStorage.setItem(this.siteTimeKey, this.siteTimeTotalSeconds);
     }
 }

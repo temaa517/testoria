@@ -1700,6 +1700,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.currentQuestionIndex = 0;
             this.userAnswers = [];
             this.testId = null;
+            this.testStartTime = null; // точное время старта теста
             
             this.elements = {
                 testTitle: document.getElementById('testTitle'),
@@ -1742,6 +1743,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.showError('Тест не найден');
                 return;
             }
+
+            // Фиксируем момент старта, чтобы корректно посчитать потраченное время
+            this.testStartTime = Date.now();
 
             this.displayTestInfo();
             this.showQuestion(0);
@@ -2893,10 +2897,11 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             // ВЫЗЫВАЕМ СОХРАНЕНИЕ РЕЗУЛЬТАТА В ПРОФИЛЬ (с result)
+            const timeSpentSeconds = this.testStartTime ? Math.max(0, Math.floor((Date.now() - this.testStartTime) / 1000)) : 0;
             const resultId = this.saveTestResult(
                 this.currentTest,
                 this.userAnswers,
-                600,
+                timeSpentSeconds,
                 result
             );
             
