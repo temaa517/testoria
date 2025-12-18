@@ -1819,7 +1819,7 @@ class TestsManager {
     editTest(testId) {
         const test = this.tests.find(t => t.id === testId);
         if (!test) {
-            testoriaAlerts.success('Тест не найден');
+            testoriaAlerts.error('Тест не найден');
             return;
         }
 
@@ -1922,7 +1922,7 @@ class TestsManager {
         
         const answers = this.currentEditingTest.questions[questionIndex].answers;
         if (answers.length <= 2) {
-            testoriaAlerts.success('Должно быть минимум 2 ответа');
+            testoriaAlerts.warning('Должно быть минимум 2 ответа');
             return;
         }
         
@@ -2164,7 +2164,7 @@ class TestsManager {
         });
         
         if (!nameInput || !descriptionInput || !timeLimitInput) {
-            testoriaAlerts.success('❌ Ошибка: форма не найдена');
+            testoriaAlerts.error('❌ Ошибка: форма не найдена');
             return;
         }
         
@@ -2175,7 +2175,7 @@ class TestsManager {
         console.log('Данные формы:', { name, description, timeLimit });
         
         if (!name) {
-            testoriaAlerts.success('📝 Введите название теста');
+            testoriaAlerts.warning('📝 Введите название теста');
             nameInput.focus();
             return;
         }
@@ -2307,7 +2307,7 @@ class TestsManager {
             window.testsManager.renderTestsGrid();
             testoriaAlerts.success(`✅ Создано ${tests.length} тестов!`);
         } else {
-            testoriaAlerts.success('❌ testsManager не загружен');
+            testoriaAlerts.error('❌ testsManager не загружен');
         }
         
         return tests;

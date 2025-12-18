@@ -179,8 +179,8 @@ class ProfileManager {
         }
 
         try {
-            // Обновляем имя через UserManager
-            this.userManager.updateUserName(this.currentUser.id, newName);
+            // Обновляем имя через UserManager (единый метод)
+            this.userManager.updateUserName(newName);
             this.currentUser.name = newName;
             
             testoriaAlerts.success('Имя пользователя обновлено!');

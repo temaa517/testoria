@@ -1,0 +1,49 @@
+[
+  {
+    "id": "u_admin_1",
+    "name": "Admin",
+    "password": "Admin123",
+    "isAdmin": true,
+    "createdAt": "2025-01-01T10:00:00.000Z",
+    "notifications": true,
+    "stats": {
+      "testsCompleted": 0,
+      "totalTime": 0,
+      "favoriteCategory": null
+    },
+    "history": [],
+    "achievements": []
+  },
+  {
+    "id": "u_user_1",
+    "name": "UserOne",
+    "password": "UserOne123",
+    "isAdmin": false,
+    "createdAt": "2025-01-02T11:00:00.000Z",
+    "notifications": true,
+    "stats": {
+      "testsCompleted": 0,
+      "totalTime": 0,
+      "favoriteCategory": null
+    },
+    "history": [],
+    "achievements": []
+  },
+  {
+    "id": "u_user_2",
+    "name": "UserTwo",
+    "password": "UserTwo123",
+    "isAdmin": false,
+    "createdAt": "2025-01-03T12:00:00.000Z",
+    "notifications": true,
+    "stats": {
+      "testsCompleted": 0,
+      "totalTime": 0,
+      "favoriteCategory": null
+    },
+    "history": [],
+    "achievements": []
+  }
+]
+
+

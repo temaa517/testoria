@@ -619,7 +619,15 @@ ID: ${user.id}
         }
 
         showNotification(message, type = 'info') {
-            testoriaAlerts.success(message);
+            if (type === 'error') {
+                testoriaAlerts.error(message);
+            } else if (type === 'warning') {
+                testoriaAlerts.warning(message);
+            } else if (type === 'info') {
+                testoriaAlerts.info(message);
+            } else {
+                testoriaAlerts.success(message);
+            }
         }
 
         formatDate(dateString) {

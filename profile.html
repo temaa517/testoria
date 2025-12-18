@@ -292,285 +292,12 @@
 
     <!-- JavaScript -->
     <script>
-        // ПРОСТЫЕ ГЛОБАЛЬНЫЕ ФУНКЦИИ
-        function logout() {
-            console.log('🔴 Выход из аккаунта');
-            
-            // Очищаем все данные авторизации
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('testoria_current_user');
-            
-            // Показываем сообщение
-            testoriaAlerts.success('Вы успешно вышли из аккаунта!');
-            
-            // Переходим на главную
-            window.location.href = 'index.html';
-        }
-
-        async function confirmLogout() {
-            const confirmed = await customConfirm('Вы уверены, что хотите выйти из аккаунта?', 'Подтверждение выхода');
-            if (confirmed) {
-                logout();
-            }
-        }
-
-        function updateUserName() {
-            const newName = document.getElementById('userNameInput').value.trim();
-            if (!newName) {
-                testoriaAlerts.success('Введите имя пользователя');
-                return;
-            }
-
-            try {
-                // Простое обновление имени в localStorage
-                const userData = JSON.parse(localStorage.getItem('testoria_current_user') || '{}');
-                userData.name = newName;
-                localStorage.setItem('testoria_current_user', JSON.stringify(userData));
-                
-                testoriaAlerts.success('Имя пользователя обновлено!');
-                location.reload();
-            } catch (error) {
-                testoriaAlerts.success('Ошибка при обновлении имени: ' + error.message);
-            }
-        }
-
+        // Переход к достижениям из виджета статистики
         function goToAchievements() {
             window.location.href = 'achievements.html';
         }
 
-        // Profile Manager
-        class ProfileManager {
-            constructor() {
-                this.currentUser = null;
-                this.init();
-            }
-
-            init() {
-                // Проверяем авторизацию
-                const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-                if (!isLoggedIn) {
-                    window.location.href = 'login.html';
-                    return;
-                }
-                
-                this.loadUserData();
-                this.setupEventListeners();
-                this.loadProfileData();
-            }
-
-            loadUserData() {
-                try {
-                    const userData = localStorage.getItem('testoria_current_user');
-                    if (userData) {
-                        this.currentUser = JSON.parse(userData);
-                    }
-                } catch (error) {
-                    console.error('Ошибка загрузки пользователя:', error);
-                }
-            }
-
-            setupEventListeners() {
-                // Кнопки выхода
-                document.getElementById('logoutHeader')?.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    confirmLogout();
-                });
-                
-                document.getElementById('logoutProfile')?.addEventListener('click', () => {
-                    confirmLogout();
-                });
-
-                // Сохранение имени
-                document.getElementById('saveUserName')?.addEventListener('click', () => {
-                    updateUserName();
-                });
-
-                // Переключение вкладок
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const tab = btn.dataset.tab;
-                        this.switchTab(tab);
-                    });
-                });
-
-                // Выпадающее меню профиля
-                document.getElementById('profileBtn')?.addEventListener('click', () => {
-                    this.toggleProfileMenu();
-                });
-            }
-
-            toggleProfileMenu() {
-                const dropdown = document.getElementById('profileDropdown');
-                if (dropdown.style.display === 'block') {
-                    dropdown.style.display = 'none';
-                } else {
-                    dropdown.style.display = 'block';
-                // Закрытие при клике вне меню
-                    setTimeout(() => {
-                        document.addEventListener('click', this.closeProfileMenu.bind(this), { once: true });
-                    }, 0);
-                }
-            }
-
-            closeProfileMenu(e) {
-                const dropdown = document.getElementById('profileDropdown');
-                const profileBtn = document.getElementById('profileBtn');
-                if (!dropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
-            }
-
-            switchTab(tabName) {
-                // Обновляем активные кнопки
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                document.querySelector(`[data-tab="${tabName}"]`)?.classList.add('active');
-
-                // Обновляем активные вкладки
-                document.querySelectorAll('.tab-content').forEach(tab => {
-                    tab.classList.remove('active');
-                });
-                document.getElementById(`${tabName}-tab`)?.classList.add('active');
-            }
-
-            loadProfileData() {
-                if (!this.currentUser) return;
-
-                // Основная информация
-                document.getElementById('userName').textContent = this.currentUser.name || 'Пользователь';
-                document.getElementById('userNameInput').value = this.currentUser.name || '';
-                
-                // Дата регистрации
-                const joinDate = this.currentUser.createdAt ? 
-                    new Date(this.currentUser.createdAt).toLocaleDateString('ru-RU') : 
-                    new Date().toLocaleDateString('ru-RU');
-                document.getElementById('userJoinDate').textContent = `Участник с ${joinDate}`;
-
-                // СТАТИСТИКА ИЗ РЕЗУЛЬТАТОВ ТЕСТОВ
-                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
-                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
-                
-                const testsCompleted = userResults.length;
-                const totalTime = userResults.reduce((total, test) => total + (test.timeSpent || 0), 0);
-                
-                document.getElementById('testsCompleted').textContent = testsCompleted;
-                document.getElementById('totalTime').textContent = this.formatTime(totalTime);
-                document.getElementById('achievementsCount').textContent = this.calculateAchievements(testsCompleted);
-
-                // История и активность
-                this.loadHistory();
-                this.loadRecentActivity();
-            }
-
-            // Упрощенная система достижений (только за количество тестов)
-            calculateAchievements(testsCount) {
-                if (testsCount >= 10) return 3;
-                if (testsCount >= 5) return 2;
-                if (testsCount >= 1) return 1;
-                return 0;
-            }
-
-            loadHistory() {
-                const historyList = document.getElementById('historyList');
-                
-                // Берем результаты из localStorage
-                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
-                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
-                
-                console.log('Загружаем историю тестов:', userResults);
-                
-                if (userResults.length === 0) {
-                    historyList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-history"></i>
-                            <h3>История тестов пуста</h3>
-                            <p>Пройдите свой первый тест, чтобы увидеть его здесь!</p>
-                            <a href="catalog.html" class="btn btn-primary">Найти тест</a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                // Сортируем по дате (новые сверху)
-                const sortedResults = userResults.sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
-                
-                historyList.innerHTML = sortedResults.map(test => `
-                    <div class="history-item" style="cursor: pointer;" onclick="window.location.href='results.html?resultId=${test.id}'">
-                        <div class="test-info">
-                            <h4>${test.testTitle || 'Неизвестный тест'}</h4>
-                            <p class="test-description">Пройдено вопросов: ${test.totalQuestions || '?'}</p>
-                            ${test.result ? `<p class="test-result-preview">Результат: ${test.result.title || 'Завершено'}</p>` : ''}
-                        </div>
-                        <div class="test-meta">
-                            <span class="test-date">${new Date(test.completedAt).toLocaleDateString('ru-RU')}</span>
-                            <span class="test-time">${this.formatTime(test.timeSpent || 0)}</span>
-                            <i class="fas fa-arrow-right" style="margin-left: 10px; opacity: 0.6;"></i>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            loadRecentActivity() {
-                const activityList = document.getElementById('recentActivity');
-                
-                // Берем результаты из localStorage
-                const allResults = JSON.parse(localStorage.getItem('testResults')) || [];
-                const userResults = allResults.filter(result => result.userId === this.currentUser.id);
-                const recentTests = userResults.slice(0, 5).reverse(); // Последние 5
-                
-                if (recentTests.length === 0) {
-                    activityList.innerHTML = '<p class="no-activity">Нет недавней активности</p>';
-                    return;
-                }
-
-                activityList.innerHTML = recentTests.map(test => `
-                    <div class="activity-item">
-                        <i class="fas fa-check-circle"></i>
-                        <div class="activity-content">
-                            <span class="activity-text">Пройден тест "${test.testTitle || 'Неизвестный тест'}"</span>
-                            <span class="activity-time">${this.formatRelativeTime(test.completedAt)}</span>
-                        </div>
-                    </div>
-                `).join('');
-            }
-
-            formatTime(seconds) {
-                const hours = Math.floor(seconds / 3600);
-                const minutes = Math.floor((seconds % 3600) / 60);
-                const secs = seconds % 60;
-                
-                if (hours > 0) {
-                    return `${hours}ч ${minutes}м`;
-                } else if (minutes > 0) {
-                    return `${minutes}м ${secs}с`;
-                } else {
-                    return `${secs}с`;
-                }
-            }
-
-            formatRelativeTime(dateString) {
-                const date = new Date(dateString);
-                const now = new Date();
-                const diffMs = now - date;
-                const diffMins = Math.floor(diffMs / 60000);
-                const diffHours = Math.floor(diffMins / 60);
-                const diffDays = Math.floor(diffHours / 24);
-
-                if (diffMins < 1) return 'только что';
-                if (diffMins < 60) return `${diffMins} мин назад`;
-                if (diffHours < 24) return `${diffHours} ч назад`;
-                if (diffDays < 7) return `${diffDays} д назад`;
-                return date.toLocaleDateString('ru-RU');
-            }
-        }
-
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
-            // ThemeManager инициализируется через auth-header.js
-            new ProfileManager();
-        });
-
+        // Настройки профиля (уведомления)
         class ProfileSettings {
         constructor() {
             this.userManager = new UserManager();
@@ -637,12 +364,20 @@
         }
 
         showNotification(message, type = 'info') {
-            // Простое уведомление
-            testoriaAlerts.success(message);
+            // Простое уведомление по типу
+            if (type === 'error') {
+                testoriaAlerts.error(message);
+            } else if (type === 'warning') {
+                testoriaAlerts.warning(message);
+            } else if (type === 'info') {
+                testoriaAlerts.info(message);
+            } else {
+                testoriaAlerts.success(message);
+            }
         }
     }
 
-    // Инициализация при загрузке страницы
+    // Инициализация настроек при загрузке страницы
     document.addEventListener('DOMContentLoaded', () => {
         new ProfileSettings();
     });

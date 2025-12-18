@@ -12,9 +12,15 @@ class UserManager {
         }
     }
     setCurrentUser(user) {
-            this.currentUser = user;
-            localStorage.setItem('currentUser', JSON.stringify(user));
+        this.currentUser = user;
+        // Единый формат хранения текущего пользователя
+        localStorage.setItem('testoria_current_user', JSON.stringify(user));
+        localStorage.setItem('isLoggedIn', 'true');
+        // Обновляем хедер, если он инициализирован
+        if (window.authHeaderManager) {
+            window.authHeaderManager.updateHeader();
         }
+    }
     getUsers() {
         return this.users;
     }
@@ -255,29 +261,53 @@ class UserManager {
         const users = this.getUsers();
         return users.filter(user => user.isAdmin === true);
     }
-}
 
-// Функция для обновления отображения кнопок в шапке
-function updateHeaderAuthState() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    const authButtons = document.getElementById('auth-buttons');
-    const profileSection = document.getElementById('profile-section');
-    
-    if (isLoggedIn === 'true') {
-        // Пользователь вошел - показываем профиль, скрываем кнопки входа
-        if (authButtons) authButtons.style.display = 'none';
-        if (profileSection) profileSection.style.display = 'block';
-    } else {
-        // Пользователь не вошел - показываем кнопки входа, скрываем профиль
-        if (authButtons) authButtons.style.display = 'block';
-        if (profileSection) profileSection.style.display = 'none';
+    // Создание дефолтных пользователей (админ + обычные)
+    createDefaultUsers() {
+        // Чтобы не перетирать уже существующих, выходим если пользователи есть
+        if (this.users && this.users.length > 0) return;
+
+        const baseUsers = [
+            {
+                id: 'u_admin_default',
+                name: 'Admin',
+                password: 'Admin123',
+                isAdmin: true
+            },
+            {
+                id: 'u_user_default_1',
+                name: 'UserOne',
+                password: 'UserOne123',
+                isAdmin: false
+            },
+            {
+                id: 'u_user_default_2',
+                name: 'UserTwo',
+                password: 'UserTwo123',
+                isAdmin: false
+            }
+        ];
+
+        this.users = baseUsers.map(u => ({
+            id: u.id,
+            name: u.name,
+            password: this.hashPassword(u.password),
+            isAdmin: u.isAdmin,
+            createdAt: new Date().toISOString(),
+            notifications: true,
+            stats: {
+                testsCompleted: 0,
+                totalTime: 0,
+                favoriteCategory: null
+            },
+            history: [],
+            achievements: []
+        }));
+
+        this.saveUsers();
+        console.log('✅ Созданы дефолтные пользователи (Admin/UserOne/UserTwo)');
     }
 }
-
-// Вызываем при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    updateHeaderAuthState();
-});
 
 // ThemeManager класс
 class ThemeManager {
@@ -361,27 +391,3 @@ class ThemeManager {
     }
     
 }
-
-// Также проверяем при изменении localStorage (если открыто несколько вкладок)
-window.addEventListener('storage', function(e) {
-    if (e.key === 'isLoggedIn') {
-        updateHeaderAuthState();
-    }
-});
-document.addEventListener('DOMContentLoaded', function() {
-    updateHeaderAuthState();
-});
-
-
-// Также обновляем при изменении localStorage (если вход в другой вкладке)
-window.addEventListener('storage', function(e) {
-    if (e.key === 'isLoggedIn') {
-        updateHeaderAuthState();
-    }
-});
-
-// Автоматическое обновление шапки при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Проверка авторизации...');
-    updateHeaderAuthState();
-});

@@ -278,17 +278,17 @@
 
                 // Базовая валидация
                 if (!name) {
-                    testoriaAlerts.success('Введите имя пользователя');
+                    testoriaAlerts.warning('Введите имя пользователя');
                     return;
                 }
 
                 if (!password) {
-                    testoriaAlerts.success('Введите пароль');
+                    testoriaAlerts.warning('Введите пароль');
                     return;
                 }
 
                 if (password !== confirmPassword) {
-                    testoriaAlerts.success('Пароли не совпадают');
+                    testoriaAlerts.warning('Пароли не совпадают');
                     return;
                 }
 
@@ -305,7 +305,7 @@
                     }, 1000);
 
                 } catch (error) {
-                    testoriaAlerts.success(error.message);
+                    testoriaAlerts.error(error.message || 'Ошибка при регистрации');
                 }
             });
         }
